@@ -49,3 +49,6 @@
 [submodule "pack/git-managed/opt/apprentice"]
 	path = pack/git-managed/opt/apprentice
 	url = https://github.com/romainl/apprentice
+[submodule "pack/git-managed/opt/vim-cool"]
+	path = pack/git-managed/opt/vim-cool
+	url = https://github.com/romainl/vim-cool

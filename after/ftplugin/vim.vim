@@ -21,3 +21,10 @@ setlocal tabstop=2
 setlocal textwidth=80
 setlocal foldmethod=marker
 let &l:define = '\C^command\|function'
+
+" HACK: attempt to fix 'foo.vim' and 'vim-package' highlighting
+" '.vim' is highlighted and 'vim-' is highlighted by making
+" them part of keyword it changes highlighting group and we can
+" navigate over them easier too with word motions like w and e.
+setlocal iskeyword+=.
+setlocal iskeyword+=-

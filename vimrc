@@ -62,12 +62,14 @@ let g:mucomplete#enable_auto_at_startup = 1
 " Essentially, whenever I see <C-z> read it as hitting <Tab> key
 set wildcharm=<C-z>
 
-
 nnoremap <Leader>ev :edit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 " use %% in command-line to autoexpand to current buf directory
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+" common mistake, we almost never want q:
+map q: :q
 
 " :edit mappings
 " nnoremap <Leader>e :<C-u>e<space><C-z><S-Tab>
@@ -166,7 +168,7 @@ set autoread " If file changed on disk, reread it
 set autoindent
 set hidden
 set ignorecase smartcase
-set noswapfile nobackup noundofile
+set noswapfile nobackup noundofile nowritebackup
 set number relativenumber
 set laststatus=2
 " ',,' means search in current directory
@@ -175,14 +177,19 @@ set laststatus=2
 " use because I keep the value of 'cd' at project root
 set path=,,
 set path+=**3
-set signcolumn=number
+if has("patch-8.1.1564")
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 " split and vsplit commands always open below and to right, respectively
 set splitbelow splitright
 " adding '!26' to save 26 global marks, i.e., A - Z, rest is default
 set viminfo="'100,!26,<50,s10,h"
+" Used with :edit, :find, and a few others
 set wildignore+=*.jpg,*.jpeg,*.bmp,*.ico,*.so,*.dll,*.o,*.obj,*.zip
-set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*
-set wildignore+=.venv/
+set wildignore+=*.swp,*~,._*,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz,*.zip
+set wildignore+=*/.git/*,*/node_modules/*,*/.hg/*,*/.svn/*,*/.venv/*
 
 if v:version >= 800
   packadd! matchit
