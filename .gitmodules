@@ -46,3 +46,6 @@
 [submodule "pack/git-managed/opt/gruvbox"]
 	path = pack/git-managed/opt/gruvbox
 	url = https://github.com/gruvbox-community/gruvbox
+[submodule "pack/git-managed/opt/apprentice"]
+	path = pack/git-managed/opt/apprentice
+	url = https://github.com/romainl/apprentice

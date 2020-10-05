@@ -24,7 +24,7 @@ endif
 " -------------------------
 " Packages and Settings
 " -------------------------
-packadd! gruvbox
+packadd! apprentice
 packadd! targets.vim
 packadd! vim-commentary
 packadd! vim-dispatch
@@ -231,4 +231,4 @@ rviminfo!
 " Ignore errors and read in all doc/ files in &rtp to update help files.
 silent! helptags ALL
 " Set last to make sure it applies after other things may have been done to syntax.
-colorscheme gruvbox
+colorscheme apprentice
