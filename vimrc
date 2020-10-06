@@ -64,7 +64,12 @@ noremap <Esc>p :Buffers<CR>
 
 packadd! vim-lsc
 let g:lsc_server_commands = {
-  \ 'javascript': ''
+  \ 'javascript': '',
+  \ 'python': 'pyls',
+  \ 'css': '',
+  \ 'html': '',
+  \ 'bash': '',
+  \ 'vim': ''
 \ }
 " Complete default mappings are:
 let g:lsc_auto_map = {
@@ -119,15 +124,15 @@ map q: :q
 " :find mappings
 " * Like :edit but uses value of 'path',
 " * keep value of 'pwd' at project root to get find-in-project results
-" nnoremap <Leader>f :<C-u>find<space><C-d>
-" " Like above, but use current file directory as starting point
-" nnoremap <Leader>F :<C-u>find <C-r>=fnameescape(expand('%:p:h')).'/'<CR><C-d>
-" nnoremap <Leader>s :<C-u>sfind<space><C-d>
-" nnoremap <Leader>S
-"   \ :<C-u>sfind <C-r>=fnameescape(expand('%:p:h')).'/'<CR><C-d>
-" nnoremap <Leader>v :<C-u>vert sfind<space><C-d>
-" nnoremap <Leader>V
-"   \ :<C-u>vert sfind <C-r>=fnameescape(expand('%:p:h')).'/'<CR><C-d>
+nnoremap <Leader>f :<C-u>find<space><C-d>
+" Like above, but use current file directory as starting point
+nnoremap <Leader>F :<C-u>find <C-r>=fnameescape(expand('%:p:h')).'/'<CR><C-d>
+nnoremap <Leader>s :<C-u>sfind<space><C-d>
+nnoremap <Leader>S
+  \ :<C-u>sfind <C-r>=fnameescape(expand('%:p:h')).'/'<CR><C-d>
+nnoremap <Leader>v :<C-u>vert sfind<space><C-d>
+nnoremap <Leader>V
+  \ :<C-u>vert sfind <C-r>=fnameescape(expand('%:p:h')).'/'<CR><C-d>
 
 " :tabedit/tabfind mappings
 nnoremap <Leader>t :<C-u>tabedit <C-z><S-Tab>
@@ -139,19 +144,19 @@ nnoremap <Leader>b :<C-u>buffer <C-d>
 nnoremap <Leader>B :<C-u>sbuffer <C-d>
 
 " Function keys
-nnoremap <silent><F3> call utils#ToggleQuickfixList()<CR>
-nnoremap <silent><F4> call utils#ToggleLocationList()<CR>
-nnoremap <F5> silent make % <bar> silent redraw!<CR>
-nnoremap <F6> 15Lexplore<CR>
-nnoremap <F9> set list!<CR>
-nnoremap <F10> set spell!<CR>
+nnoremap <silent><F3> :call utils#ToggleQuickfixList()<CR>
+nnoremap <silent><F4> :call utils#ToggleLocationList()<CR>
+nnoremap <F5> :silent make % <bar> silent redraw!<CR>
+nnoremap <F6> :15Lexplore<CR>
+nnoremap <F9> :set list!<CR>
+nnoremap <F10> :set spell!<CR>
 
 " Buffers/Windows
 nnoremap <Leader>w :<C-u>update<CR>
 nnoremap <Leader>l :<C-u>b #<CR>
 
 " Edit current buffer filetype in after/ftplugin/
-nnoremap <Leader>ft e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
+nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
 
 " Symbol Navigation (see vimways.org/2018 romainl article)
 nnoremap <Leader>ij :<C-u>ijump <C-r><C-w>
@@ -166,7 +171,7 @@ nnoremap <Leader>ds :<C-u>dsearch
 nnoremap <Leader>dl :<C-u>dlist
 
 " Tag jumping
-nnoremap <Leader>tj <C-u>tjump<space>
+nnoremap <Leader>tj :<C-u>tjump<space>
 nnoremap <Leader>tp <C-w>}
 "
 " jump to tag or present options if ambiguous
@@ -175,7 +180,7 @@ nnoremap <C-]> g<C-]>
 nnoremap <C-w><C-]> g<C-w><C-]>
 
 " Visual
-nnoremap <silent> <C-L> <C-U>nohlsearch<CR>
+nnoremap <silent> <C-L> :<C-U>nohlsearch<CR>
 
 " Terminal
 tnoremap <Esc> <C-\><C-n>
