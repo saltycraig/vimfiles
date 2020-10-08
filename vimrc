@@ -68,11 +68,16 @@ packadd! fzf
 let g:fzf_layout = { 'down': '40%' }
 packadd! fzf.vim
 nnoremap <C-p> :FZF<CR>
-" this is how terminal vim sees alt+p keypress (:help i_C-v)
-noremap <Esc>p :Buffers<CR>
+if has('osx')
+  nnoremap π :Buffers<CR>
+  " option-j (alt key) = ∆
+  " option-k = ˚
+else
+  " this is how terminal vim sees alt+p keypress in mintty (:help i_C-v)
+  noremap <Esc>p :Buffers<CR>
+endif
 " packadd! vim-mucomplete
 " let g:mucomplete#enable_auto_at_startup = 1
-
 packadd! vim-lsc
 " let g:lsc_server_commands = {
 "   \ 'javascript': '',
@@ -111,8 +116,17 @@ packadd! vim-vsnip-integ
 set wildcharm=<C-z>
 
 " Scroll other window shortcut
-nnoremap <Esc>j <C-w>p<C-e><C-w>p
-nnoremap <Esc>k <C-w>p<C-y><C-w>p
+if has('osx')
+  " On Alacritty set 'alt_send_esc = false' in the alacritty.yml config.
+  if !empty('ALACRITTY_LOG')
+    nnoremap ∆ <C-w>p<C-e><C-w>p
+    nnoremap ˚ <C-w>p<C-y><C-w>p
+  endif
+else
+  " mintty, maybe others
+  nnoremap <Esc>j <C-w>p<C-e><C-w>p
+  nnoremap <Esc>k <C-w>p<C-y><C-w>p
+endif
 
 " vimrc
 nnoremap <Leader>ev :edit $MYVIMRC<CR>
