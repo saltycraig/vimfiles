@@ -238,6 +238,7 @@ let g:netrw_list_hide=netrw_gitignore#Hide().'.*\.swp$'
 let g:netrw_sizestyle='h'
 set autoread " If file changed on disk, reread it
 set autoindent
+set cursorline
 set hidden
 set ignorecase smartcase
 set noswapfile nobackup noundofile nowritebackup
