@@ -20,12 +20,21 @@ else
   set completeopt=menuone,noinsert,noselect,preview
 endif
 
-" mintty-specific - to change cursor in vim to line cursor in insert mode
-if !empty("WSLENV")
-  let &t_ti.="\e[1 q"
-  let &t_SI.="\e[5 q"
-  let &t_EI.="\e[1 q"
-  let &t_te.="\e[0 q"
+" mintty/xterm-compatible terminal
+if &term =~ "xterm*"
+  " see :h termcap-cursor-shape
+  " let &t_ti.="\<Esc>[1 q" | " put terminal in 'termcap' mode
+
+  " start insert mode with 'bar' cursor
+  let &t_SI.= "\<Esc>[5 q"
+  let &t_SI.= "\<ESC>]12;red\x7"
+  " t_SR is sent when entering Replace mode, if empty, uses t_SI
+  " let &t_SR = ""
+  " t_EI is sent when leaving Insert/Replace mode (back to Normal)
+  let &t_EI.="\<Esc>[1 q"
+
+  " end 'termcap mode'
+  " let &t_te.="\<Esc>[0 q"
 endif
 
 " -------------------------
