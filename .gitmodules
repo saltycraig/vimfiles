@@ -79,3 +79,6 @@
 [submodule "pack/git-managed/opt/vim-vsnip-snippets"]
 	path = pack/git-managed/opt/vim-vsnip-snippets
 	url = https://github.com/craigmac/vim-vsnip-snippets
+[submodule "pack/git-managed/opt/vim-colors-solarized"]
+	path = pack/git-managed/opt/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized

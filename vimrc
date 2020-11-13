@@ -40,7 +40,7 @@ endif
 " -------------------------
 " Packages and Settings
 " -------------------------
-packadd! nord-vim
+packadd! vim-colors-solarized
 packadd! targets.vim
 packadd! vim-commentary
 packadd! vim-dispatch
@@ -51,17 +51,17 @@ packadd! vim-indent-object
 packadd! vim-repeat
 packadd! vim-surround
 packadd! vim-unimpaired
-packadd! lightline.vim
-let g:lightline = {
-  \ 'colorscheme': 'nord',
-  \ 'active': {
-  \   'left': [ [ 'mode', 'paste' ],
-  \   [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-  \ },
-  \ 'component_function': {
-  \   'gitbranch': 'FugitiveHead'
-  \ },
-\ }
+" packadd! lightline.vim
+" let g:lightline = {
+"   \ 'colorscheme': 'nord',
+"   \ 'active': {
+"   \   'left': [ [ 'mode', 'paste' ],
+"   \   [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+"   \ },
+"   \ 'component_function': {
+"   \   'gitbranch': 'FugitiveHead'
+"   \ },
+" \ }
 
 packadd! vim-fugitive
 nnoremap <Leader>gs :Git<CR>
@@ -348,7 +348,7 @@ set noautoindent
 if v:version >= 800
   packadd! matchit
   set belloff=all | " Turn off bell ring for all events
-  set termguicolors " Use true colours if terminal supports it
+  " set termguicolors " Use true colours if terminal supports it
   set breakindent | " Every wrapped line continues visual indent
   set shortmess+=c
   if has('patch-8.1.0360')
@@ -391,4 +391,5 @@ command! Cd :cd %:h
 rviminfo!
 " Ignore errors and read in all doc/ files in &rtp to update help files.
 silent! helptags ALL
-colorscheme nord
+set background=light
+colorscheme solarized
