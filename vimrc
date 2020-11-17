@@ -84,7 +84,19 @@ let g:vsnip_snippet_dirs = [
 
 packadd! vim-vsnip-integ
 packadd! vim-vsnip-snippets
+
+" 'python3 install.py --all' flag installs servers for:
+" C/C++, C#, Go, Java, Python, Rust, JavaScript/TypeScript
 packadd! YouCompleteMe
+" https://github.com/ycm-core/YouCompleteMe#plugging-an-arbitrary-lsp-server
+let g:ycm_language_server =
+  \ [
+  \   {
+  \     'name': 'vimls',
+  \     'cmdline': ['/usr/local/bin/vim-language-server', '--stdio'],
+  \     'filetypes': ['vim']
+  \   },
+  \ ]
 
 " -------------------------
 " Non-Plugin Mappings

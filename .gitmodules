@@ -82,3 +82,6 @@
 [submodule "pack/git-managed/opt/vim-colors-solarized"]
 	path = pack/git-managed/opt/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized
+[submodule "pack/git-managed/opt/YouCompleteMe"]
+	path = pack/git-managed/opt/YouCompleteMe
+	url = https://github.com/ycm-core/YouCompleteMe
