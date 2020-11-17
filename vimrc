@@ -161,7 +161,7 @@ nnoremap <Leader>B :<C-u>sbuffer <C-d>
 " Function keys
 nnoremap <silent><F3> :call utils#ToggleQuickfixList()<CR>
 nnoremap <silent><F4> :call utils#ToggleLocationList()<CR>
-nnoremap <F5> :silent make % <bar> silent redraw!<CR>
+nnoremap <F5> :silent make! % <bar> silent redraw!<CR>
 nnoremap <F6> :15Lexplore<CR>
 nnoremap <F9> :set list!<CR>
 nnoremap <F10> :set spell!<CR>
@@ -321,6 +321,20 @@ command! Todo :silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ **<CR>
 command! LocalTodo :lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 " change to current buffer directory
 command! Cd :cd %:h
+
+
+" -------------------------
+" Autocommands
+" -------------------------
+" Local settings
+autocmd FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=0
+autocmd FileType python setlocal define=^\\s*\\(def\\\|class\\)
+autocmd FileType python setlocal makeprg=pylint\ --output-format=parseable\ --score=n
+autocmd FileType javascript,javascriptreact setlocal et ts=2 sts=2 sw=0
+autocmd FileType javascript,javascriptreact setlocal makeprg=npx\ eslint\ --format\ unix
+
+" Lint on write, also have F5 to run same on demand
+autocmd BufWritePost *.py,*.js,*.jsx silent make! <afile> | silent redraw!
 
 " -------------------------
 " Needed Last
