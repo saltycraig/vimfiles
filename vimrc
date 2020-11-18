@@ -23,15 +23,10 @@ endif
 " -------------------------
 " Packages and Settings
 " -------------------------
-packadd! vim-colors-solarized
 packadd! targets.vim
+packadd! vim-colors-solarized
 packadd! vim-commentary
 packadd! vim-dispatch
-packadd! vim-editorconfig
-packadd! vim-indent-object
-packadd! vim-repeat
-packadd! vim-surround
-packadd! vim-unimpaired
 
 packadd! vim-fugitive
 nnoremap <Leader>gs :Git<CR>
@@ -39,6 +34,14 @@ nnoremap <Leader>ga :Git add -A<CR>
 nnoremap <Leader>gb :Git blame<CR>
 nnoremap <Leader>gg :Git commit --all<CR>
 nnoremap <Leader>gp :Git push<CR>
+
+packadd! vim-editorconfig
+packadd! vim-flagship
+packadd! vim-indent-object
+packadd! vim-obsession
+packadd! vim-repeat
+packadd! vim-surround
+packadd! vim-unimpaired
 
 packadd! fzf
 let g:fzf_layout = { 'down': '40%' }
@@ -226,6 +229,7 @@ set autoindent
 set cursorline
 set hidden
 set ignorecase smartcase
+set noruler
 set noswapfile nobackup noundofile nowritebackup
 set noshowmode
 set number relativenumber
@@ -236,6 +240,7 @@ set laststatus=2
 " use because I keep the value of 'cd' at project root
 set path=,,
 set path+=**3
+set showtabline=2
 if has('patch-8.1.1564')
   set signcolumn=number
 else
@@ -322,14 +327,16 @@ command! LocalTodo :lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 " change to current buffer directory
 command! Cd :cd %:h
 
-
 " -------------------------
 " Autocommands
 " -------------------------
 augroup FileTypeSettings
-  " Used instead of e.g., .vim/after/ftplugin/javascript.vim to keep them all here
+  " Group here instead of e.g., .vim/after/ftplugin/javascript.vim
   autocmd!
-  autocmd FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=0
+  autocmd FileType vim setlocal ai et ts=2 sw=2 tw=80 fdm=marker
+  autocmd FileType vim setlocal define=^function
+  autocmd FileType vim setlocal iskeyword+=.,-
+  autocmd FileType python setlocal et ts=4 sts=4 sts=0 fdm=indent
   autocmd FileType python setlocal define=^\\s*\\(def\\\|class\\)
   autocmd FileType javascript,javascriptreact setlocal et ts=2 sts=2 sw=0
 augroup END
@@ -343,8 +350,6 @@ augroup FileTypeLinting
   " Lint on write, I also bind  F5 to run same on demand
   autocmd BufWritePost *.py,*.js,*.jsx silent make! <afile> | silent redraw!
 augroup END
-
-
 
 " -------------------------
 " Needed Last

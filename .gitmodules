@@ -85,3 +85,9 @@
 [submodule "pack/git-managed/opt/YouCompleteMe"]
 	path = pack/git-managed/opt/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe
+[submodule "pack/git-managed/opt/vim-obsession"]
+	path = pack/git-managed/opt/vim-obsession
+	url = https://github.com/tpope/vim-obsession
+[submodule "pack/git-managed/opt/vim-flagship"]
+	path = pack/git-managed/opt/vim-flagship
+	url = https://github.com/tpope/vim-flagship
