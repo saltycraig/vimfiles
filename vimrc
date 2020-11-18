@@ -254,9 +254,10 @@ set statusline=\ %f " left-justified path to buffer file relative to :cd
 " TODO: add some colour to this using ':h hl-User1..9' and %1*{item}%*
 set statusline+=\ %M\ %R " modified flags, read-only flag
 set statusline+=\ ft:\ %Y " e.g., [vim], shows filetype
-" TODO: fugitive statusline add, obsession statusline add
+" TODO: obsession statusline add
 set statusline+=%= " Right hand side start
-set statusline+=%-15.(ln:\ %l\/%L%) " 14 minwid no max for group of line/lines
+set statusline+=\ %{FugitiveStatusline()}
+set statusline+=\ %-15.(ln:\ %l\/%L%) " 14 minwid no max for group of line/lines
 set statusline+=%-10.(col:\ %v%)
 set statusline+=%-5.(%P%)
 
