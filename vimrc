@@ -1,4 +1,4 @@
-" vi: ft=vim:et:fdm=marker
+" vim:ft=vim:
 " Author: C.D. MacEachern <craigm@fastmail.com>
 " Description: vim 8.0+ configuration, requires '+packages'.
 
@@ -113,7 +113,8 @@ nnoremap <silent><F6> :15Lexplore<CR>
 nnoremap <F9> :set list!<CR>
 nnoremap <F10> :set spell!<CR>
 nnoremap <silent><Leader>tn :tabnew<CR>
-" Send actual escape character to underlying terminal app, e.g., 'top'.
+tnoremap <Esc> <C-\><C-n>
+" Send actual Escape char to app running in term, e.g., 'top'
 tnoremap <C-v><Esc> <Esc>
 nnoremap <Leader>w :update<CR>
 " Follows global 'hidden' option wrt what to do when hidden.
@@ -175,8 +176,11 @@ if has('win32')
   nnoremap <Esc>j <C-w>p<C-e><C-w>p
   nnoremap <Esc>k <C-w>p<C-y><C-w>p
 elseif has('mac')
-    nnoremap ∆ <C-w>p<C-e><C-w>p
-    nnoremap ˚ <C-w>p<C-y><C-w>p
+  nnoremap ∆ <C-w>p<C-e><C-w>p
+  nnoremap ˚ <C-w>p<C-y><C-w>p
+  " Dropping a bunch of files onto MacVim opens each in its own tab,
+  " and the default is only 10, so bump it up on MacVim.
+  set tabpagemax=100
 endif
 
 " TODO: install vim-ocs52
