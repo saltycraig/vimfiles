@@ -1,6 +1,6 @@
 " vi: ft=vim:et:fdm=marker
 " Author: C.D. MacEachern <craigm@fastmail.com>
-" Description: vim 8.0+ config
+" Description: vim 8.0+ configuration, requires '+packages'.
 
 " Bootstrap {{{
 source $VIMRUNTIME/defaults.vim
@@ -8,14 +8,16 @@ source $VIMRUNTIME/defaults.vim
 let mapleader=' '
 let maplocalleader='\'
 
-" TODO: refactor to remove this.
-" I put them autocmds into this 'init' group rather than create a ton of groups
 augroup init
   autocmd!
 augroup END
+" }}}
 
+" Global Options {{{
 set autoread
 set complete-=i | " Don't search includes.
+" TODO: see how this works with :args **/*.jsx etc., will it scan those?
+" set complete-=u | " Don't scan unloaded buffers in buffer list.
 set completeopt=menuone,noinsert,noselect
 set hidden
 set foldnestmax=2
@@ -24,6 +26,7 @@ set noswapfile
 set nowrap
 set number relativenumber
 set signcolumn=yes
+set spelllang=en_ca
 set splitbelow splitright
 set termguicolors
 set thesaurus=~/.vim/thesaurus/english.txt
@@ -39,6 +42,19 @@ let g:netrw_liststyle=3
 let g:netrw_sizestyle='h'
 let g:netrw_winsize=15
 " " }}}
+
+" Packages {{{
+" packadd! nord-vim
+packadd! targets.vim
+packadd! vim-commentary
+packadd! vim-dispatch
+packadd! vim-editorconfig
+packadd! vim-indent-object
+packadd! vim-repeat
+packadd! vim-surround
+packadd! vim-unimpaired
+
+" }}}
 
 " Whitespace Explanations. Because I forget. {{{
 " Number of spaces <Tab> counts for. Whether 1 tab byte 0x09 will be replaced
@@ -71,27 +87,46 @@ set noautoindent
 " }}}
 
 " Mappings {{{
+set wildcharm=<C-z>
+
+" Edit/Buffer/Find
+nnoremap <Leader>e :edit <C-d>
+nnoremap <Leader>E :split <C-d>
+nnoremap <Leader>ve :vertical split <C-d>
+
+nnoremap <Leader>b :buffer <C-z><S-Tab>
+nnoremap <Leader>B :buffers!<CR>:b
+nnoremap <Leader>vb :vnew<CR>:buffer <C-z><S-Tab>
+
+nnoremap <Leader>f :find <C-d>
+nnoremap <Leader>F :split find <C-d>
+nnoremap <Leader>vf :vnew<CR>:find <C-d>
+
+set splitbelow  " horizontal splitting commands open below always.
+set splitright  " vertical splitting commands open to right always.
+
 map q: :q
 nnoremap <silent><F3> :call utils#ToggleQuickfixList()<CR>
 nnoremap <silent><F4> :call utils#ToggleLocationList()<CR>
 nnoremap <silent><F5> :silent! make % <bar> copen <bar> silent redraw!<CR>
-nnoremap <silent><F6> :30Lexplore<CR>
+nnoremap <silent><F6> :15Lexplore<CR>
 nnoremap <F9> :set list!<CR>
 nnoremap <F10> :set spell!<CR>
 nnoremap <silent><Leader>tn :tabnew<CR>
-" Send actual escape character to underlying terminal app, e.g., ipython
+" Send actual escape character to underlying terminal app, e.g., 'top'.
 tnoremap <C-v><Esc> <Esc>
 nnoremap <Leader>w :update<CR>
-nnoremap <Leader>k :hide<CR>
+" Follows global 'hidden' option wrt what to do when hidden.
+nnoremap <Leader>h :hide<CR>
+" Unload and delete from :ls/:buffers list (unless '!' post-fix used).
+" Option values, vars and maps/abbrevs for the buffer are cleared.
 nnoremap <Leader>q :bdelete<CR>
-nnoremap <Leader>l <C-^>
 nnoremap <silent><Leader>n :nohlsearch<CR>
-nnoremap <silent><Leader>ev :edit $MYVIMRC<CR>
-nnoremap <silent><Leader>sv :source $MYVIMRC<CR>
+nnoremap <silent><Leader>, :edit $MYVIMRC<CR>
 nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
 " }}}
 
-"  Abbreviations {{{
+"  Global Abbreviations {{{
 inoreabbrev (<CR> (<CR>)<Esc>O
 inoreabbrev ({<CR> ({<CR>});<Esc>O
 inoreabbrev {<CR> {<CR>}<Esc>O
@@ -102,26 +137,22 @@ inoreabbrev [; [<CR>];<Esc>O
 inoreabbrev [, [<CR>],<Esc>O
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
-" %% in command-line autoexpands to current file's directory
+" %% in command-line auto-expands to current file's directory
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " }}}
 
-" Autocommands {{{
+" Auto-commands {{{
 autocmd init QuickFixCmdPost [^l]* cwindow
 autocmd init QuickFixCmdPost  l* lwindow
 autocmd init VimEnter * cwindow
 autocmd init BufWritePre /tmp/* setlocal noundofile
 autocmd init BufNewFile,BufRead *.txt,*.md,*.adoc setlocal complete+=k
+" HACK: fixes reviving unlisted buffer (:buffers!), because FileType
+" is not run unless we do quick :e to trigger it. Adding 'doc/' to match
+" only vim help documents (**/doc/foo.txt).
+autocmd init BufWinEnter */doc/*.txt setlocal nonumber norelativenumber
+autocmd init BufWritePost ~/.vim/vimrc source ~/.vim/vimrc
 
-" TODO: move these back to after/ftplugin/foo.vim
-augroup fileTypeIndent
-  autocmd!
-  autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-  autocmd BufNewFile,BufRead *.js,*.jsx setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-  autocmd BufNewFile,BufRead *.ts,*.tsx setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-  autocmd BufNewFile,BufRead *.php setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-  autocmd BufNewFile,BufRead *.vim setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-augroup END
 " }}}
 
 " Commands {{{
@@ -130,10 +161,25 @@ augroup END
 command! Todo :silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ **<CR>
 command! LocalTodo :lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 command! Cd :cd %:h
+" Wipe out all buffers for real (not set to hidden) except current one.
+command! Only :.+,$bwipeout<CR>
+" }}}
 
-" Scroll other window shortcut
-nnoremap <Esc>j <C-w>p<C-e><C-w>p
-nnoremap <Esc>k <C-w>p<C-y><C-w>p
+" Playground {{{
+" TODO: how to detect wsl vs. linux terminal
+" * MacVim 8.2 sends: <M-BS>
+" * iTerm2 sends:     ÿ
+" * wsltty ubuntu 20.04 sends: ^]<BS>. Replace any ^[ with <Esc> in maps
+" and it will work.
+if has('win32')
+  nnoremap <Esc>j <C-w>p<C-e><C-w>p
+  nnoremap <Esc>k <C-w>p<C-y><C-w>p
+elseif has('mac')
+    nnoremap ∆ <C-w>p<C-e><C-w>p
+    nnoremap ˚ <C-w>p<C-y><C-w>p
+endif
+
+" TODO: install vim-ocs52
 " }}}
 
 " Needed last {{{

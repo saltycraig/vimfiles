@@ -13,9 +13,6 @@
 [submodule "pack/git-managed/opt/vim-unimpaired"]
 	path = pack/git-managed/opt/vim-unimpaired
 	url = https://github.com/tpope/vim-unimpaired
-[submodule "pack/git-managed/opt/vim-fugitive"]
-	path = pack/git-managed/opt/vim-fugitive
-	url = https://github.com/tpope/vim-fugitive
 [submodule "pack/git-managed/opt/vim-editorconfig"]
 	path = pack/git-managed/opt/vim-editorconfig
 	url = https://github.com/sgur/vim-editorconfig
@@ -25,33 +22,6 @@
 [submodule "pack/git-managed/opt/vim-indent-object"]
 	path = pack/git-managed/opt/vim-indent-object
 	url = https://github.com/michaeljsmith/vim-indent-object
-[submodule "pack/git-managed/opt/fzf"]
-	path = pack/git-managed/opt/fzf
-	url = https://github.com/junegunn/fzf
-[submodule "pack/git-managed/opt/fzf.vim"]
-	path = pack/git-managed/opt/fzf.vim
-	url = https://github.com/junegunn/fzf.vim
-[submodule "pack/git-managed/opt/vim-js"]
-	path = pack/git-managed/opt/vim-js
-	url = https://github.com/yuezk/vim-js
-[submodule "pack/git-managed/opt/vim-jsx-pretty"]
-	path = pack/git-managed/opt/vim-jsx-pretty
-	url = https://github.com/maxmellon/vim-jsx-pretty
-[submodule "pack/git-managed/opt/vim-vsnip-integ"]
-	path = pack/git-managed/opt/vim-vsnip-integ
-	url = https://github.com/hrsh7th/vim-vsnip-integ
-[submodule "pack/git-managed/opt/vim-vsnip"]
-	path = pack/git-managed/opt/vim-vsnip
-	url = https://github.com/hrsh7th/vim-vsnip
-[submodule "pack/git-managed/opt/vim-vsnip-snippets"]
-	path = pack/git-managed/opt/vim-vsnip-snippets
-	url = https://github.com/craigmac/vim-vsnip-snippets
-[submodule "pack/git-managed/opt/vim-colors-solarized"]
-	path = pack/git-managed/opt/vim-colors-solarized
-	url = https://github.com/altercation/vim-colors-solarized
 [submodule "pack/git-managed/opt/YouCompleteMe"]
 	path = pack/git-managed/opt/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe
-[submodule "pack/git-managed/opt/vim-obsession"]
-	path = pack/git-managed/opt/vim-obsession
-	url = https://github.com/tpope/vim-obsession
