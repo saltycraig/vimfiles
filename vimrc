@@ -28,7 +28,6 @@ set number relativenumber
 set signcolumn=yes
 set spelllang=en_ca
 set splitbelow splitright
-set termguicolors
 set thesaurus=~/.vim/thesaurus/english.txt
 set undofile
 set undodir=~/.vim/undodir
@@ -44,7 +43,7 @@ let g:netrw_winsize=15
 " " }}}
 
 " Packages {{{
-" packadd! nord-vim
+packadd! apprentice
 packadd! targets.vim
 packadd! vim-commentary
 packadd! vim-dispatch
@@ -89,18 +88,18 @@ set noautoindent
 " Mappings {{{
 set wildcharm=<C-z>
 
-" Edit/Buffer/Find
-nnoremap <Leader>e :edit <C-d>
-nnoremap <Leader>E :split <C-d>
-nnoremap <Leader>ve :vertical split <C-d>
+" Edit/Buffer/Find (adds ignorecase flag for quick completions)
+nnoremap <Leader>e :edit <C-d>\c
+nnoremap <Leader>E :split <C-d>\c
+nnoremap <Leader>ve :vertical split <C-d>\c
 
 nnoremap <Leader>b :buffer <C-z><S-Tab>
 nnoremap <Leader>B :buffers!<CR>:b
 nnoremap <Leader>vb :vnew<CR>:buffer <C-z><S-Tab>
 
-nnoremap <Leader>f :find <C-d>
-nnoremap <Leader>F :split find <C-d>
-nnoremap <Leader>vf :vnew<CR>:find <C-d>
+nnoremap <Leader>f :find <C-d>\c
+nnoremap <Leader>F :split find <C-d>\c
+nnoremap <Leader>vf :vnew<CR>:find <C-d>\c
 
 set splitbelow  " horizontal splitting commands open below always.
 set splitright  " vertical splitting commands open to right always.
