@@ -1,4 +1,3 @@
-" vim:ft=vim:
 " Author: C.D. MacEachern <craigm@fastmail.com>
 " Description: vim 8.0+ configuration, requires '+packages'.
 
@@ -52,37 +51,6 @@ packadd! vim-indent-object
 packadd! vim-repeat
 packadd! vim-surround
 packadd! vim-unimpaired
-
-" }}}
-
-" Whitespace Explanations. Because I forget. {{{
-" Number of spaces <Tab> counts for. Whether 1 tab byte 0x09 will be replaced
-set tabstop=8
-" Governs how much to indent (e.g., >> command)
-" Whether it uses spaces or tab character is up to a few settings:
-"   * if 'noexpandtab': tries to use tab bytes (\x09) alone. It will use
-"   spaces as needed if the result of tabstop / shiftwidth is not 0.
-"   * if 'expandtab': only use space bytes.
-" Unless you want mixed tab and space bytes (THE HORROR.) if you set
-" tabstop and shiftwidth to different values that are non equally divisible,
-" use 'expandtab'.
-set shiftwidth=8
-" Rounds indenting actions to a multiple of 'shiftwidth' if this is on.
-set noshiftround
-" Number of spaces that tab byte \x09 counts for when doing edits like
-" when pressing <Tab> or <BS>. It uses a mix of space \x020 and tab
-" \x09 bytes. Useful to keep tabstop at 8 while being able to add tabs
-" and delete like it is set to softtabstop (insert/remove that many
-" whitespaces, made up of space and tab characters).
-"  * if 'noexpandtab': number of \x020 (space) bytes are minimized by
-"  inserting as many \x09 (tab) bytes as possible.
-set softtabstop=0
-" Don't use space bytes \x020 to make up tab \x09 bytes, use real tabs.
-" Technically small filesizes with tab characters, but with minification
-" on most web/code now being popular, this doesn't matter as much.
-set noexpandtab
-" Do not copy indent from current line when starting new line: <CR>,o,O
-set noautoindent
 " }}}
 
 " Mappings {{{
@@ -171,7 +139,7 @@ command! Only :.+,$bwipeout<CR>
 " * iTerm2 sends:     ÿ
 " * wsltty ubuntu 20.04 sends: ^]<BS>. Replace any ^[ with <Esc> in maps
 " and it will work.
-if has('win32')
+if has('linux')
   nnoremap <Esc>j <C-w>p<C-e><C-w>p
   nnoremap <Esc>k <C-w>p<C-y><C-w>p
 elseif has('mac')
@@ -182,12 +150,13 @@ elseif has('mac')
   set tabpagemax=100
 endif
 
-" TODO: install vim-ocs52
-" }}}
-
 " Needed last {{{
 rviminfo!
 silent! helptags ALL
 colorscheme apprentice
 " }}}
 
+" Playground {{{
+" TODO: install vim-ocs52
+
+" }}}
