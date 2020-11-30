@@ -25,3 +25,6 @@
 [submodule "pack/git-managed/opt/YouCompleteMe"]
 	path = pack/git-managed/opt/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe
+[submodule "pack/git-managed/opt/apprentice"]
+	path = pack/git-managed/opt/apprentice
+	url = https://github.com/romainl/apprentice

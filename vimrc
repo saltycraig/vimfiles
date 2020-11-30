@@ -189,6 +189,6 @@ endif
 " Needed last {{{
 rviminfo!
 silent! helptags ALL
-colorscheme nord
+colorscheme apprentice
 " }}}
 
