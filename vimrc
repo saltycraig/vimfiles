@@ -31,7 +31,6 @@ set spelllang=en_ca
 " default is %<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
 set statusline=%<%F\ %h%m%r%=%-14.(%l,%c%V%)\ %P
 set splitbelow splitright
-set termguicolors
 set thesaurus=~/.vim/thesaurus/english.txt
 set undofile
 set undodir=~/.vim/undodir
@@ -64,7 +63,7 @@ set wildcharm=<C-z>
 " Edit/Buffer/Find (adds ignorecase flag for quick completions)
 nnoremap <Leader>e :edit <C-d>\c*
 nnoremap <Leader>E :split <C-d>\c*
-nnoremap <Leader>ve :vertical split <C-d>\c*
+nnoremap <Leader>ve :vsplit<CR>:edit <C-d>\c*
 
 nnoremap <Leader>b :buffer <C-d>*
 nnoremap <Leader>B :buffers!<CR>:b
@@ -188,8 +187,16 @@ endif
 " Needed last {{{
 rviminfo!
 silent! helptags ALL
+" TODO: guard this somehow. Issue: Terminal.app only has
+" 256 colours, so I set the Terminal ANSI 16 to exact Solarized
+" palette and use this flag (and make sure :set notermguicolors)
+" Otherwise we want to turn on :set termguicolors and turn off flag,
+" when using e.g., iTerm2 3+, Windows Terminal, WSL 1&2, alacritty etc.
+let g:solarized_use16=1
+let g:solarized_old_cursor_style=1
+let g:solarized_italics=0
+let g:solarized_enable_extra_hi_groups=1
 set background=light
-let g:solarized_extra_hi_groups=1
 colorscheme solarized8
 " }}}
 
