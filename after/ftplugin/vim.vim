@@ -28,3 +28,17 @@ let &l:define = '\C^command\|function'
 " navigate over them easier too with word motions like w and e.
 setlocal iskeyword+=.
 setlocal iskeyword+=-
+
+" Auto add line continuation when Enter is pressed if needed
+" function! s:ContinueLine() abort
+"   let l:line = getline(".")
+"   if (match(l:line, '{'))
+"     return "\<CR>" . '\ " '
+"   elseif (match(l:line, '['))
+"     return "\<CR>" . '\ " '
+"   else
+"     return "\<CR>"
+"   endif
+" endfunction
+" inoremap <buffer><expr> <CR> ContinueLine()
+

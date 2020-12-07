@@ -5,6 +5,18 @@ out of my brain!
 
 ## Vim Scripting Gotchas and Best Practices
 
+* `:help eval.txt` is the bible and final say.
+* I added `:API` command to bring up `:h function-list`
+
+Comparisons Operators:
+
+* always use `==#` to match case and e.g., `>=?` to ignore case.
+* see `:h expr4` for details on comparing expressions.
+
+Functions:
+
+* always add `abort` keyword, e.g., `function! foo() abort `
+* always use `function!`
 
 ## Vimscript vs. Vim 9 Reference
 
