@@ -87,19 +87,20 @@ nnoremap <Leader>q :bdelete<CR>
 nnoremap <silent><Leader>n :nohlsearch<CR>
 nnoremap <silent><Leader>, :edit $MYVIMRC<CR>
 nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
-if has('unix')
+if has('unix') && !has('mac')
   " mintty on win 10 sends ^@ which is <Nul> in Vim notation
   inoremap <Nul> <C-x><C-o>
-  " tnoremap <silent> <Esc>` <C-w>:ToggleTerminal<CR>
-  " nnoremap <silent> <Esc>` :ToggleTerminal<CR>
   nnoremap <Esc>j <C-w>p<C-e><C-w>p
   nnoremap <Esc>k <C-w>p<C-y><C-w>p
+  nnoremap <Esc>` :call ToggleTerminal()<CR>
+  tnoremap <silent> <Esc>` :call ToggleTerminal()<CR>
 elseif has('mac')
-  nnoremap ∆ <C-w>p<C-e><C-w>p
-  nnoremap ˚ <C-w>p<C-y><C-w>p
+  " This is for iTerm2 only.
+  nnoremap ê <C-w>p<C-e><C-w>p
+  nnoremap ë <C-w>p<C-y><C-w>p
+  nnoremap à :call ToggleTerminal()<CR>
+  tnoremap à :call ToggleTerminal()<CR>
   " TODO: setup toggleterminal command mapping like above for mac.
-
-  " TODO: fix Ctrl-^ requiring Shift be pressed as well
   " Dropping a bunch of files onto MacVim opens each in its own tab,
   " and the default is only 10, so bump it up on MacVim.
   set tabpagemax=100
@@ -168,36 +169,60 @@ cnoremap <expr> <CR> CCR()
 
 rviminfo!
 silent! helptags ALL
-colorscheme photon
-" Alter photon.vim to make comments red.
+set background=light
+colorscheme paramount
+" Make comments red.
 highlight Comment ctermfg=167
 
 " Playground / Testing
 
-function! ToggleTerminal()
-  " => Number: -1 if no buffer exists.
-  let term_buffer = bufnr('terminal-toggle')
-
-  if term_buffer == -1
-    terminal ++close ++open ++rows=10
-    file! terminal-toggle
-  else
-    " Buffer exists: try to get window ID
-    " => Number: -1 if no window ID associated
-    let term_window = bufwinnr(term_buffer)
-    if term_window == -1
-      execute 'sbuffer' . term_buffer
-    else
-      execute term_buffer . "wincmd w"
-      " this may not work? might have to escape to normal mode or
-      hide
-    endif
-  endif
-endfunction
-
-nnoremap <Leader>` :call ToggleTerminal()<CR>
+" function! ToggleTerminal()
+"   let term_buffer = bufnr('terminal-toggle')
+"   if term_buffer == -1
+"     terminal ++close ++open ++rows=10
+"     file! terminal-toggle
+"   else
+"     let term_window = bufwinnr(term_buffer)
+"     if term_window == -1
+"       execute 'sbuffer' . term_buffer
+"     else
+"       execute term_buffer . "wincmd w"
+"       hide
+"     endif
+"   endif
+" endfunction
 
 if v:version >=# 802
   " Terminal* autocmds available
   autocmd init TerminalOpen setlocal nonumber norelativenumber
 endif
+
+" r/vim/comments/fusqe9/how_can_i_convert_this_simple_neo_vim_terminal/
+let g:term_toggle_buf = 0
+let g:term_toggle_win = 0
+let g:term_toggle_cmd = "/usr/local/bin/bash"
+let g:term_toggle_size = 8 "height of the terminal window in lines
+
+function! TermToggle()
+  " => Number: 0 on failure, 1 on success
+  if win_gotoid(g:term_toggle_win)
+    let g:term_toggle_size = winheight(0)
+    close
+  else
+    try
+      exec "sbuffer ".g:term_toggle_buf
+      exec "resize ".g:term_toggle_size
+    catch
+      exec "terminal ++rows=".g:term_toggle_size." ++close ".g:term_toggle_cmd
+      let g:term_toggle_buf = bufnr("")
+    endtry
+    startinsert!
+    let g:term_toggle_win = win_getid()
+    let g:term_toggle_size = winheight(0)
+  endif
+endfunction
+
+map <F9> :call TermToggle()<CR>
+tmap <F9> <C-W>:call TermToggle()<CR>
+
+
