@@ -131,6 +131,7 @@ inoreabbrev [, [<CR>],<Esc>O
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+nnoremap gV `[v`]
 
 autocmd init QuickFixCmdPost [^l]* cwindow
 autocmd init QuickFixCmdPost  l* lwindow
