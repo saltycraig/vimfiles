@@ -25,9 +25,6 @@
 [submodule "pack/git-managed/opt/vim-solarized8"]
 	path = pack/git-managed/opt/vim-solarized8
 	url = https://github.com/lifepillar/vim-solarized8
-[submodule "pack/git-managed/opt/photon.vim"]
-	path = pack/git-managed/opt/photon.vim
-	url = https://github.com/axvr/photon.vim
 [submodule "pack/git-managed/opt/vim-endwise"]
 	path = pack/git-managed/opt/vim-endwise
 	url = https://github.com/tpope/vim-endwise

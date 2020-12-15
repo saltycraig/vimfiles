@@ -1,5 +1,15 @@
 source $VIMRUNTIME/defaults.vim
-packadd! editexisting
+" Builtins I don't use. Neglible startup increase, but less code is fewer bugs.
+let g:loaded_gzip = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_logiPat = 1
+let g:loaded_rrhelper = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_zipPlugin = 1
+
 if (v:version >=# 802)
   packadd! cfilter
 endif
@@ -19,6 +29,7 @@ set hidden
 set foldnestmax=2
 set ignorecase smartcase
 set laststatus=2
+set mouse=a
 set noswapfile
 set nowrap
 set number relativenumber
@@ -39,7 +50,6 @@ let g:netrw_liststyle=3
 let g:netrw_sizestyle='h'
 let g:netrw_winsize=15
 
-packadd! photon.vim
 packadd! tagbar
 packadd! targets.vim
 packadd! vim-commentary
@@ -183,10 +193,7 @@ cnoremap <expr> <CR> CCR()
 
 rviminfo!
 silent! helptags ALL
-set background=light
-colorscheme paramount
-" Make comments red.
-highlight Comment ctermfg=167 guifg=#d75f5f
+colorscheme prose
 
 " Playground / Testing
 if v:version >=# 802 " Terminal* autocmds available
@@ -206,3 +213,6 @@ function! TermOpenWhenDone(cmd)
   if !has('terminal') | finish | endif
   execute "botright terminal ++hidden ++open " . a:cmd
 endfunction
+
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
