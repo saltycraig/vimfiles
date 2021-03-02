@@ -8,21 +8,13 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-" Include macros in completion
-setlocal complete+=d
+" CMake with Qt (taken from Qt Creator build steps for MinGW_81_x64 kit
+" for Windows. Using path to ninja
+setlocal makeprg=
+" Clean step is: cmake\ --build\ .\ --target clean
 
-" OS-dependent makeprg
-if has('win32') || has('win64')
-  " gvim with mingw via Code::Blocks (make sure it's 'bin' in %PATH%)
-  setlocal makeprg=mingw32-make
-else
-  setlocal makeprg=make
-endif
-
-" Compile single file with F6
+" Single files, compile single file, run single file
 nnoremap <buffer> <F6> :!g++ --std=c++17 -Wall -Werror -pedantic %<CR>
-
-" Run single file
 nnoremap <buffer> <C-F6> :!%:r<CR>
 
 " Set include pattern

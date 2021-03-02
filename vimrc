@@ -1,4 +1,7 @@
 " vim: fdm=indent nowrap ft=vim et sts=2 ts=2 sw=2
+" vimrc for 8.2+
+" Windows GVim => c:/users/cmaceachern/vimfiles/vimrc
+" UNIX => ~/.vim/vimrc
 scriptencoding utf-8
 set encoding=utf-8
  
@@ -8,36 +11,26 @@ runtime macros/matchit.vim
 let mapleader=' '
 let maplocalleader='\'
 
-" Try to load minpac.
-packadd minpac
-
-if !exists('g:loaded_minpac')
-  " minpac not available stuff here.
+if has('win64')
+  call plug#begin('~/vimfiles/plugged')
 else
-  " Install/update: call minpac#update()
-  " Uninstall/clea: call minpac#clean()
-  " See plugin status: call minpac#status()
-  call minpac#init()
-  call minpac#add('k-takata/minpac', {'type': 'opt'})
-  call minpac#add('tpope/vim-commentary', {'type': 'opt'})
-  call minpac#add('tpope/vim-repeat', {'type': 'opt'})
-  call minpac#add('tpope/vim-surround', {'type': 'opt'})
-  call minpac#add('wellle/targets.vim', {'type': 'opt'})
-  call minpac#add('ctrlpvim/ctrlp.vim', {'type': 'opt'})
-  call minpac#add('cormacrelf/vim-colors-github', {'type': 'opt'})
-  call minpac#add('lifepillar/vim-solarized8', {'type': 'opt'})
-  packadd vim-commentary
-  packadd vim-repeat
-  packadd vim-surround
-  packadd targets.vim
-  packadd ctrlp.vim
-  packadd vim-colors-github
-  packadd vim-solarized8
+  call plug#begin('~/.vim/plugged')
 endif
+
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'wellle/targets.vim'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'ycm-core/YouCompleteMe'
+Plug 'cormacrelf/vim-colors-github'
+Plug 'lifepillar/vim-solarized8'
+call plug#end()
 
 set autoindent
 set autoread
 set belloff=all
+set completeopt=menuone,popup
 set hidden
 set hlsearch
 set ignorecase 
@@ -89,7 +82,11 @@ nnoremap <F10> :set spell!<CR>
 nnoremap <Leader>w :update<CR>
 nnoremap <Leader>q :bdelete<CR>
 nnoremap <Leader>, :edit $MYVIMRC<CR>
-nnoremap <Leader>t :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
+if has('win64')
+  nnoremap <Leader>t :e <C-R>=expand('~/vimfiles/after/ftplugin/'.&ft.'.vim')<CR><CR>
+else
+  nnoremap <Leader>t :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
+endif
 nnoremap <Leader>l :buffer #<CR>
 nnoremap <Leader>n :nohl<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
@@ -136,7 +133,7 @@ augroup END
 autocmd vimrc BufNewFile,BufRead *.txt,*.md,*.adoc setlocal complete+=k
 autocmd vimrc BufNewFile,BufRead *.txt,*.md,*.adoc setlocal tw=78
 autocmd vimrc BufWinEnter */doc/*.txt setlocal nonumber norelativenumber
-if has('win32') || has('win64')
+if has('win64')
   autocmd vimrc BufWritePost ~/vimfiles/vimrc source ~/vimfiles/vimrc
 else
   autocmd vimrc BufWritePost ~/.vim/vimrc source ~/.vim/vimrc
@@ -162,5 +159,5 @@ command! Only :.+,$bwipeout<CR>
 command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 
 set background=light
-colorscheme github
+colorscheme solarized8
 
