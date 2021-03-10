@@ -19,10 +19,12 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'wellle/targets.vim'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'ycm-core/YouCompleteMe'
-Plug 'cormacrelf/vim-colors-github'
-Plug 'lifepillar/vim-solarized8'
+Plug 'arcticicestudio/nord-vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 call plug#end()
+
+" Plugin Settings
 
 " Settings
 set autoindent
@@ -34,7 +36,7 @@ set completeopt=menuone,popup
 set hidden
 set history=200
 set hlsearch
-set ignorecase 
+
 set incsearch
 set laststatus=2
 set listchars=eol:$,space:·,
@@ -54,7 +56,7 @@ set showmode
 
 set smartcase
 set tags=./tags;,tags;
-set termguicolors                 
+set termguicolors
 set ttimeout
 set ttimeoutlen=100
 set wildignore=*/.git/*,*/.hg/*,*/.svn/*,*/.node_modules/*,*.o,*.obj
@@ -97,7 +99,7 @@ nnoremap <Leader>o :CtrlPTag<CR>
 nnoremap <C-s> :source %<CR>
 
 " Terminal
-tnoremap <Esc> <C-\><C-n> 
+
 tnoremap <C-v><Esc> <Esc>
 
 if has('mac') && has('gui_running')
@@ -170,7 +172,6 @@ autocmd vimrc BufReadPost *
   \   exe "normal g`\"" |
   \ endif
 
-
 " Getting Help Easier
 nnoremap <F1>f :help list-functions<CR>
 nnoremap <F1>k :help keycodes<CR>
@@ -184,13 +185,12 @@ command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
-" Revert with: ":delcommand DiffOrig".
+" Revert with: ":delcommand DiffOrig"
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
+  \ | wincmd p | diffthis
 endif
 
-
-set background=light
-colorscheme solarized8
+set background=dark
+colorscheme nord
 
