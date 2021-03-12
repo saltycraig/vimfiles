@@ -1,30 +1,74 @@
 " vim: fdm=indent nowrap ft=vim et sts=2 ts=2 sw=2
 " vimrc for 8.2+
-" Windows GVim => c:/users/cmaceachern/vimfiles/vimrc
-" UNIX => ~/.vim/vimrc
+" macOS/Linux/BSD/WSL do: 
+" git clone https://github.com/k-takata/minpac ~/.vim/pack/minpac/opt/minpac
 
 " Bare-basics.
-set nocompatible
 filetype plugin on " enable loading plugin/foo.vim files for all filetypes
 filetype indent on " enable loading indent/foo.vim files for all filetypes
 syntax on
-scriptencoding utf-8
 set encoding=utf-8
+scriptencoding utf-8
 let mapleader=' '
 
 " Plugins
-call plug#begin('~/.vim/plugged')
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'wellle/targets.vim'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'arcticicestudio/nord-vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-call plug#end()
+packadd minpac
+if !exists('g:loaded_minpac')
+  " minpac is not available.
+  echoerr 'First clone k-takata/minpac ~/.vim/pack/minpac/opt/minpac'
+  finish
+else
+  " 2: (Default) Show error messages from external commands.
+  " 3: Show start/end messages for each plugin.
+  " 4: Show debug messages.
+  call minpac#init({'verbose': 3, 'progress_open': 'vertical'})
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
+  call minpac#add('tpope/vim-scriptease', {'type': 'opt'})
+  call minpac#add('tpope/vim-commentary')
+  call minpac#add('tpope/vim-endwise')
+  call minpac#add('tpope/vim-obsession')
+  call minpac#add('tpope/vim-repeat')
+  call minpac#add('tpope/vim-surround')
+  call minpac#add('tpope/vim-unimpaired')
+  call minpac#add('wellle/targets.vim')
+  call minpac#add('michaeljsmith/vim-indent-object')
+  call minpac#add('tpope/vim-projectionist')
+  call minpac#add('tpope/vim-dispatch')
+  call minpac#add('tpope/vim-fugitive')
+  call minpac#add('arcticicestudio/nord-vim')
+  call minpac#add('vim-airline/vim-airline')
+  call minpac#add('vim-airline/vim-airline-themes')
+  " Download binary, update config files for keybindings (bash, zsh), after
+  " every update.
+  call minpac#add('junegunn/fzf', {'do': { -> system('install --all --no-fish') }})
+  call minpac#add('junegunn/fzf.vim')
+  call minpac#add('dense-analysis/ale')
+  call minpac#add('janko-m/vim-test')
+  call minpac#add('sgur/vim-editorconfig')
+
+  command! PackUpdate call minpac#update()
+  command! PackClean call minpac#clean()
+endif
 
 " Plugin Settings
+
+" https://github.com/dense-analysis/ale
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_filetype_changed = 0
+let g:ale_linters = {
+  \ 'javascript': ['eslint'],
+  \ 'vim': ['vint'],
+\ }
+nmap <silent> [W <Plug>(ale_first)
+nmap <silent> [w <Plug>(ale_previous)
+nmap <silent> ]w <Plug>(ale_next)
+nmap <silent> ]W <Plug>(ale_last)
+
+
+" https://github.com/janko-m/vim-test
+let test#strategy = 'dispatch'
 
 " Settings
 set autoindent
@@ -36,7 +80,6 @@ set completeopt=menuone,popup
 set hidden
 set history=200
 set hlsearch
-
 set incsearch
 set laststatus=2
 set listchars=eol:$,space:·,
@@ -53,7 +96,6 @@ set scrolloff=5
 set showcmd
 set showmatch
 set showmode
-
 set smartcase
 set tags=./tags;,tags;
 set termguicolors
@@ -92,14 +134,28 @@ nnoremap <Leader>q :bdelete<CR>
 nnoremap <Leader>, :edit $MYVIMRC<CR>
 nnoremap <Leader>t :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
 
-nnoremap <Leader>l :buffer #<CR>
-nnoremap <Leader>n :nohl<CR>
-nnoremap <Leader>b :CtrlPBuffer<CR>
-nnoremap <Leader>o :CtrlPTag<CR>
-nnoremap <C-s> :source %<CR>
+nnoremap <Leader>l :ALELint<CR>
+nnoremap <Leader>n :<C-u>nohl<CR>
+nnoremap <Leader>b :<C-u>Buffers<CR>
+nnoremap <Leader>r :<C-u>Rg<Space>
+
+" smaller case does buffer-local, uppercase is project wide
+nnoremap <Leader>T :<C-u>Tags<Space>
+nnoremap <Leader>t :<C-u>BTags<Space>
+nnoremap <Leader>g :<C-u>BCommits<CR>
+nnoremap <Leader>G :<C-u>Commits<CR>
+nnoremap <C-p> :<C-u>FZF<CR>
+
+nnoremap <Leader>gs :Git<CR>
+nnoremap <Leader>ga :Git add -A<CR>
+nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>gg :Git commit --all<CR>
+nnoremap <Leader>gp :Git push<CR>
+nnoremap <Leader>gd :Gvdiffsplit<CR>
+nnoremap gh :diffget //2<CR>
+nnoremap gl :diffget //3<CR>
 
 " Terminal
-
 tnoremap <C-v><Esc> <Esc>
 
 if has('mac') && has('gui_running')
@@ -143,6 +199,7 @@ if has('win64')
 else
   autocmd vimrc BufWritePost ~/.vim/vimrc source ~/.vim/vimrc
 endif
+autocmd vimrc BufWritePre /tmp/* setlocal noundofile
 
 " Quickfix/Location List
 autocmd vimrc FileType * if &ft ==# 'qf' | setlocal nonu nornu | endif
@@ -186,11 +243,10 @@ command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
 " Revert with: ":delcommand DiffOrig"
-if !exists(":DiffOrig")
+if !exists(':DiffOrig')
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
   \ | wincmd p | diffthis
 endif
 
-set background=dark
 colorscheme nord
 
