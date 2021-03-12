@@ -45,12 +45,102 @@ else
   call minpac#add('dense-analysis/ale')
   call minpac#add('janko-m/vim-test')
   call minpac#add('sgur/vim-editorconfig')
-
+  " LSP 
+  call minpac#add('prabirshrestha/asyncomplete.vim')
+  call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
+  call minpac#add('prabirshrestha/asyncomplete-buffer.vim')
+  call minpac#add('prabirshrestha/asyncomplete-file.vim')
+  call minpac#add('prabirshrestha/asyncomplete-tags.vim')
+  call minpac#add('prabirshrestha/vim-lsp')
+  call minpac#add('mattn/vim-lsp-settings')
+ 
   command! PackUpdate call minpac#update()
   command! PackClean call minpac#clean()
 endif
 
+" ==================
 " Plugin Settings
+" ==================
+" Refer to wiki for individual server setup (manual) if an installer
+" via mattn/vim-lsp-settings is not provided for that language. If supported,
+" we can simply run :LspInstall <server-name>
+" Help: https://github.com/prabirshrestha/vim-lsp/wiki/Servers
+let g:asyncomplete_auto_popup = 1 " default is 1
+
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+  \ 'name': 'buffer',
+  \ 'allowlist': ['*'],
+  \ 'blocklist': ['go'],
+  \ 'completor': function('asyncomplete#sources#buffer#completor'),
+  \ 'config': {
+  \    'max_buffer_size': 5000000,
+  \  },
+  \ }))
+
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+  \ 'name': 'file',
+  \ 'allowlist': ['*'],
+  \ 'priority': 10,
+  \ 'completor': function('asyncomplete#sources#file#completor')
+  \ }))
+
+" Requires we have :echo executable('ctags') to be 1 (installed ctags)
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#tags#get_source_options({
+  \ 'name': 'tags',
+  \ 'allowlist': ['c', 'ruby'],
+  \ 'completor': function('asyncomplete#sources#tags#completor'),
+  \ 'config': {
+  \    'max_file_size': 50000000,
+  \  },
+  \ }))
+
+" I find this to be buggy and not work well with Vim folding behaviours. 
+let g:lsp_fold_enabled = 0  
+" 0 to use ALE or other linting plugins. 1 will mean to let server provide
+" diagnostics about the code. I use ALE because not every language has a LSP
+" server, like Vimscript, but does have a linter program we can call with ALE,
+" so we get better coverage of languages by just leaving linting to ALE and
+" using LSP servers for others purposes.
+let g:lsp_diagnostics_enabled = 0 
+" Requires linking to or tweaking highlight group 'lspReference'
+" highlight! link ErrorMsg lspReference
+let g:lsp_document_highlight_enabled = 0
+
+if executable('pyls')
+  " pip install python-language-server
+  au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'allowlist': ['python'],
+        \ })
+endif
+
+function! s:on_lsp_buffer_enabled() abort
+  setlocal omnifunc=lsp#complete
+  setlocal signcolumn=yes
+  if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+  nmap <buffer> gd <plug>(lsp-definition)
+  nmap <buffer> gs <plug>(lsp-document-symbol-search)
+  nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+  nmap <buffer> gr <plug>(lsp-references)
+  nmap <buffer> gi <plug>(lsp-implementation)
+  nmap <buffer> gt <plug>(lsp-type-definition)
+  nmap <buffer> <leader>rn <plug>(lsp-rename)
+  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+  nmap <buffer> K <plug>(lsp-hover)
+  inoremap <buffer> <expr><c-f> lsp#scroll(+4)
+  inoremap <buffer> <expr><c-d> lsp#scroll(-4)
+  let g:lsp_format_sync_timeout = 1000
+  " Example document format on save
+  " autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+endfunction
+
+augroup lsp_install
+  autocmd!
+  " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 
 " https://github.com/dense-analysis/ale
 let g:ale_lint_on_text_changed = 'never'
