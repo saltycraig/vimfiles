@@ -188,7 +188,9 @@ inoreabbrev [, [<CR>],<Esc>O
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
+" fugitive
 nnoremap <Leader>g :G<CR>
+nnoremap <Leader>gP :G push<CR>
 
 " }}}
 
