@@ -51,7 +51,7 @@ set clipboard=unnamed,unnamedplus
 " Another option:
 " set completeopt=menuone,noinsert,noselect,popup
 set completeopt=menuone,popup
-set cursorline
+set nocursorline
 set foldlevelstart=99
 set hidden
 set history=200
@@ -121,6 +121,8 @@ if (v:version >=# 802)
 endif
 
 set background=light
+" more blocky diff markers in signcolumn (e.g. GitGutter)
+let g:github_colors_block_diffmark = 1
 colorscheme github
 " }}}
 
@@ -153,6 +155,11 @@ nnoremap ê <C-w>p<C-e><C-w>p
 nnoremap ë <C-w>p<C-y><C-w>p
 nnoremap Ê <C-w>p<C-d><C-w>p
 nnoremap Ë <C-w>p<C-u><C-w>p
+" macvim-only
+nnoremap <D-j> <C-w>p<C-e><C-w>p
+nnoremap <D-k> <C-w>p<C-y><C-w>p
+nnoremap <D-J> <C-w>p<C-d><C-w>p
+nnoremap <D-K> <C-w>p<C-u><C-w>p
 " Leader keys
 nnoremap <Leader>w :update<CR>
 nnoremap <Leader>q :bdelete<CR>
