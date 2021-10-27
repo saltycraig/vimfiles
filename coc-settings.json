@@ -1,0 +1,17 @@
+{
+  "markdownlint.config": {
+    "default": true,
+    "line-length": false,
+    "MD004": { "style": "asterisk" },
+    "MD025": { "front_matter_title": "" },
+    "no-hard-tabs": true,
+    "no-bare-urls": true,
+    "no-inline-html": false
+  },
+  "snippets.extends": {
+    "liquid": ["markdown"],
+    "javascriptreact": ["javascript"],
+    "typescript": ["javascript"]
+  },
+  "snippets.textmateSnippetsRoots": ["/Users/cmaceach/.vim/snippets"]
+}
