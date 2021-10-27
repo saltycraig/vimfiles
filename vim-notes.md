@@ -9,26 +9,27 @@ out of my brain!
 
 * `:help eval.txt` is the bible and final say.
 * I added `:API` command to bring up `:h function-list`
-* Always use mapping variants to stop look for mappings in the 'rhs' (right
-  hand side) of the mapping: use `:noremap`, `:nnoremap`, `:inoremap` , etc.
-  This is almost always what you want, unless you want the rhs of the mapping
-  to call it's possible mappings too.
-* Use <Bar> for '|' in map command can be followed by another command and the
-  | character separates two commands. To include one use the <Bar> symbolic,
-  e.g., `:noremap <F8> :write <Bar> !ls<CR>`. For literal spaces use <Space>,
-  e.g., `:noremap <Space> W`
-* You cannot put comment after a mapping because it will consider it part of
-  the mapping. End the map with '|' first the use a comment, e.g., `:map
-  <Space> W| " use spacebar to move forward a Word.
+* always use mapping variants to don't look for mappings in the 'rhs'
+(right hand side) of the mapping: use `:noremap`, `:nnoremap`, `:inoremap`
+, etc. This is almost always what you want, unless you want the rhs
+of the mapping to call it's possible mappings too.
+* special characters in a mapping: use <Bar> for '|' because map command
+can be followed by another command and the | character separates two
+commands. To include one use the <Bar> symbolic, e.g.,
+`:noremap <F8> :write <Bar> !ls<CR>`. For literal spaces use <Space>, e.g.,
+`:noremap <Space> W`
+* You cannot put comment after a mapping because it will consider it
+part of the mapping. End the map with '|' first the use a comment, e.g.,
+`:map <Space> W| " use spacebar to move forward a Word.
 * <script> : make mapping local to the script run in.
 * <buffer> : make mapping local to that buffer.
 * <unique> : make mapping fail if it exists already. Default is to overwrite.
 * <Nop> : No operation. Do nothing when mapped to this.
-* User-defined commands MUST begin with a capital letter. e.g., `:command
-  DeleteFirstLine 1delete`. Can't use 'X', 'Next', and 'Print'.  Also no
-  underscores. Digits ok, but discouraged.
+* User-defined commands MUST begin with a capital letter. e.g.,
+`:command DeleteFirstLine 1delete`. Can't use 'X', 'Next', and 'Print'.
+Also no underscores. Digits ok, but discouraged.
 * Always add '!' to `:command` and `:function` definitions to allow resourcing
-  and overwriting existing function of same name.
+and overwriting existing function of same name.
 * Command arguments:
   * e.g., `:command! -nargs=0 DeleteFirst 1delete` (0 default nargs opt. here)
   * -nargs=0 No args
@@ -40,32 +41,32 @@ out of my brain!
   * `:command -nargs=+ Say :echo "<args>"` and do `:Say Hello World`
   * with above adding quotes will error, e.g., `:Say Hello "world"`
   * to fix that, use `<q-args>` which means 'quote arguments', e.g.,
-    `:command! -nargs=+ Say :echo <q-args>` NOTE NO QUOTES AROUND q-args
+  `:command! -nargs=+ Say :echo <q-args>` NOTE NO QUOTES AROUND q-args
   * <f-args> : keyword contains same info as <args> but put in a format
-    suitable for using as function call args, e.g., `:command! -nargs=\* DoIt
-    :call AFunction(<f-args>)`
+  suitable for using as function call args, e.g.,
+  `:command! -nargs=\* DoIt :call AFunction(<f-args>)`
   * `:DoIt a b c` executes like this: `:call AFunction("a", "b", "c")`
 * Line Ranges as arguments:
   * -range Range allowed, default is current line
   * -range=% Range allowed, whole file by default
-  * -range={count} Range allowed; last number in it is used as a single number
-    whose default is {count}.
+  * -range={count} Range allowed; last number in it is used as a single
+  number whose default is {count}.
   * `:command -range=% SaveIt :<line1>,<line2>write! savefilename`
 * Other command options:
   * -count={number} command can take count, number as default. Can be used
   through the <count> keyword in the body of the function.
   * -bang You can use a '!' character. Using <bang> will result in '!'
   * -register You can specify a register. Default is unnamed.
-  * -complete={type} Type of completions you can use for this command.  See
-    `:command-completion` for list of values you can use.
-  * -bar The command can be followed by '|' and another command or a comment
+  * -complete={type} Type of completions you can use for this command.
+  See `:command-completion` for list of values you can use.
+  * -bar The command can be followed by '|' and another command or
+  a comment
   * -buffer The command is only available for current buffer.
 * <lt> keyword that stands for the character '<'. Use this to escape
 any special meaning of the <..> items.
 * Form of autocommands. [foo] means optional:
   * `:autocmd [group] {EventName} {file\_pattern} [nested] {command}`
 * Autocommand examples:
-
 ```vim
 :autocmd BufWritePre * call DateInsert()
 :autocmd BufReadPost,BufRead *.gsm set filetype=asm
@@ -89,7 +90,9 @@ any special meaning of the <..> items.
 " will result in executing this command when buffer *.new read:
 :doautocmd BufReadPost tryout.c
 :autocmd BufReadPost *.chg execute "normal! 0New entry:\<Esc>" | 1read !date
+
 ```
+
 
 ## Comparison Operators (==, =?, ==#, etc.)
 
@@ -101,6 +104,13 @@ any special meaning of the <..> items.
 * always add `abort` keyword, e.g., `function! foo() abort `
 * always use `function!` to allow overriding an existing function of
 same name
+
+
+# Vimscript vs. Vim 9 Reference
+
+## Variables
+
+
 
 # Whitespace and Tab Settings
 
@@ -148,7 +158,6 @@ Which are all related to whitespace/tab settings.
 
 # Script Examples from usr41.txt
 
-```vim
 " global variable "i"
 let i = 1
 while i < 5
@@ -242,5 +251,4 @@ endif
 " Test a line in command line
 :if 5 == 5 | echo "yes" | endif
 :if 0 == "false" | echo "yes" | endif
-```
 

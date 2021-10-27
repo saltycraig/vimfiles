@@ -20,4 +20,5 @@ private/
 startup
 Session.vim
 swapdir/
-*.spl
+./pack/
+pack/
