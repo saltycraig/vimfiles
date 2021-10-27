@@ -48,6 +48,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'christoomey/vim-tmux-navigator'
+" Use release branch (recommend)
+" :CocInstall coc-tsserver coc-json coc-css ...
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " UI
 Plug 'lifepillar/vim-solarized8'
@@ -59,13 +62,17 @@ call plug#end()
 
 " Plugin Settings {{{
 
-" fugitive
+" coc.nvim
+" BUGFIX: https://github.com/neoclide/coc.nvim/issues/1775
+let g:coc_disable_transparent_cursor = 1
+
+" vim-fugitive
 nnoremap <Leader>gg :G<CR>
 nnoremap <Leader>gP :G push<CR>
 nnoremap <Leader>gp :G pull<CR>
 nnoremap <Leader>gd :Gvdiffsplit<CR>
 
-" fzf
+" fzf.vim
 nnoremap <C-p> :GFiles<CR>
 " FZF from directory buffer is in, use this when not in Git repo
 nnoremap <Leader>e :FZF %:h<CR>
