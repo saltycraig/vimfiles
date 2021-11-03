@@ -71,49 +71,70 @@ let g:fzf_colors =
 " Lightline, requires vim-gitbranch and vim-fugitive plugins.
 " Trim mode names down to single character to save space for long git branches
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-      \ 'mode_map': {
-        \ 'n' : 'N',
-        \ 'i' : 'I',
-        \ 'R' : 'R',
-        \ 'v' : 'V',
-        \ 'V' : 'VL',
-        \ "\<C-v>": 'VB',
-        \ 'c' : 'C',
-        \ 's' : 'S',
-        \ 'S' : 'SL',
-        \ "\<C-s>": 'SB',
-        \ 't': 'T',
-        \ },
-      \ }
+  \ 'colorscheme': 'solarized',
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ],
+  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+  \ },
+  \ 'component_function': {
+  \   'gitbranch': 'FugitiveHead'
+  \ },
+  \ 'mode_map': {
+    \ 'n' : 'N',
+    \ 'i' : 'I',
+    \ 'R' : 'R',
+    \ 'v' : 'V',
+    \ 'V' : 'VL',
+    \ "\<C-v>": 'VB',
+    \ 'c' : 'C',
+    \ 's' : 'S',
+    \ 'S' : 'SL',
+    \ "\<C-s>": 'SB',
+    \ 't': 'T',
+  \ },
+\ }
+
 " }}}
 
 " Settings {{{
 
-set autoindent autoread belloff=all clipboard=unnamed,unnamedplus
-set expandtab 
-set completeopt=menuone,popup nocursorline foldlevelstart=99 hidden hlsearch
-set laststatus=2 listchars=space:·,trail:·
-set modeline noswapfile nowrap number relativenumber
-set shortmess+=c showcmd showmatch noshowmode signcolumn=yes
-set ignorecase smartcase thesaurus=~/.vim/thesaurus/english.txt
-set undofile undodir=~/.vim/undodir
+" Indenting/Formatting
+" copy above line indent on enter
+set autoindent
+" indent after {, after a line with a keyword from 'cinwords',
+" before a line starting with }. } as first char is given same
+" indent as matching {. When 'cindent' is on or 'indentexpr' is set
+" smartindent has no effect. 'indentexpr' is the most advanced version.
+" 'cindent' is mainly for C stuff specifically.
+set smartindent
+set autoread " auto re-read files changes outside of Vim
+set belloff=all | " no sounds for all possible bell events
+" yank/delete/change/put ops go to clipboard registers * and +
+" Normally they would go to unnamed register.
+" This isn't supposed to work without :echo has('X11') and
+" :echo has('xterm_clipboard') but in my tests on macos both are 0 but work!
+set clipboard=unnamed,unnamedplus
+" completion menu can show even when only one match, and instead of preview
+" window if there's extra information, use the 'popupwin' feature
+set completeopt=menuone,popup
+set hidden " hide buffers without needing to save them
+set hlsearch " highlight all search matches until :nohl run
+set laststatus=2 | " always show statuslines in all windows
+set listchars=space:·,trail:· | " strings to show when :set list is on
+set noswapfile " no annoying *.foo~ files left around
+set nowrap " defaults to line wrapping on
+set number relativenumber " current line number shown - rest shown relative
+set showmatch " on brackets briefly jump to matching to show it
+set ignorecase smartcase " ignore case in searches, UNLESS capitals used
+set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
+set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
 
 if executable('rg')
   set grepprg=rg\ --vimgrep
 elseif executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
 endif
-set incsearch
-set laststatus=2
-set listchars=space:·,trail:·
+
 if exists('+termguicolors')
   " https://github.com/tmux/tmux/issues/1246
   " Without 2 t_8x lines below termguicolors doesn't work.
@@ -146,11 +167,10 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " Function keys
 nnoremap <silent><F3> :call utils#ToggleQuickfixList()<CR>
-nnoremap <F4> :call utils#ToggleLocationList()<CR>
-nnoremap <F5> :silent! make % <bar> copen <bar> silent redraw!<CR>
-nnoremap <F6> :15Lexplore<CR>
-nnoremap <F9> :set list!<CR>
-nnoremap <F10> :set spell!<CR>
+nnoremap <silent><F4> :call utils#ToggleLocationList()<CR>
+nnoremap <silent><F6> :15Lexplore<CR>
+nnoremap <silent><F9> :set list!<CR>
+nnoremap <silent><F10> :set spell!<CR>
 
 " iTerm2
 nnoremap j <C-w>p<C-e><C-w>p
@@ -169,11 +189,15 @@ nnoremap <Leader><Leader> :b #<CR>
 " Vimdiff
 nnoremap gh :diffget //2<CR>
 nnoremap gl :diffget //3<CR>
+
+" A way to send actual Esc char to terminal buffer if needed
 tnoremap <C-v><Esc> <Esc>
 
 " vim-unimpaired style
 nnoremap [q :cprevious<CR>
 nnoremap ]q :cnext<CR>
+nnoremap [Q :cfirst<CR>
+nnoremap ]Q :clast<CR>
 nnoremap [l :lprevious<CR>
 nnoremap ]l :lnext<CR>
 " }}}
@@ -221,7 +245,7 @@ highlight! GitGutterAdd guibg=#eee8d5
 highlight! GitGutterChange guibg=#eee8d5
 highlight! GitGutterDelete guibg=#eee8d5
 
-" Display hightlighting groups of thing under cursor
+" Display highlighting groups of thing under cursor
 map <F2> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
       \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
       \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
@@ -242,6 +266,6 @@ autocmd vimrc BufNewFile,BufRead *.markdown,*.mkd,*.mkdn,*.md
 
 " Playground {{{
 " TODO:
-" * 
+" * play with t_SI t_EI et al to modify cursor on mode changes
 
 " }}}
