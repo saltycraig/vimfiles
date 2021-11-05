@@ -12,6 +12,7 @@ let mapleader=' '
 
 " pack/git/opt/<plugin>
 packadd vim-polyglot
+packadd cfilter
 
 " vim-fugitive
 nnoremap <Leader>gg :G<CR>
@@ -28,14 +29,13 @@ nnoremap <C-p> :GFiles<CR>
 nnoremap <Leader>e :FZF %:h<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>/ :BLines<CR>
-nnoremap <Leader>r :Rg<CR>
 " Change to git project directory
 nnoremap <Leader>c :FZFCd ~/git<CR>
 nnoremap <Leader>C :FZFCd!<CR>
 command! -bang -bar -nargs=? -complete=dir FZFCd
-    \ call fzf#run(fzf#wrap(
-    \ {'source': 'find '.( empty("<args>") ? ( <bang>0 ? "~" : "." ) : "<args>" ) .' -type d',
-    \ 'sink': 'cd'}))
+  \ call fzf#run(fzf#wrap(
+  \ {'source': 'find '.( empty("<args>") ? ( <bang>0 ? "~" : "." ) : "<args>" ) .' -type d',
+  \ 'sink': 'cd'}))
 " Function used to populate Quickfix with selected lines
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -68,7 +68,7 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 
 " Lightline
-" Lightline, requires vim-gitbranch and vim-fugitive plugins.
+" Lightline, requires vim-gitbranch or vim-fugitive plugins.
 " Trim mode names down to single character to save space for long git branches
 let g:lightline = {
   \ 'colorscheme': 'solarized',
@@ -96,7 +96,7 @@ let g:lightline = {
 
 " }}}
 
-" Settings {{{
+" Options {{{
 
 " Indenting/Formatting
 " copy above line indent on enter
@@ -117,6 +117,7 @@ set clipboard=unnamed,unnamedplus
 " completion menu can show even when only one match, and instead of preview
 " window if there's extra information, use the 'popupwin' feature
 set completeopt=menuone,popup
+set diffopt+=algorithm:patience | " http://vimways.org/2018/the-power-of-diff/
 set hidden " hide buffers without needing to save them
 set hlsearch " highlight all search matches until :nohl run
 set laststatus=2 | " always show statuslines in all windows
@@ -126,6 +127,7 @@ set nowrap " defaults to line wrapping on
 set number relativenumber " current line number shown - rest shown relative
 set showmatch " on brackets briefly jump to matching to show it
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
+set tags+=.git/tags | " check .git/ folder for 'tags' files (tpope method)
 set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
 set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
 
@@ -267,5 +269,9 @@ autocmd vimrc BufNewFile,BufRead *.markdown,*.mkd,*.mkdn,*.md
 " Playground {{{
 " TODO:
 " * play with t_SI t_EI et al to modify cursor on mode changes
-
+" * TODO: make this live Rg, this is just running fzf over it, I want
+" new rg to fire on each keypress
+" nnoremap <Leader>r :Rg<CR>
+command! -nargs=+ Grep execute 'silent grep! <args>'
+" nnoremap <Leader>s :silent grep!<Space> | redraw!
 " }}}
