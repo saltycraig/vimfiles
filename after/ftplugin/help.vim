@@ -1,3 +1,5 @@
-" don't specify exact region, so region variants hl differently
-" setlocal spell spelllang=en
+setlocal nonumber
+setlocal norelativenumber
+setlocal nospell
 
+let b:undo_ftplugin .= '|setlocal number< relativenumber< spell<'

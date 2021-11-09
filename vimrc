@@ -12,7 +12,8 @@ let mapleader=' '
 
 " pack/git/opt/<plugin>
 packadd vim-polyglot
-packadd cfilter
+packadd cfilter " quickfix reducer :Cfilter [v]/re/
+packadd matchit " extended 'matchpairs', basically
 
 " vim-fugitive
 nnoremap <Leader>gg :G<CR>
@@ -28,7 +29,6 @@ nnoremap <C-p> :GFiles<CR>
 " FZF from directory buffer is in, use this when not in Git repo
 nnoremap <Leader>e :FZF %:h<CR>
 nnoremap <Leader>b :Buffers<CR>
-nnoremap <Leader>/ :BLines<CR>
 " Change to git project directory
 nnoremap <Leader>c :FZFCd ~/git<CR>
 nnoremap <Leader>C :FZFCd!<CR>
@@ -125,9 +125,9 @@ set listchars=space:·,trail:· | " strings to show when :set list is on
 set noswapfile " no annoying *.foo~ files left around
 set nowrap " defaults to line wrapping on
 set number relativenumber " current line number shown - rest shown relative
+set signcolumn=yes | " Always show sign column, instead of popping open/closed
 set showmatch " on brackets briefly jump to matching to show it
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
-set tags+=.git/tags | " check .git/ folder for 'tags' files (tpope method)
 set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
 set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
 
@@ -152,6 +152,10 @@ let g:markdown_folding = 1
 runtime ftplugin/man.vim
 let g:ft_man_folding_enable=1
 
+" vim-liquid
+" TODO: test this
+let g:liquid_highlight_types=["javascript", "cpp"]
+
 " }}}
 
 " Mappings {{{
@@ -170,6 +174,7 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Function keys
 nnoremap <silent><F3> :call utils#ToggleQuickfixList()<CR>
 nnoremap <silent><F4> :call utils#ToggleLocationList()<CR>
+nnoremap <silent><F5> :silent make! % <bar> silent redraw!<CR>
 nnoremap <silent><F6> :15Lexplore<CR>
 nnoremap <silent><F9> :set list!<CR>
 nnoremap <silent><F10> :set spell!<CR>
@@ -216,19 +221,12 @@ command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 " safe to be re-sourced, by clearing all first with autocmd!
 augroup vimrc
   autocmd!
+  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePre /tmp/* setlocal noundofile
+  autocmd QuickFixCmdPost [^l]* cwindow
+  autocmd QuickFixCmdPost  l* lwindow
+  autocmd VimEnter * cwindow
 augroup END
-
-autocmd vimrc BufNewFile,BufRead *.md setlocal complete+=k spell
-autocmd vimrc BufWinEnter */doc/*.txt setlocal nonumber norelativenumber
-autocmd vimrc BufWritePost $MYVIMRC nested source $MYVIMRC
-autocmd vimrc BufWritePre /tmp/* setlocal noundofile
-autocmd vimrc FileType liquid setlocal list
-
-" Quickfix/Location List
-autocmd vimrc FileType * if &ft ==# 'qf' | setlocal nonu nornu | endif
-autocmd vimrc QuickFixCmdPost [^l]* cwindow
-autocmd vimrc QuickFixCmdPost  l* lwindow
-autocmd vimrc VimEnter * cwindow
 
 " }}}
 
@@ -255,23 +253,11 @@ map <F2> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<
 " Add comment highlighting support for 'JSONC' (JSON w/ comments)
 autocmd vimrc FileType json syntax match Comment +\/\/.\+$+
 
-" To capture release-notes.md and migration-notes.md which are snippet files
-autocmd vimrc BufNewFile,BufRead *.markdown,*.mkd,*.mkdn,*.md
-      \ if getline(1) =~# "^We\.re excited" |
-      \   let b:liquid_subtype = 'markdown' |
-      \   set ft=liquid |
-      \ elseif getline(1) =~# "^\\d.\\d\\d is the first generally" |
-      \   let b:liquid_subtype = 'markdown' |
-      \   set ft=liquid | 
-      \ endif
 "}}}
 
 " Playground {{{
 " TODO:
 " * play with t_SI t_EI et al to modify cursor on mode changes
-" * TODO: make this live Rg, this is just running fzf over it, I want
-" new rg to fire on each keypress
-" nnoremap <Leader>r :Rg<CR>
-command! -nargs=+ Grep execute 'silent grep! <args>'
-" nnoremap <Leader>s :silent grep!<Space> | redraw!
+nnoremap <Leader>s :silent grep! '' **/*.md <Bar> silent redraw!
+nnoremap <Leader>/ :noautocmd vimgrep //j **/*.md<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 " }}}

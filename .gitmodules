@@ -46,3 +46,6 @@
 [submodule "pack/git/opt/vim-polyglot"]
 	path = pack/git/opt/vim-polyglot
 	url = https://github.com/sheerun/vim-polyglot
+[submodule "pack/git/start/zenbones.nvim"]
+	path = pack/git/start/zenbones.nvim
+	url = https://github.com/mcchrish/zenbones.nvim

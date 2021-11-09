@@ -15,8 +15,8 @@ if exists(":CompilerSet") != 2
   command -nargs=* CompilerSet setlocal <args>
 endif
 
-CompilerSet makeprg=vale
-CompilerSet errorformat=%f:\ line\ %l:\ %m
+CompilerSet makeprg=vale\ --no-wrap\ --no-exit\ --output\ line
+CompilerSet errorformat=%f:%l:%c:%m
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
