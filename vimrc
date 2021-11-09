@@ -211,7 +211,9 @@ augroup END
 
 " zenbones light/dark
 set background=light
-colorscheme zenbones_light
+" colorscheme zenbones_light
+let g:colors_off_a_little = 1
+colorscheme off
 
 " lifepillar/vim-solarized8
 " https://ethanschoonover.com/solarized/#the-values
