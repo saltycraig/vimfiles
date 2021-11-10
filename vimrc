@@ -11,18 +11,8 @@ let mapleader=' '
 " Plugin Settings {{{
 
 " pack/git/opt/<plugin>
-packadd vim-polyglot
 packadd cfilter " quickfix reducer :Cfilter [v]/re/
 packadd matchit " extended 'matchpairs', basically
-
-" vim-fugitive
-nnoremap <Leader>gg :G<CR>
-nnoremap <Leader>gP :G push<CR>
-nnoremap <Leader>gp :G pull<CR>
-nnoremap <Leader>gd :Gvdiffsplit<CR>
-nnoremap <Leader>gb :G blame<CR>
-nnoremap <Leader>gl :Gclog<CR>
-nnoremap <Leader>gc :G commit -av<CR>
 
 " fzf.vim
 nnoremap <C-p> :GFiles<CR>
@@ -97,12 +87,8 @@ set listchars=space:·,trail:· | " strings to show when :set list is on
 set noswapfile " no annoying *.foo~ files left around
 set nowrap " defaults to line wrapping on
 set number relativenumber " current line number shown - rest shown relative
-set signcolumn=yes | " Always show sign column, instead of popping open/closed
 set showmatch " on brackets briefly jump to matching to show it
-set statusline=%F
-set statusline+=%=
-set statusline+=%{FugitiveStatusline()}
-set statusline+=%y
+set statusline=%F%=%y
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
 set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
 set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
@@ -184,6 +170,9 @@ nnoremap [Q :cfirst<CR>
 nnoremap ]Q :clast<CR>
 nnoremap [l :lprevious<CR>
 nnoremap ]l :lnext<CR>
+nnoremap ]t :tabnext<CR>
+nnoremap [t :tabprev<CR>
+nnoremap ]T :tab term<CR>
 " }}}
 
 " Commands {{{
@@ -208,32 +197,34 @@ augroup END
 " }}}
 
 " Colorscheme and Syntax {{{
+" https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg
 
-" zenbones light/dark
+" See all active highlight groups with:
+" :so $VIMRUNTIME/syntax/hitest.vim
+
 set background=light
-" colorscheme zenbones_light
-let g:colors_off_a_little = 1
-colorscheme off
 
 " lifepillar/vim-solarized8
 " https://ethanschoonover.com/solarized/#the-values
 " For colouring 'nbsp', 'tab', and 'trail'
 " original guifg=#657b83
+" colorscheme solarized8
 " highlight! SpecialKey guibg=#fdf6e3 guifg=#eee8d5
 " Use same bg as LineNr to blend all together
-" highlight! SignColumn guibg=#eee8d5
-" highlight! GitGutterAdd guibg=#eee8d5
-" highlight! GitGutterChange guibg=#eee8d5
-" highlight! GitGutterDelete guibg=#eee8d5
 
-" Display highlighting groups of thing under cursor
-map <F2> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-      \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-      \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
-" Add comment highlighting support for 'JSONC' (JSON w/ comments)
-autocmd vimrc FileType json syntax match Comment +\/\/.\+$+
-
+function! SynGroup()
+  " Outputs both the name of the syntax group, AND the translated syntax
+  " group of the character the cursor is on.
+  " line('.') and col('.') return the current position
+  " synID(...) returns a numeric syntax ID
+  " synIDtrans(l:s) translates the numeric syntax id l:s by following highlight links
+  " synIDattr(l:s, 'name') returns the name corresponding to the numeric syntax ID
+  " example output:
+  " vimMapModKey -> Special
+  let l:s = synID(line('.'), col('.'), 1)
+  echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfunction
+nnoremap <F2> :call SynGroup()<CR>
 "}}}
 
 " Playground {{{
@@ -241,4 +232,6 @@ autocmd vimrc FileType json syntax match Comment +\/\/.\+$+
 " * play with t_SI t_EI et al to modify cursor on mode changes
 nnoremap <Leader>s :silent grep! '' **/*.md <Bar> silent redraw!
 nnoremap <Leader>/ :noautocmd vimgrep //j **/*.md<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+
 " }}}
+
