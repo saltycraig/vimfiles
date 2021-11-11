@@ -7,4 +7,7 @@ autocmd BufNewFile,BufRead *.markdown,*.mkd,*.mkdn,*.md
       \ elseif getline(1) =~# "^\\d.\\d\\d is the first generally" |
       \   let b:liquid_subtype = 'markdown' |
       \   set filetype=liquid | 
+      \ elseif getline(2) =~# "^layout: redirect" |
+      \   let b:liquid_subtype = 'markdown' |
+      \   set filetype=liquid |
       \ endif
