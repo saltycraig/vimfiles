@@ -110,14 +110,6 @@ elseif executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
 endif
 
-if exists('+termguicolors')
-  " https://github.com/tmux/tmux/issues/1246
-  " Without 2 t_8x lines below termguicolors doesn't work.
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
 " enable use of folding with ft-markdown-plugin
 let g:markdown_folding = 1
 
@@ -241,4 +233,5 @@ nnoremap <Leader>/ :noautocmd vimgrep //j **/*.md<Left><Left><Left><Left><Left><
 
 nnoremap <Leader>gl :botright vertical terminal ++close lazygit<CR> 
 " }}}
+"
 
