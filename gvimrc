@@ -38,3 +38,8 @@ set tabpagemax=100
 
 " cd to directory of this file, macvim sets 'cd' to ~ by default
 call chdir(fnameescape(expand("~/.vim")))
+
+" set this macvim specific option to toggle fullscreen on macos
+if has('gui_macvim')
+  nnoremap <F11> :set fullscreen!<CR>
+endif
