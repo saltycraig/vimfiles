@@ -28,20 +28,9 @@ nnoremap <Leader>gc :G commit -av<CR>
 nnoremap <C-p> :GFiles<CR>
 " FZF from directory buffer is in, use this when not in Git repo
 nnoremap <Leader>e :FZF %:h<CR>
-" Only show buffers from current tabpage
-nnoremap <Leader>b :FZFTabBuffers<CR>
-" Show buffers from everywhere, note selecting from here will open that
-" buffer in current tabpage replacing current buffer opened, this is because
-" a buffer number can be in any number of tabpages
-nnoremap <Leader>B :Buffers<CR>
-
-command! -bar FZFTabBuffers
-  \ call fzf#run(fzf#wrap(
-  \ {'source': mapnew(tabpagebuflist(), {_, val -> bufname(val)}),
-  \ 'sink': 'b'}))
+nnoremap <Leader>b :Buffers<CR>
 
 " :bwipeout! selected buffers using :ls! to show all hidden buffers
-" getbufinfo() => list of dicts, one for each buffer
 nnoremap <Leader>! :FZFWipeSelectedBuffers<CR>
 command! FZFWipeSelectedBuffers
   \ call fzf#run(fzf#wrap({'source': mapnew(getbufinfo(), {_, val -> val.name}),
@@ -191,10 +180,8 @@ nnoremap <Leader>q :bdelete<CR>
 nnoremap <Leader>, :edit $MYVIMRC<CR>
 nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
 nnoremap <Leader><Leader> :buffer #<CR>
-" Really, really lose everything from this buffer, can't switch back to it
-" either, with :bdelete! I could switch back to it. I set help filetypes to
-" setlocal bufhidden=wipe to auto do this for help buffers
-nnoremap <Leader>k :bwipeout!<CR>
+" leave this a bdelete because wipeout erases jump points etc for navigation
+nnoremap <Leader>k :bdelete!<CR>
 
 " Vimdiff
 nnoremap gh :diffget //2<CR>
