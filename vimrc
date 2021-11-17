@@ -103,8 +103,11 @@ set showtabline=2 | " Always show tabline, I set it to show &pwd and use :lcd in
 " Use for non-gui tabline, for gui use :h 'guitablabel'
 set tabline=%!MyTabLine()
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
+set splitbelow " new horizontal split window always goes below current
+set splitright " same but with new vertical split window
 set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
 set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
+set wildoptions=tagfile | " :tag <C-d> will show tag kind and file
 
 if executable('rg')
   set grepprg=rg\ --vimgrep
@@ -116,12 +119,25 @@ endif
 let g:markdown_folding = 1
 
 " enable :Man command and use it's folding
-runtime ftplugin/man.vim
+runtime! ftplugin/man.vim
 let g:ft_man_folding_enable=1
 
+" Terminal.app
+if $TERM_PROGRAM ==# 'Apple_Terminal'
+  set title
+  autocmd! BufEnter * let &titlestring=getcwd()
+endif
 " }}}
 
 " Mappings {{{
+
+" Match C,D, behaviour, yank to line end from cursor position
+nnoremap Y y$
+" Clear highlighting, call :diffupdate
+nnoremap <C-l> <Cmd>nohlsearch<Bar>diffupdate<CR><C-l>
+
+nnoremap <Leader>tv :vertical terminal<CR> 
+nnoremap <Leader>ts :terminal<CR> 
 
 " Re-select visually selected area after indenting/dedenting.
 xmap < <gv
@@ -153,7 +169,6 @@ nnoremap <Leader>w :update<CR>
 nnoremap <Leader>q :bdelete<CR>
 nnoremap <Leader>, :edit $MYVIMRC<CR>
 nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
-nnoremap <Leader>n :<C-u>nohl<CR>
 nnoremap <Leader><Leader> :buffer #<CR>
 nnoremap <Leader>k :bdelete!<CR>
 
@@ -228,7 +243,7 @@ nnoremap <Leader>/ :noautocmd vimgrep //j **/*.md<Left><Left><Left><Left><Left><
 
 nnoremap <Leader>gl :botright vertical terminal ++close lazygit<CR> 
 
-function MyTabLine()
+function! MyTabLine()
   " Loop over pages and define labels for them, then get label for each tab
   " page use MyTabLabel(). See :h 'statusline' for formatting, e.g., T, %, #, etc.
   let s = ''
@@ -259,7 +274,7 @@ function MyTabLine()
   return s
 endfunction
 
-function MyTabLabel(n)
+function! MyTabLabel(n)
   " Give tabpage number n create a string to display on tabline
   let buflist = tabpagebuflist(a:n)
   let winnr = tabpagewinnr(a:n)
@@ -267,6 +282,15 @@ function MyTabLabel(n)
   return getcwd(winnr, a:n)
   " return bufname(buflist[winnr - 1])
 endfunction
+
+" Never mistype q: again
+nnoremap q: :q
+
+" Never mis-sudo again:
+" (w) the whole buffer to stdout stream (usually current file), but here instead
+" run external program (!) 'sudo cat' which takes stdin stream and outputs to it
+" to file (%) which is replaced by the current buffer name on expansion.  :w
+" !sudo cat %
 
 " }}}
 

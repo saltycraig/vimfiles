@@ -1,5 +1,9 @@
 # Vim setup
 
+## Runtime path explained
+
+https://learnvimscriptthehardway.stevelosh.com/chapters/42.html
+
 ## Replicating the whole setup on new machine
 
 ```sh

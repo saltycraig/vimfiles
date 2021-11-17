@@ -148,3 +148,6 @@ function! utils#MaybeReplaceCrWithCrColon() abort
 endfunction
 
 
+function! utils#Hello() abort
+  echo 'hello from autoload/utils.vim -> hello() function'
+endfunction

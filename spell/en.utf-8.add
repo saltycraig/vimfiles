@@ -96,3 +96,11 @@ iTerm2
 Vimdiff
 autocmds
 Colorscheme
+codetabs
+codetab
+endcodetab
+endcodetabs
+Config
+stylesheet
+endcomment
+endraw
