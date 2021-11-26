@@ -3,8 +3,14 @@
 " Maintainer: github.com/craigmac
 " License: Same as Vim.
 "
-" A non-colorscheme using the lower 16 colors of the xterm-256 color palette
-" to maximize chances of portability and consistent look.
+" A non-colorscheme using the xterm-256 color palette to maximize chances of
+" portability and consistent look.  Does not use the first 0-15 colorcodes
+" because they tend to be slightly different between terminal emulators, and not
+" the same as the ANSI 16 found here:
+" https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg
+"
+" The rest of the 256 colors (16-255) are typically much closer, as in the case
+" of Terminal.app and iTerm on macOS.
 "
 " Anti-Features:
 " * Uses 'notermguicolors' so works on non true-colour capable terminals, like
@@ -38,28 +44,6 @@
 "   otherwise it is 007/#c0c0c0 background with 000/#000000 black text.
 "   Examples:
 
-" HINTS:
-" * In Terminal.app when using Profiles:
-" - Basic
-" The ANSI#15 bright white is not #feffff like it is in iTerm so you
-" must either accept the Terminal.app Basic value or change it to
-" #feffff like iTerm.
-"
-" Colour differences:
-" For xterm-256 color chart for first 16 colours see:
-" https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg
-"
-" ANSI colours in comparison: 
-"
-" iTerm2          Terminal.app     xterm-256-color-chart
-" 0 => #000000    0 => #000000     0 => #000000
-" 4 => #c7c400    4 => #000099     4 => #808000
-" 7 => #c7c7c7    7 => #cccccc     7 => #c0c0c0
-" 8 => #676767    8 => #666666     8 => #808080
-" 10 => #5ff967   10 => #00cc00    10 => #00ff00
-" 11 => #fefb67   11 => #cccc00    11 => ffff00
-" 12 => #6871ff   12 => #0000ff    12 => #0000ff
-" 15 => #feffff   15 => #cccccc    15 => #ffffff
 
 hi clear
 
@@ -69,70 +53,71 @@ endif
 
 let g:colors_name='enso'
 
-hi! Conceal ctermfg=0 ctermbg=231 guifg=#000000 guibg=#ffffff 
-hi! CursorColumn ctermbg=7 guibg=#c0c0c0
-hi! CursorLine ctermbg=7 guibg=#c0c0c0 cterm=NONE gui=NONE
-hi! CursorLineNr ctermbg=7 ctermfg=0 guifg=#000000 guibg=#c0c0c0 cterm=NONE gui=NONE
-hi! Directory ctermfg=8 guifg=#808080
-hi! DiffAdd ctermbg=10 ctermfg=0 guibg=#00ff00 guifg=#000000
-hi! DiffDelete ctermbg=9 ctermfg=0 guibg=#ff0000 guifg=#000000 cterm=NONE gui=NONE
-hi! DiffChange ctermbg=11 cterm=NONE gui=NONE ctermfg=0 guifg=#000000 guibg=#ffff00
-hi! DiffText ctermbg=10 cterm=NONE gui=NONE ctermfg=0 guifg=#000000 guibg=#00ff00
-hi! EndOfBuffer ctermfg=0 ctermbg=231 guifg=#000000 guibg=#ffffff
-hi! ErrorMsg ctermfg=15 ctermbg=1 guifg=#ffffff guibg=#800000
-hi! VertSplit ctermfg=0 ctermbg=0 guifg=#000000 guibg=#000000
-hi! Folded ctermfg=0 ctermbg=7 cterm=NONE gui=NONE guifg=#000000 guibg=#c0c0c0
-hi! FoldColumn ctermfg=0 ctermbg=231 guibg=#000000 guibg=#ffffff
-hi! SignColumn ctermfg=0 ctermbg=231 guifg=#000000 guibg=#ffffff
-hi! IncSearch cterm=NONE gui=NONE ctermbg=11 ctermfg=0 guibg=#ffff00 guifg=#000000
-hi! LineNr ctermfg=0 ctermbg=231 cterm=NONE gui=NONE guifg=#000000 guibg=#ffffff
+" original cc color. cursorlinenr, cursorline, statuslineNC, Pmenu
+hi! Conceal ctermfg=232 ctermbg=231 guifg=#080808 guibg=#eeeeee 
+hi! CursorColumn ctermbg=255 guibg=#eeeeee
+hi! CursorLine ctermbg=255 guibg=#eeeeee cterm=NONE gui=NONE
+hi! CursorLineNr ctermbg=255 ctermfg=232 guifg=#080808 guibg=#eeeeee cterm=NONE gui=NONE
+hi! Directory ctermfg=244 guifg=#808080
+hi! DiffAdd ctermbg=118 ctermfg=232 guibg=#87ff00 guifg=#080808
+hi! DiffDelete ctermbg=196 ctermfg=232 guibg=#ff0000 guifg=#080808 cterm=NONE gui=NONE
+hi! DiffChange ctermbg=214 cterm=NONE gui=NONE ctermfg=232 guifg=#080808 guibg=#ffaf00
+hi! DiffText ctermbg=118 cterm=NONE gui=NONE ctermfg=232 guifg=#080808 guibg=#87ff00
+hi! EndOfBuffer ctermfg=232 ctermbg=231 guifg=#080808 guibg=#eeeeee
+hi! ErrorMsg ctermfg=231 ctermbg=196 guifg=#eeeeee guibg=#800000
+hi! VertSplit ctermfg=232 ctermbg=232 guifg=#080808 guibg=#080808
+hi! Folded ctermfg=232 ctermbg=255 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! FoldColumn ctermfg=232 ctermbg=231 guibg=#080808 guibg=#eeeeee
+hi! SignColumn ctermfg=232 ctermbg=231 guifg=#080808 guibg=#eeeeee
+hi! IncSearch cterm=NONE gui=NONE ctermbg=226 ctermfg=232 guibg=#ffff00 guifg=#080808
+hi! LineNr ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
 hi! link LineNrAbove LineNr
 hi! link LineNrBelow LineNr
 hi! link CursorLineNr CursorLine
-hi! MatchParen cterm=NONE gui=NONE ctermbg=0 ctermfg=15 guibg=#000000 guifg=#ffffff
+hi! MatchParen cterm=NONE gui=NONE ctermbg=232 ctermfg=231 guibg=#080808 guifg=#eeeeee
 hi! ModeMsg cterm=bold gui=bold
-hi! MoreMsg cterm=bold gui=bold ctermfg=0 ctermbg=231 guibg=#ffffff guifg=#000000
-hi! NonText cterm=NONE gui=NONE ctermfg=0 ctermbg=231 guibg=#ffffff guifg=#000000
-hi! Normal ctermfg=0 ctermbg=231 guifg=#000000 guibg=#ffffff
-hi! Pmenu ctermfg=0 ctermbg=7 cterm=NONE gui=NONE guifg=#000000 guibg=#c0c0c0
-hi! PmenuSel ctermfg=15 ctermbg=8 cterm=NONE gui=NONE guifg=#ffffff guibg=#808080
-hi! PmenuSbar ctermbg=7 guibg=#c0c0c0
-hi! PmenuThumb ctermbg=0 guibg=#000000
-hi! Question ctermbg=231 ctermfg=0 cterm=bold gui=bold guifg=#000000 guibg=#ffffff
-hi! Search ctermbg=11 ctermfg=0 guibg=#ffff00 guifg=#000000 cterm=NONE gui=NONE
+hi! MoreMsg cterm=bold gui=bold ctermfg=232 ctermbg=231 guibg=#eeeeee guifg=#080808
+hi! NonText cterm=NONE gui=NONE ctermfg=232 ctermbg=231 guibg=#eeeeee guifg=#080808
+hi! Normal ctermfg=232 ctermbg=231 guifg=#080808 guibg=#eeeeee
+hi! Pmenu ctermfg=232 ctermbg=255 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! PmenuSel ctermfg=231 ctermbg=244 cterm=NONE gui=NONE guifg=#eeeeee guibg=#808080
+hi! PmenuSbar ctermbg=255 guibg=#eeeeee
+hi! PmenuThumb ctermbg=232 guibg=#080808
+hi! Question ctermbg=231 ctermfg=232 cterm=bold gui=bold guifg=#080808 guibg=#eeeeee
+hi! Search ctermbg=226 ctermfg=232 guibg=#ffff00 guifg=#080808 cterm=NONE gui=NONE
 hi! link QuickFixLine Search
 " Used for listchars but also for meta/map keys listed with :map. Neovim does
 " this better by breaking them into two separate groups, with a ListChar group.
-hi! SpecialKey ctermbg=231 ctermfg=7
-hi! SpellBad cterm=underline gui=undercurl ctermfg=1 ctermbg=231 guifg=#800000 guibg=#ffffff
+hi! SpecialKey ctermbg=231 ctermfg=255
+hi! SpellBad cterm=underline gui=underline ctermfg=196 ctermbg=231 guifg=#ff0000 guibg=#eeeeee
 hi! link SpellCap SpellBad
 hi! link SpellLocal SpellBad
 hi! link SpellRare SpellBad
-hi! StatusLine ctermfg=15 ctermbg=8 cterm=NONE gui=NONE guifg=#ffffff guibg=#808080
-hi! StatusLineNC ctermfg=0 ctermbg=7 cterm=NONE gui=NONE guifg=#000000 guibg=#c0c0c0
-hi! Tabline cterm=NONE gui=NONE ctermbg=7 ctermfg=0 guifg=#000000 guibg=#c0c0c0
-hi! TabLineFill ctermbg=231 ctermfg=15 guibg=#ffffff guifg=#000000
-hi! TabLineSel ctermbg=8 cterm=NONE gui=NONE ctermfg=15 guifg=#ffffff guibg=#808080
-hi! Title ctermbg=231 ctermfg=0 cterm=bold gui=bold guifg=#000000 guibg=#ffffff
-hi! Visual ctermbg=8 ctermfg=15 guifg=#ffffff guibg=#c0c0c0
-hi! VisualNOS ctermbg=8 ctermfg=15 guifg=#ffffff guibg=#c0c0c0
-hi! WarningMsg ctermbg=231 ctermfg=1 guibg=#ffffff guifg=#800000
-hi! WildMenu ctermbg=7 guibg=#c0c0c0
-hi! ColorColumn ctermbg=7 guibg=#c0c0c0
+hi! StatusLine ctermfg=231 ctermbg=244 cterm=NONE gui=NONE guifg=#eeeeee guibg=#808080
+hi! StatusLineNC ctermfg=232 ctermbg=255 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! Tabline cterm=NONE gui=NONE ctermbg=255 ctermfg=232 guifg=#080808 guibg=#eeeeee
+hi! TabLineFill ctermbg=231 ctermfg=231 guibg=#eeeeee guifg=#080808
+hi! TabLineSel ctermbg=244 cterm=NONE gui=NONE ctermfg=231 guifg=#eeeeee guibg=#808080
+hi! Title ctermbg=231 ctermfg=232 cterm=bold gui=bold guifg=#080808 guibg=#eeeeee
+hi! Visual ctermbg=244 ctermfg=231 guifg=#eeeeee guibg=#eeeeee
+hi! VisualNOS ctermbg=244 ctermfg=231 guifg=#eeeeee guibg=#eeeeee
+hi! WarningMsg ctermbg=231 ctermfg=196 guibg=#eeeeee guifg=#ff0000
+hi! WildMenu ctermbg=255 guibg=#eeeeee
+hi! ColorColumn ctermbg=255 guibg=#eeeeee
 
 " Preferred groups
-hi! Comment ctermfg=8 ctermbg=231 cterm=NONE gui=NONE guifg=#000000 guibg=#ffffff
-hi! Constant ctermfg=8 ctermbg=231 cterm=NONE gui=NONE guifg=#000000 guibg=#ffffff
-hi! Identifier ctermfg=0 ctermbg=231 cterm=NONE gui=NONE guifg=#000000 guibg=#ffffff
-hi! Statement ctermfg=0 ctermbg=231 cterm=bold gui=bold guifg=#000000 guibg=#ffffff
-hi! PreProc ctermfg=0 ctermbg=231 cterm=NONE gui=NONE guifg=#000000 guibg=#ffffff
-hi! Type ctermfg=0 ctermbg=231 cterm=NONE gui=NONE guifg=#000000 guibg=#ffffff
-hi! Special ctermfg=0 ctermbg=231 cterm=NONE gui=NONE guifg=#000000 guibg=#ffffff
-hi! Underlined cterm=underline gui=underline ctermfg=0 ctermbg=231 guifg=#000000 guibg=#ffffff
-hi! Ignore ctermbg=231 ctermfg=15 guibg=#ffffff guifg=#ffffff
-hi! Error ctermbg=9 ctermfg=15 guibg=#ff0000 guifg=#ffffff
-hi! Todo cterm=NONE gui=NONE ctermbg=8 ctermfg=15 guibg=#808080 guifg=#ffffff
-hi! SignColumn ctermbg=231 guibg=#000000
+hi! Comment ctermfg=244 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! Constant ctermfg=244 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! Identifier ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! Statement ctermfg=232 ctermbg=231 cterm=bold gui=bold guifg=#080808 guibg=#eeeeee
+hi! PreProc ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! Type ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! Special ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
+hi! Underlined cterm=underline gui=underline ctermfg=232 ctermbg=231 guifg=#080808 guibg=#eeeeee
+hi! Ignore ctermbg=231 ctermfg=231 guibg=#eeeeee guifg=#eeeeee
+hi! Error ctermbg=196 ctermfg=231 guibg=#ff0000 guifg=#eeeeee
+hi! Todo cterm=NONE gui=NONE ctermbg=244 ctermfg=232 guibg=#808080 guifg=#080808
+hi! SignColumn ctermbg=231 guibg=#080808
 
 hi! link StatusLineTerm StatusLine
 hi! link StatusLineTermNC StatusLineNC

@@ -64,8 +64,6 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " Default toggle preview window key of <C-/> is not widely supported on
 " terminal emulators. Also it slows things down. Off until toggled on.
 let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-o']
-" TODO: not working? C-n/p in C-p menu doesn't recall searches
-let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -231,7 +229,9 @@ xmap > >gv
 xnoremap J :m '>+1<CR>gv=gv
 xnoremap K :m '<-2<CR>gv=gv
 
-" TODO: map [e and ]e to lnext/lprev for loc list movement
+" TODO: map [e and ]e to lnext/lprev changed here! for loc list movement
+nnoremap <silent> [e :silent! lprevious<CR>
+nnoremap <silent> ]e :silent! lnext<CR>
 "
 " '%%' in command-line mode maybe expands to path of current buffer.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
@@ -325,6 +325,7 @@ augroup END
 
 " See all active highlight groups with:
 " :so $VIMRUNTIME/syntax/hitest.vim
+
 set background=light
 colorscheme enso
 
