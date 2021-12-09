@@ -8,3 +8,5 @@ endif
 
 compiler yamllint-relaxed
 
+setlocal foldmethod=indent
+

@@ -14,14 +14,11 @@ let mapleader=' '
 packadd cfilter " quickfix reducer :Cfilter [v]/re/
 packadd matchit " extended 'matchpairs', basically
 packadd vim-fugitive
-packadd syntastic
 
-" vim-syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_sort_aggregated_errors = 1
-let g:syntastic_aggregate_errors = 1
-" let g:syntastic_liquid_checkers = ['vale', 'markdownlint-cli2']
+" brew install fzf first
+if executable('fzf') && has('mac')
+    set runtimepath+=/usr/local/opt/fzf
+endif
 
 " vim-fugitive
 nnoremap <Leader>gg :G<CR>
@@ -120,9 +117,9 @@ set secure " autocmd, shell, and write commands not allow in dir exrc
 set showmatch " on brackets briefly jump to matching to show it
 set statusline=%F
 " Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 " End Syntastic
 set statusline+=%=
 set statusline+=%y
@@ -130,6 +127,7 @@ set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
 " Use for non-gui tabline, for gui use :h 'guitablabel'
 set tabline=%!MyTabLine()
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
+set signcolumn=yes | " Always show it, too jarring when pops in/out
 set splitbelow " new horizontal split window always goes below current
 set splitright " same but with new vertical split window
 set tags=./tags;,tags; | " pwd and search up til root dir for tags file
@@ -140,6 +138,16 @@ set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
 " set wcm=<C-Z> | cnnoremap ss so $VIM/sessions/*.vim<C-Z>
 set wildcharm=<C-z>
 set wildoptions=tagfile | " :tag <C-d> will show tag kind and file
+
+if exists('+termguicolors')
+  " To work with tmux we needs these as well
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  " Terminal.app only supports 256 still (in 2021...)
+  if !$TERM_PROGRAM =~ "Apple_Terminal"
+    set termguicolors
+  endif
+endif
 
 if executable('rg')
   set grepprg=rg\ --vimgrep
@@ -155,10 +163,11 @@ runtime! ftplugin/man.vim
 let g:ft_man_folding_enable=1
 
 " Terminal.app
-if $TERM_PROGRAM ==# 'Apple_Terminal'
-  set title
-  autocmd! BufEnter * let &titlestring=getcwd()
-endif
+" if $TERM_PROGRAM ==# 'Apple_Terminal'
+"   set title
+"   autocmd! BufEnter * let &titlestring=getcwd()
+" endif
+
 " }}}
 
 " Mappings {{{
@@ -211,12 +220,10 @@ nnoremap <Leader>i :ilist /
 nnoremap [I [I:djump<Space><Space><Space><C-r><C-w><S-Left><Left>
 nnoremap ]I ]I:djump<Space><Space><Space><C-r><C-w><S-Left><Left>
 
-
-
 " Match C,D, behaviour, yank to line end from cursor position
 nnoremap Y y$
 " Clear highlighting, call :diffupdate
-nnoremap <C-l> <Cmd>nohlsearch<Bar>diffupdate<CR><C-l>
+nnoremap <Leader>n <Cmd>nohlsearch<Bar>diffupdate<CR><C-l>
 
 nnoremap <Leader>tv :vertical terminal<CR> 
 nnoremap <Leader>ts :terminal<CR> 
@@ -290,7 +297,7 @@ command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 cnoremap <expr> <CR> <SID>CCR()
 function! s:CCR()
   command! -bar Z silent set more|delcommand Z
-  if getcmdtype() == ":"
+  if getcmdtype() ==# ':'
     let cmdline = getcmdline()
     if cmdline =~ '\v\C^(dli|il)' | return "\<CR>:" . cmdline[0] . "jump   " . split(cmdline, " ")[1] . "\<S-Left>\<Left>\<Left>"
     elseif cmdline =~ '\v\C^(cli|lli)' | return "\<CR>:silent " . repeat(cmdline[0], 2) . "\<Space>"
@@ -328,6 +335,9 @@ augroup END
 
 set background=light
 colorscheme enso
+" Terminal.app for some reason doesn't respect the cterm=italic on Comment
+" unless done AFTER enso is loaded
+hi! Comment cterm=italic
 
 function! SynGroup() " Outputs both the name of the syntax group, AND the translated syntax
   " group of the character the cursor is on.
@@ -411,8 +421,13 @@ endfunction
 " To search down and then recurse up until given dir  use ';'
 " set path=**;~/git/devx/docs/_ver_6.14
 
+" HMM how to get this work right?
+" This is char code for ^@ (ctrl-space) on Terminal.app
+" cnoremap <Nul> <Esc>:<Up><C-d>
+
 " TODO:
 " * 
+
 " }}}
 
 " Neovim backports {{{
