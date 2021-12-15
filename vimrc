@@ -116,11 +116,6 @@ set path-=/usr/include |  set path+=** | " Look recursively from ':pwd'
 set secure " autocmd, shell, and write commands not allow in dir exrc
 set showmatch " on brackets briefly jump to matching to show it
 set statusline=%F
-" Syntastic
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-" End Syntastic
 set statusline+=%=
 set statusline+=%y
 set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
