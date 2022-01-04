@@ -330,6 +330,7 @@ augroup vimrc
   autocmd QuickFixCmdPost  l* lwindow
   autocmd VimEnter * cwindow
   autocmd FileType fugitiveblame call feedkeys('A')
+  autocmd FileType gitcommit call feedkeys('i')
 augroup END
 
 " }}}
