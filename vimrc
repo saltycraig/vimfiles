@@ -339,11 +339,14 @@ augroup END
 " :so $VIMRUNTIME/syntax/hitest.vim
 set background=light
 colorscheme quiet
+
+" Colorscheme Extras for Plugins {{{
 hi! link diffAdded DiffAdd
 hi! link diffRemoved DiffDelete
 hi! link diffBDiffer DiffText
 hi! link diffDiffer DiffText
 hi! link diffChanged DiffChange
+"}}}
 
 function! SynGroup() " Outputs both the name of the syntax group, AND the translated syntax
   " group of the character the cursor is on.
