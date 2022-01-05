@@ -33,7 +33,7 @@ nnoremap <Leader>g/ :Ggrep! --quiet<Space>
 " fzf.vim
 nnoremap <C-p> :GFiles<CR>
 " FZF from directory buffer is in, use this when not in Git repo
-nnoremap <Leader>e :FZF %:h<CR>
+nnoremap <Leader>e. :FZF %:h<CR>
 " Jump to buffer in existing window if possible with this option
 let g:fzf_buffers_jump = 1
 nnoremap <Leader><Tab> :Buffers<CR>
@@ -115,6 +115,7 @@ set history=10000 | " Max possible value, use <C-f> in commandline to browse
 set hlsearch " highlight all search matches until :nohl run
 set laststatus=2 | " always show statuslines in all windows
 set listchars=space:·,trail:· | " strings to show when :set list is on
+set mouse=a
 set noswapfile " no annoying *.foo~ files left around
 set nowrap " defaults to line wrapping on
 set number relativenumber " current line number shown - rest shown relative
@@ -125,10 +126,8 @@ set statusline=%F | " Absolute path to buffer name
 set statusline+=%m%r%h | " [+] when modified, [-] no modify [RO] and [help]
 set statusline+=%= | " Start right-hand side of statusline
 " Requires https://github.com/itchyny/vim-gitbranch function
-set statusline+=%-30.{gitbranch#name()} | " master
-" Setting min and max 30 and right-align stops branch name jumping around
-" as you scroll through file and right-side expands/shrinks.
-set statusline+=%30.30(\ %p%%\ \|\ %c:%l\ %L\ %y%) | " e.g. 28% | 6:131 450 [vim]
+set statusline+=%{gitbranch#name()} | " master
+set statusline+=\|%Y
 set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
 " Use for non-gui tabline, for gui use :h 'guitablabel'
 set tabline=%!MyTabLine()
@@ -217,6 +216,7 @@ nnoremap <Leader>es :split *<C-z><S-Tab>
 nnoremap <Leader>ev :vert split *<C-z><S-Tab>
 
 " :buffer for showing listed buffers, :buffers! for everything
+" TODO: when 1 buffer this doesn't work
 nnoremap <Leader>bb :buffer *<C-z><S-Tab>
 nnoremap <Leader>bs :sbuffer *<C-z><S-Tab>
 nnoremap <Leader>bv :vert sbuffer *<C-z><S-Tab>
@@ -352,11 +352,6 @@ set background=dark
 colorscheme apprentice
 
 " Colorscheme Extras for Plugins {{{
-" hi! link diffAdded DiffAdd
-" hi! link diffRemoved DiffDelete
-" hi! link diffBDiffer DiffText
-" hi! link diffDiffer DiffText
-" hi! link diffChanged DiffChange
 "}}}
 
 function! SynGroup() " Outputs both the name of the syntax group, AND the translated syntax
@@ -436,7 +431,9 @@ function! MyTabLabel(n)
 endfunction
 
 " TODO:
-" * 
+" * g; to do g;zl
+nnoremap g; g;zv
+nnoremap g, g,zv
 
 " }}}
 
@@ -448,9 +445,20 @@ set sessionoptions-=options
 " register, but I mostly just use qq so no need to create elaborate backport
 nnoremap Q @q
 nnoremap Y y$
-nnoremap <C-L> <Cmd>nohlsearch<Bar>diffupdate<CR><C-L>
+" TODO call an expr to determine/call this and then go tmux right?
+" nnoremap <C-L> <Cmd>nohlsearch<Bar>diffupdate<CR><C-L>
 inoremap <C-U> <C-G>u<C-U>
 inoremap <C-W> <C-G>u<C-W>
+
+" NOTE: tnoremap not done due to conflicts with fzf and others that use
+" terminal buffer and use <C-j/k> keys by default. It also allows us to use
+" <C-l> to clear screen when in a terminal buffer, as normal
+let g:tmux_navigator_no_mappings=1
+nnoremap <silent> <C-l> <Cmd>nohlsearch<Bar>diffupdate<Bar>TmuxNavigateRight<CR>
+nnoremap <silent> <C-h> <Cmd>TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> <Cmd>TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> <Cmd>TmuxNavigateUp<cr>
+nnoremap <silent> <C-\> <Cmd>TmuxNavigatePrevious<cr>
 
 " }}}
 
