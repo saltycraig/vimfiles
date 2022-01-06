@@ -348,8 +348,8 @@ augroup END
 
 " See all active highlight groups with:
 " :so $VIMRUNTIME/syntax/hitest.vim
-set background=dark
-colorscheme apprentice
+" colorscheme apprentice
+colorscheme warlock
 
 " Colorscheme Extras for Plugins {{{
 "}}}
