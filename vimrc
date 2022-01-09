@@ -354,7 +354,9 @@ augroup END
 
 " See all active highlight groups with:
 " :so $VIMRUNTIME/syntax/hitest.vim
-colorscheme apprentice
+" colorscheme apprentice
+set background=light
+colorscheme zenbones_light
 
 " Colorscheme Extras for Plugins {{{
 "}}}
@@ -389,7 +391,8 @@ let &t_EI = "\e[2 q"
 
 " Grepping
 nnoremap <Leader>s :silent grep! '' **/*.md <Bar> silent redraw!
-nnoremap <Leader>/ :noautocmd vimgrep //j **/*.md<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+" Add 'noautocmd' before :vimgrep to increase speed, but no copen happens
+nnoremap <Leader>/ :vimgrep //j **/*.md<S-Left><S-Left><Right>
 nnoremap <Leader>? :Grep<Space>
 " https://github.com/romainl/minivimrc
 command! -nargs=+ -complete=file_in_path -bar Grep cgetexpr system(&grepprg . ' <args>')
