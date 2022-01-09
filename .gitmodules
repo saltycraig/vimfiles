@@ -31,21 +31,12 @@
 [submodule "pack/git/start/vim-solarized8"]
 	path = pack/git/start/vim-solarized8
 	url = https://github.com/lifepillar/vim-solarized8
-[submodule "pack/git/opt/vim-polyglot"]
-	path = pack/git/opt/vim-polyglot
-	url = https://github.com/sheerun/vim-polyglot
 [submodule "pack/git/opt/vim-fugitive"]
 	path = pack/git/opt/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
-[submodule "pack/git/opt/vim-rhubarb"]
-	path = pack/git/opt/vim-rhubarb
-	url = https://github.com/tpope/vim-rhubarb
 [submodule "pack/git/opt/vim-gitgutter"]
 	path = pack/git/opt/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter
-[submodule "pack/git/opt/syntastic"]
-	path = pack/git/opt/syntastic
-	url = https://github.com/vim-syntastic/syntastic
 [submodule "pack/git/start/--force"]
 	path = pack/git/start/--force
 	url = https://github.com/christoomey/vim-tmux-navigator
@@ -58,3 +49,6 @@
 [submodule "pack/git/start/vim-gitbranch"]
 	path = pack/git/start/vim-gitbranch
 	url = https://github.com/itchyny/vim-gitbranch
+[submodule "pack/git/start/zenbones.nvim"]
+	path = pack/git/start/zenbones.nvim
+	url = https://github.com/mcchrish/zenbones.nvim

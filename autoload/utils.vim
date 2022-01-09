@@ -147,25 +147,14 @@ function! utils#MaybeReplaceCrWithCrColon() abort
   endif
 endfunction
 
-
 function! utils#Hello() abort
   echo 'hello from autoload/utils.vim -> hello() function'
 endfunction
 
-" 0. Return immediately if either: &pwd is not  =~ 'devx' OR devx not in full path to the buffer
-" 1. Grab path relative to value of 'pwd', expand('%:.')
-" 2. substitute '_ver_6.15' with '6.15'
-" 3. Replace '.md$' in string with just '/'
-" 4. Use version number to decided whether to try prepending the URL for
-" local server 'https://localhost:8080/6.xx/path/to/file/ or
-" staging server. Depends on me updating the g:latest_docs number.
-" 5. Use gf on the resulting string to open the URL
 function! utils#JekyllOpenLive() abort
+  " Requires 'devx' as &pwd for '%:.' to work correctly with forming the final URL to open
   if !getcwd() =~ 'devx' 
     echoerr 'Command only works when &pwd is "devx"'
-    return
-  elseif matchstr(expand('%:p'), 'devx\|release-details') ==# ''
-    echoerr 'Command only works when devx or release-details found in path to buffer'
     return
   endif
   let relpath = expand('%:.')
@@ -182,15 +171,18 @@ function! utils#JekyllOpenLive() abort
   " up with 6.15/6.15/path/to/file. We only check up to first / to limit to first folder.
   let newpath = newversion .. relpath->substitute('\d\.\d\d\?/', '', '')
 
-  " echom newpath
-
   " any version 6.14 and over requires localhost only
   let host = str2float(newversion) >= 6.14 ? 'https://localhost.com:8080/' : 'https://developer-staging.youi.tv/'
 
   let finalurl = host .. newpath
-  echom finalurl
   " TODO: make more robust, calling os-specific open like netrw does,
   " like xdg-open on Linux
-  " execute "silent! !open " . finalurl
+  execute "silent! !open " . finalurl
 endfunction
 
+function! utils#Redir(cmd) abort
+  let output = execute(a:cmd)
+  botright split +enew
+  setlocal nobuflisted nonumber norelativenumber buftype=nofile bufhidden=wipe noswapfile
+  call setline(1, split(output, "\n"))
+endfunction

@@ -12,7 +12,6 @@ let mapleader=' '
 
 " pack/git/opt/<plugin>
 packadd matchit " extended 'matchpairs', basically
-packadd vim-fugitive
 
 " brew install fzf first
 if executable('fzf') && has('mac')
@@ -101,7 +100,6 @@ set complete+=d | " C-n/p scans include i_CTRL-X_CTRL-D results too
 " completion menu can show even when only one match, and instead of preview
 " window if there's extra information, use the 'popupwin' feature
 set completeopt=menuone,popup
-set cursorline
 try " 8.1 something this became an option
   set diffopt+=algorithm:patience | " http://vimways.org/2018/the-power-of-diff/
 catch /E474/
@@ -121,12 +119,14 @@ set number relativenumber " current line number shown - rest shown relative
 set path-=/usr/include |  set path+=** | " Look recursively from ':pwd'
 set secure " autocmd, shell, and write commands not allow in dir exrc
 set showmatch " on brackets briefly jump to matching to show it
-set statusline=%F | " Absolute path to buffer name
+set statusline=\ %f | " buffer name relative to :pwd
 set statusline+=%m%r%h | " [+] when modified, [-] no modify [RO] and [help]
 set statusline+=%= | " Start right-hand side of statusline
 " Requires https://github.com/itchyny/vim-gitbranch function
 set statusline+=%{gitbranch#name()} | " master
-set statusline+=\|%Y
+set statusline+=\ [%Y]
+set statusline+=\ %P
+set statusline +=\ %l:%c\ 
 set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
 " Use for non-gui tabline, for gui use :h 'guitablabel'
 set tabline=%!MyTabLine()
@@ -205,6 +205,14 @@ inoremap [, [<CR>],<Esc>O
 cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 
+" keeps marks, settings, and you can still do e.g., <C-o> to jump to it
+nnoremap <Leader>dd <Cmd>bdelete!<CR> 
+" REALLY delete the buffer.
+nnoremap <Leader>D <Cmd>bwipeout!<CR>
+" Make THIS the only buffer, mnemonic, alternate to D is Alt-D
+nnoremap <Leader>d <Cmd>only!<CR>
+
+
 " :find (&path aware) and :edit niceties
 nnoremap <Leader>ff :find *
 nnoremap <Leader>fs :sfind *
@@ -220,13 +228,15 @@ nnoremap <Leader>bb :buffer *<C-z><S-Tab>
 nnoremap <Leader>bs :sbuffer *<C-z><S-Tab>
 nnoremap <Leader>bv :vert sbuffer *<C-z><S-Tab>
 
+" NOTE: these need nmap to fire the CCR() function to determine how
+" to handle the <CR> key at the end.
 " tags
-nnoremap <Leader>tj :tjump /
+nmap <Leader>tj :tjump /<CR>
 " preview window, close with C-w z
-nnoremap <Leader>tp :ptjump /
+nmap <Leader>tp :ptjump /<CR>
 
 " defines/includes jumping
-nnoremap <Leader>d :dlist /
+nmap <Leader>dl :dlist /<CR>
 " instead of just showing where the definition is setup to do the jump
 nnoremap [D [D:djump<Space><Space><Space><C-r><C-w><S-Left><Left>
 nnoremap ]D ]D:djump<Space><Space><Space><C-r><C-w><S-Left><Left>
@@ -346,6 +356,9 @@ augroup vimrc
   autocmd VimEnter * cwindow
   autocmd FileType fugitiveblame call feedkeys('A')
   autocmd FileType gitcommit call feedkeys('i')
+  autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+  autocmd WinLeave * setlocal nocursorline
+  autocmd BufWritePost *.vim source '%'
 augroup END
 
 " }}}
@@ -354,11 +367,17 @@ augroup END
 
 " See all active highlight groups with:
 " :so $VIMRUNTIME/syntax/hitest.vim
-" colorscheme apprentice
-set background=light
-colorscheme zenbones_light
-
+"
 " Colorscheme Extras for Plugins {{{
+" macOS ships without +termguicolors on Big Sur when using /usr/bin/vim
+if has('+termguicolors')
+  set termguicolors
+  set background=light
+  colorscheme zenbones
+else
+  set background=dark
+  colorscheme apprentice " widest support
+endif
 "}}}
 
 function! SynGroup() " Outputs both the name of the syntax group, AND the translated syntax
