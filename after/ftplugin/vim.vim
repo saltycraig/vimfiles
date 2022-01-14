@@ -9,4 +9,5 @@ setlocal cinwords+=abort
 setlocal cinwords+=augroup
 
 compiler vint
-let &l:define = '\C^command\|function'
+let &l:define = '\C^command\|^function'
+" let &l:includeexpr = 

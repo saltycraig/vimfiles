@@ -148,16 +148,9 @@ if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   " Terminal.app only supports 256 still (in 2021...)
-  if !$TERM_PROGRAM =~ "Apple_Terminal"
+  if !$TERM_PROGRAM =~# 'Apple_Terminal'
     set termguicolors
   endif
-endif
-
-if $TERM_PROGRAM =~ "xterm_kitty"
-  " https://sw.kovidgoyal.net/kitty/faq/
-  " vim uses background color erase even if the terminfo file does not contain
-  " the bce capability. This is a bug in vim. This is workaround for kitty:
- let &t_ut=''
 endif
 
 if executable('rg')
@@ -173,15 +166,16 @@ let g:markdown_folding = 1
 runtime! ftplugin/man.vim
 let g:ft_man_folding_enable=1
 
-" Terminal.app
-" if $TERM_PROGRAM ==# 'Apple_Terminal'
-"   set title
-"   autocmd! BufEnter * let &titlestring=getcwd()
-" endif
-
 " }}}
 
 " Mappings {{{
+
+if has('gui_macvim')
+  " I set this later, so just set it to non zero so $VIM/gvimrc
+  " detects it's not empty and doesn't set it to %M%t
+  set guitablabel=%!MyTabLine()
+  let g:macvim_skip_cmd_opt_movement = 1
+endif
 
 " manual expansions, when I want it
 inoremap (<CR> (<CR>)<Esc>O
@@ -212,7 +206,6 @@ nnoremap <Leader>D <Cmd>bwipeout!<CR>
 " Make THIS the only buffer, mnemonic, alternate to D is Alt-D
 nnoremap <Leader>d <Cmd>only!<CR>
 
-
 " :find (&path aware) and :edit niceties
 nnoremap <Leader>ff :find *
 nnoremap <Leader>fs :sfind *
@@ -235,7 +228,7 @@ nmap <Leader>tj :tjump /<CR>
 " preview window, close with C-w z
 nmap <Leader>tp :ptjump /<CR>
 
-" defines/includes jumping
+" jumping: dlist here is remapping to djump in CCR()
 nmap <Leader>dl :dlist /<CR>
 " instead of just showing where the definition is setup to do the jump
 nnoremap [D [D:djump<Space><Space><Space><C-r><C-w><S-Left><Left>
@@ -265,12 +258,12 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Function keys
 nnoremap <silent><F3> :call utils#ToggleQuickfixList()<CR>
 nnoremap <silent><F4> :call utils#ToggleLocationList()<CR>
-nnoremap <silent><F5> :silent make! % <bar> silent redraw!<CR>
+nnoremap <silent><F5> :silent! make! <bar> silent! redraw!<CR>
 nnoremap <silent><F6> :15Lexplore<CR>
 nnoremap <silent><F9> :set list!<CR>
 nnoremap <silent><F10> :set spell!<CR>
 
-" iTerm2/Terminal.app
+" iTerm2/Terminal.app: gvimrc sets these for macvim
 nnoremap j <C-w>p<C-e><C-w>p
 nnoremap k <C-w>p<C-y><C-w>p
 nnoremap J <C-w>p<C-d><C-w>p
@@ -320,15 +313,18 @@ function! s:CCR()
   command! -bar Z silent set more|delcommand Z
   if getcmdtype() ==# ':'
     let cmdline = getcmdline()
-    if cmdline =~ '\v\C^(dli|il)' | return "\<CR>:" . cmdline[0] . "jump   " . split(cmdline, " ")[1] . "\<S-Left>\<Left>\<Left>"
-    elseif cmdline =~ '\v\C^(cli|lli)' | return "\<CR>:silent " . repeat(cmdline[0], 2) . "\<Space>"
-    elseif cmdline =~ '\C^changes' | set nomore | return "\<CR>:Z|norm! g;\<S-Left>"
-    elseif cmdline =~ '\C^ju' | set nomore | return "\<CR>:Z|norm! \<C-o>\<S-Left>"
-    elseif cmdline =~ '\v\C(#|nu|num|numb|numbe|number)$' | return "\<CR>:"
-    elseif cmdline =~ '\C^ol' | set nomore | return "\<CR>:Z|e #<"
-    elseif cmdline =~ '\v\C^(ls|files|buffers)' | return "\<CR>:b"
-    elseif cmdline =~ '\C^marks' | return "\<CR>:norm! `"
-    elseif cmdline =~ '\C^undol' | return "\<CR>:u "
+    " TODO: maybe wrap these in a try to catch cancelled jump and send <CR>
+    " to avoid the dreaded hit enter prompt
+    " :dlist|ilist becomes :djump/ijump instead
+    if cmdline =~# '\v\C^(dli|il)' | return "\<CR>:" . cmdline[0] . "jump   " . split(cmdline, " ")[1] . "\<S-Left>\<Left>\<Left>"
+    elseif cmdline =~# '\v\C^(cli|lli)' | return "\<CR>:silent " . repeat(cmdline[0], 2) . "\<Space>"
+    elseif cmdline =~# '\C^changes' | set nomore | return "\<CR>:Z|norm! g;\<S-Left>"
+    elseif cmdline =~# '\C^ju' | set nomore | return "\<CR>:Z|norm! \<C-o>\<S-Left>"
+    elseif cmdline =~# '\v\C(#|nu|num|numb|numbe|number)$' | return "\<CR>:"
+    elseif cmdline =~# '\C^ol' | set nomore | return "\<CR>:Z|e #<"
+    elseif cmdline =~# '\v\C^(ls|files|buffers)' | return "\<CR>:b"
+    elseif cmdline =~# '\C^marks' | return "\<CR>:norm! `"
+    elseif cmdline =~# '\C^undol' | return "\<CR>:u "
     else | return "\<CR>" | endif
   else | return "\<CR>" | endif
 endfunction
@@ -478,4 +474,11 @@ inoremap <C-U> <C-G>u<C-U>
 inoremap <C-W> <C-G>u<C-W>
 
 " }}}
+
+function! JekyllLint() abort
+  " Runs vale and markdownlint-cli2 on current file, and loads results into
+  " location list, sorted by line number ascending
+  let vale_results = ['one', 'two', 'three'] 
+  call setloclist(0, ['one', 'two', 'three'])
+endfunction
 
