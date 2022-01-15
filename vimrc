@@ -371,8 +371,9 @@ augroup END
 " Colorscheme Extras for Plugins {{{
 " macOS ships without +termguicolors on Big Sur when using /usr/bin/vim
 if has('+termguicolors') | set termguicolors | endif
+" colorscheme apprentice " widest support
 set background=dark
-colorscheme apprentice " widest support
+colorscheme apprentice
 "}}}
 
 function! SynGroup() " Outputs both the name of the syntax group, AND the translated syntax
@@ -486,5 +487,4 @@ endfunction
 nnoremap <C-j> <Cmd>cnext<CR>
 nnoremap <C-k> <Cmd>cprev<CR>
 
-nnoremap gf :call gofile#Gf()<CR>
 

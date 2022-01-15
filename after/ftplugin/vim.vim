@@ -12,49 +12,38 @@ setlocal cinwords+=abort
 setlocal cinwords+=augroup
 setlocal suffixesadd=.vim
 
+nnoremap <silent><buffer> gf :call VimInclude()<CR>
+
 compiler vint
 let &l:define = '\C^command\|^function'
 
 " matches search (i.e. '/') string: call\s\+\zs\a\+#\a\+
 setlocal include=call\\s\\+\\zs\\a\\+#\\a\\+
 
-function! VimInclude(fname) abort
-  " Assumes that :call [...] must have a '#' in it to be an autoload call
-  " location that we can jump to, otherwise it could be builtin function like,
-  " ':call feedkeys('abc')' or calling script local like ':call
-  " MyFunction(args)'.
-  "
-  " LIMITATIONS:
-  " * Currently limited to only parsing the first found foo#bar on a line, how
-  " to get around this is complicated and would need to parse where cursor was
-  " and more to figure out which jump we are trying to make.
-  " * if the folder name has '.vim' in it the gf command gets confused, for
-  " example fzf folder is called 'fzf.vim' so it tries to edit that and just
-  " open netrw at that directory when we really wanted fzf.vim/plugin/fzf.vim
-  " to open. This is harcoded gf behaviour, the only way around this is remap
-  " gf to my own Gf() function to only consider filenames jumpable and ignore
-  " directories with the same name as the file.
-  " 
-  " call feedkeys('ials')
-  " call setqflist(map(copy(a:lines), '{ "filename": v:val }')) 
-  " call utils#ToggleQuickfixList
-  " call utils#nonexistantfunction
-  " call utils#nestedfolder#foobar#Function
-  "
-  " FAILS:
-  "
-  " call fzf#run(fzf#wrap(
-  "                   ^ (cursor here)
-  " would only pickup fzf#run
-  if a:fname ==# ''
-    echom 'VimInclude a:fname value was empty string.'
-    return
-  endif
-  " echom 'Include sees filename as : ' .. a:fname
-  let l:splitpath = split(a:fname, '#')
-  " echom 'splitpath on # char gives us: 0 index of ' .. l:splitpath[0] .. ' and 1 index of: ' .. l:splitpath[1]
-  return l:splitpath[0]
+" Need to map gf to this to not consider directories to be valid gf
+" candidates. For example, directory is .vim/pack/git/start/fzf.vim/plugin/fzf.vim 
+" and vimrc has a :call fzf#run(..., and with default gf harcoded into vim,
+" it would open the directory listing for fzf.vim (folder) rather than
+" the actual fzf.vim (file).
+function! VimInclude() abort
+  " Uses value of local 'include'
+  " echom 'Current line = ' .. getline('.')
+  let l:fname = matchstr(getline('.')->trim(), &include)
+  if empty(l:fname) | return | endif 
+  " echom 'VimInclude fname matched is: ' .. l:fname
+  let l:fnamesplit = split(l:fname, '#')
+  let l:fname = l:fnamesplit[0]
+  let l:funcname = l:fnamesplit[1]
+  " echom 'VimInclude funcname if found or empty string: ' .. l:funcname
+  " TODO: wrap in try in case file doesn't actually exist yet
+  silent execute 'edit' findfile('utils'..&suffixesadd, &path)
+
+  " TODO: wrap in try if function can't be found in existing file
+  " 'w'rap around in the search bc other autocmd may set cursor further along
+  " than the match in the file
+  echom 'is l:funcname non-existant now? = ' .. l:funcname
+  call search(l:funcname, 'w')
 endfunction
 
 " Provided v:fname will be the filename detected by 'include' regex 
-setlocal includeexpr=VimInclude(v:fname)
+setlocal includeexpr=VimInclude()
