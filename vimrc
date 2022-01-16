@@ -145,10 +145,10 @@ set wildoptions=tagfile | " :tag <C-d> will show tag kind and file
 
 if exists('+termguicolors')
   " To work with tmux we needs these as well
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   " Terminal.app only supports 256 still (in 2021...)
-  if !$TERM_PROGRAM =~# 'Apple_Terminal'
+  if $TERM_PROGRAM =~# 'Apple_Terminal'
     set termguicolors
   endif
 endif
@@ -192,12 +192,15 @@ inoremap [, [<CR>],<Esc>O
 " goes to previous entry, but ':help g<Up>' will search history for previous
 " pattern matching ':help g'. Also Up/Down go in/out of subfolders listings
 " when wildmenu showing - default C-n/p here is to traverse results, equivalent
-" to <Tab>/<S-Tab>. Will need to adjust on Neovim with:
-" cnoremap <expr> <C-p> wildmenumode() ? "<C-P>" : "<Up>"
-" cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
-" See: https://github.com/neovim/neovim/issues/16637
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
+" to <Tab>/<S-Tab>. 
+cnoremap <expr> <C-p> wildmenumode() ? "<C-P>" : "<Up>"
+cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
+
+" If completion menu open use C-j/k instead of arrow keys to navigate
+" parent/child folders.
+cnoremap <expr> <C-j> wildmenumode() ? "<Down>" : "<C-j>"
+cnoremap <expr> <C-k> wildmenumode() ? "<Up>" : "<C-k>"
+
 
 " keeps marks, settings, and you can still do e.g., <C-o> to jump to it
 nnoremap <Leader>dd <Cmd>bdelete!<CR> 
@@ -216,10 +219,9 @@ nnoremap <Leader>es :split *<C-z><S-Tab>
 nnoremap <Leader>ev :vert split *<C-z><S-Tab>
 
 " :buffer for showing listed buffers, :buffers! for everything
-" TODO: when 1 buffer this doesn't work
-nnoremap <Leader>bb :buffer *<C-z><S-Tab>
-nnoremap <Leader>bs :sbuffer *<C-z><S-Tab>
-nnoremap <Leader>bv :vert sbuffer *<C-z><S-Tab>
+nnoremap <Leader>bb :buffer <C-d>
+nnoremap <Leader>bs :sbuffer <C-d>
+nnoremap <Leader>bv :vert sbuffer <C-d>
 
 " NOTE: these need nmap to fire the CCR() function to determine how
 " to handle the <CR> key at the end.
