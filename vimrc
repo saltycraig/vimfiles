@@ -18,15 +18,14 @@ if executable('fzf') && has('mac')
     set runtimepath+=/usr/local/opt/fzf
 endif
 
-" vim-fugitive
-nnoremap <Leader>gg :G<CR>
-nnoremap <Leader>gP :G push<CR>
-nnoremap <Leader>gp :G pull<CR>
-nnoremap <Leader>gd :Gvdiffsplit<CR>
-nnoremap <Leader>gb :G blame<CR>
-nnoremap <Leader>gl :Gclog<CR>
-nnoremap <Leader>gc :G commit -av<CR>
-nnoremap <Leader>g/ :Ggrep! --quiet<Space>
+" nnoremap <Leader>gg :G<CR>
+" nnoremap <Leader>gP :G push<CR>
+" nnoremap <Leader>gp :G pull<CR>
+" nnoremap <Leader>gd :Gvdiffsplit<CR>
+" nnoremap <Leader>gb :G blame<CR>
+" nnoremap <Leader>gl :Gclog<CR>
+" nnoremap <Leader>gc :G commit -av<CR>
+" nnoremap <Leader>g/ :Ggrep! --quiet<Space>
 
 " fzf.vim
 nnoremap <C-p> :GFiles<CR>
@@ -171,11 +170,11 @@ if has('gui_macvim')
   let g:macvim_skip_cmd_opt_movement = 1
 endif
 
+
 " manual expansions, when I want it
 inoremap (<CR> (<CR>)<Esc>O
 inoremap (; (<CR>);<Esc>O
 inoremap (, (<CR>),<Esc>O
-inoremap {<CR> {<CR>}<Esc>O
 inoremap {; {<CR>};<Esc>O
 inoremap {, {<CR>},<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
