@@ -269,6 +269,7 @@ nnoremap <Leader>w :update<CR>
 nnoremap <Leader>, :edit $MYVIMRC<CR>
 nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
 nnoremap <Leader><Leader> :buffer #<CR>
+nnoremap <Leader><CR> :source %<CR>
 
 " Vimdiff
 nnoremap gh :diffget //2<CR>
@@ -286,7 +287,6 @@ nnoremap [t :tabprev<CR>
 nnoremap ]T :tablast<CR>
 nnoremap [t :tabfirst<CR>
 
-nnoremap <Leader><CR> :source %<CR>
 " }}}
 
 " Commands {{{
@@ -319,10 +319,6 @@ function! s:CCR()
   else | return "\<CR>" | endif
 endfunction
 
-function! MyGitBranch() abort
-  return system('git rev-parse --abbrev-ref HEAD')
-endfunction
-
 " Jekyll
 command! JekyllOpen call utils#JekyllOpenLive()
 nnoremap <Leader>@ :JekyllOpen<CR> 
@@ -342,7 +338,6 @@ augroup vimrc
   autocmd QuickFixCmdPost [^l]* cwindow
   autocmd QuickFixCmdPost  l* lwindow
   autocmd VimEnter * cwindow
-  autocmd FileType fugitiveblame call feedkeys('A')
   autocmd FileType gitcommit call feedkeys('i')
   autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
   autocmd WinLeave * setlocal nocursorline
@@ -391,7 +386,8 @@ let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
 " Grepping
-nnoremap <Leader>/ :Grep<Space>
+" TODO: make better
+nnoremap <Leader>/ :grep<Space>
 nnoremap <Leader>? :vimgrep //j **/*.md<S-Left><S-Left><Right>
 
 command! -nargs=1 Redir call utils#Redir(<q-args>)
@@ -419,13 +415,6 @@ inoremap <C-W> <C-G>u<C-W>
 " }}}
 
 " Experimental {{{
-
-" function! JekyllLint() abort
-  " Runs vale and markdownlint-cli2 on current file, and loads results into
-  " location list, sorted by line number ascending
-  " let vale_results = ['one', 'two', 'three'] 
-  " call setloclist(0, ['one', 'two', 'three'])
-" endfunction
 
 " nnoremap <expr> <CR><CR> <SID>SendLine(getline('.')->trim())
 " Worry about getting single line send to REPL correct first
