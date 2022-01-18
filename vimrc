@@ -18,11 +18,9 @@ if executable('fzf') && has('mac')
     set runtimepath+=/usr/local/opt/fzf
 endif
 
-" vim-fugitive (using asyncrun.vim)
-command! -bang -bar -nargs=* Gpush execute 'AsyncRun<bang> -cwd=' ..
-      \ fnameescape(FugitiveGitDir()) 'git push' <q-args>
+" vim-fugitive
 nnoremap <Leader>gg :G<CR>
-nnoremap <Leader>gP :Gpush<CR>
+nnoremap <Leader>gP :G push<CR>
 nnoremap <Leader>gp :G pull<CR>
 nnoremap <Leader>gd :Gvdiffsplit<CR>
 nnoremap <Leader>gb :G blame<CR>
@@ -253,15 +251,13 @@ nnoremap <silent> ]l :silent! lnext<CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " Function keys
-nnoremap <silent><F2> :AsyncRun make lint<CR>
 nnoremap <silent><F3> :call utils#ToggleQuickfixList()<CR>
 nnoremap <silent><F4> :call utils#ToggleLocationList()<CR>
-nnoremap <silent><F5> :AsyncRun make<CR>
-nnoremap <silent><F6> :AsyncRun make run<CR>
 nnoremap <silent><F7> :15Lexplore<CR>
 nnoremap <silent><F9> :set list!<CR>
 nnoremap <silent><F10> :set spell!<CR>
-nnoremap <silent><Leader>* :AsyncRun! grep -Hnri <cword> .<CR>
+" TODO: make better.
+nnoremap <silent><Leader>* :grep -Hnri <cword> .<CR>
 
 " iTerm2/Terminal.app: gvimrc sets these for macvim
 nnoremap j <C-w>p<C-e><C-w>p
@@ -384,8 +380,6 @@ nnoremap <F2> :call SynGroup()<CR>
 "}}}
 
 " Playground {{{
-" TODO:
-" * play with t_SI t_EI et al to modify cursor on mode changes
 
 " Terminal cursors:
 "https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
@@ -398,9 +392,7 @@ let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
 " Grepping
-" github.com/skywind3000/asyncrun.vim - small wrapper for jobstart()
 nnoremap <Leader>/ :Grep<Space>
-
 nnoremap <Leader>? :vimgrep //j **/*.md<S-Left><S-Left><Right>
 
 command! -nargs=1 Redir call utils#Redir(<q-args>)
