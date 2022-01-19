@@ -135,3 +135,55 @@ function! utils#Redir(cmd) abort
   call setline(1, split(output, "\n"))
 endfunction
 
+" NOTES: false positives currently for .zip/.pdf/.html links because we
+" chop at the first period found (to remove the .md)
+function! utils#LiquidInclude() abort
+  " finds:
+  " '/snippets/target-platform-before-start'
+  " '/cpp/platform-roku/roku-cloud-solution/'
+  " '/rn/develop/focus-management/#why-we-need-focus'
+  " '(../windows/)
+  " echom 'Using include value of: ' .. &include
+  let l:fname = matchstr(getline('.')->trim(), &include)
+  if empty(l:fname) 
+    return 
+  endif 
+
+  " echom 'l:fname after trim() and include match = ' .. l:fname
+
+  " split any #foo so we can jump to that spot in the file if it exists
+  let l:fname_ahref = split(l:fname, '#')
+  let l:fname = l:fname_ahref[0]
+  try
+    let l:ahref = l:fname_ahref[1]
+  catch /E684/
+    let l:ahref = 0
+  endtry
+
+  " echom 'l:fname_ahref if found in include match = ' .. l:ahref
+
+  " trim any trailing / so we can use suffixesadd to add .md
+  let l:fname = substitute(l:fname, '/$', '', '')
+  " trim leading / as well
+  let l:fname = substitute(l:fname, '^/', '', '')
+
+  " echom 'l:fname after leading and trailing "/" removed = ' .. l:fname
+
+  " TODO: 
+  " now get what version folder we want to start search in
+  " from the buffer name we are in, hardcoded right now for 6.15 only
+  let l:search_path = '/Users/cmaceach/git/devx/docs/_ver_' .. '6.15' .. '/**'
+
+  " echom 'using l:search_path of : ' .. l:search_path
+
+  execute 'edit ' .. findfile(l:fname .. &suffixesadd, l:search_path)
+
+  " try jumping to href tag if one was found
+  if !empty(l:ahref)
+    " remove dashes in the line, which are used in the url,
+    let l:ahref = substitute(l:ahref, '-\+', ' ', 'g')
+    call search('^#\+\s*' .. l:ahref, 'w')
+  endif
+endfunction
+
+

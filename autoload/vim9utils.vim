@@ -144,10 +144,7 @@ def vim9utils#mytabline(): string
     s ..= '%' .. i .. 'T'
     # s ..= ' %{GetCurrentTabLabel(' .. i .. ')} '
     s ..= ' ' .. GetCurrentTabLabel(i) .. ' '
-    
-    echom 'value of s at end of current i in range loop is: ' .. s
   endfor
-  echom 'value of s after endfor loop: ' .. s
   # After last tab fill with hl-TabLineFill and reset tab page nr with %T
   s ..= '%#TabLineFill#%T'
   # Right-align (%=) hl-TabLine (%#TabLine#) style and use %999X for a close
@@ -155,7 +152,6 @@ def vim9utils#mytabline(): string
   if tabpagenr('$') > 1
     s ..= '%=%#TabLine#%999XX'
   endif
-  echom 'final return value of s is: ' .. s
   return s
 enddef
 
@@ -167,20 +163,8 @@ def vim9utils#myguitabline(): string
     return getcwd(winnr, tabnr)
   enddef
   # This is called for each tabpage when using gui, see ':h 'guitablabel'
-
   var s = '%N' .. 'T'
   # the actual label
   s ..= ' %{GetCurrentTabLabel(' .. v:lnum  .. ')} '
-
-  # After last tab fill with hl-TabLineFill and reset tab page nr with %T
-  # s ..= '%#TabLineFill#%T'
-
-  # Right-align (%=) hl-TabLine (%#TabLine#) style and use %999X for a close
-  # current tab mark, with 'X' as the character
-  # if tabpagenr('$') > 1
-  #   s ..= '%=%#TabLine#%999XX'
-  # endif
-
-  echom 'Final s for guitablabel is : ' .. s
   return s
 enddef

@@ -36,12 +36,12 @@ function! VimInclude() abort
   let l:funcname = l:fnamesplit[1]
   " echom 'VimInclude funcname if found or empty string: ' .. l:funcname
   " TODO: wrap in try in case file doesn't actually exist yet
-  silent execute 'edit' findfile('utils'..&suffixesadd, &path)
+  silent execute 'edit' findfile(l:fname .. &suffixesadd, &path)
 
   " TODO: wrap in try if function can't be found in existing file
   " 'w'rap around in the search bc other autocmd may set cursor further along
   " than the match in the file
-  echom 'is l:funcname non-existant now? = ' .. l:funcname
+  echom 'Not found! Is l:funcname non-existent? = ' .. l:funcname
   call search(l:funcname, 'w')
 endfunction
 

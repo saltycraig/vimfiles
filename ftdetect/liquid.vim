@@ -10,4 +10,7 @@ autocmd BufNewFile,BufRead *.markdown,*.mkd,*.mkdn,*.md
       \ elseif getline(2) =~# "^layout: redirect" |
       \   let b:liquid_subtype = 'markdown' |
       \   set filetype=liquid |
+      \ elseif match(bufname(), 'snippets') |
+      \   let b:liquid_subtype = 'markdown' |
+      \   set filetype=liquid |
       \ endif

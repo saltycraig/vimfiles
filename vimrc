@@ -149,7 +149,7 @@ set wildignore+=*.png,*.jpeg,*.bmp,*.jpg
 set wildignore+=*.pyc
 set wildoptions=tagfile | " :tag <C-d> will show tag kind and file
 
-if exists('+termguicolors')
+if has('termguicolors')
   " Terminal.app only supports 256 still (in 2021...)
   if !$TERM_PROGRAM =~# 'Apple_Terminal'
     set termguicolors

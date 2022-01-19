@@ -202,23 +202,25 @@ hi link diffRemoved WarningMsg
 hi link diffAdded String
 hi link QuickFixLine Search
 
-let g:terminal_ansi_colors = [
-        \ '#1c1c1c',
-        \ '#af5f5f',
-        \ '#5f875f',
-        \ '#87875f',
-        \ '#5f87af',
-        \ '#5f5f87',
-        \ '#5f8787',
-        \ '#6c6c6c',
-        \ '#444444',
-        \ '#ff8700',
-        \ '#87af87',
-        \ '#ffffaf',
-        \ '#8fafd7',
-        \ '#8787af',
-        \ '#5fafaf',
-        \ '#ffffff',
-        \ ]
+if has('termguicolors') && !$TERM_PROGRAM =~# 'Apple_Terminal'
+  let g:terminal_ansi_colors = [
+          \ '#1c1c1c',
+          \ '#af5f5f',
+          \ '#5f875f',
+          \ '#87875f',
+          \ '#5f87af',
+          \ '#5f5f87',
+          \ '#5f8787',
+          \ '#6c6c6c',
+          \ '#444444',
+          \ '#ff8700',
+          \ '#87af87',
+          \ '#ffffaf',
+          \ '#8fafd7',
+          \ '#8787af',
+          \ '#5fafaf',
+          \ '#ffffff',
+          \ ]
+endif
 
 " Generated with RNB (https://github.com/romainl/vim-rnb)
