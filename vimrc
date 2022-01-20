@@ -268,7 +268,7 @@ nnoremap <silent><F4> :call vim9utils#ToggleLocationList()<CR>
 nnoremap <silent><F7> :15Lexplore<CR>
 nnoremap <silent><F9> :set list!<CR>
 nnoremap <silent><F10> :set spell!<CR>
-nnoremap <silent><Leader>* :Grep <cword><CR>
+nnoremap <silent><Leader>* :grep <cword><CR>
 
 " iTerm2/Terminal.app: gvimrc sets these for macvim
 nnoremap j <C-w>p<C-e><C-w>p
@@ -303,7 +303,7 @@ nnoremap [t :tabfirst<CR>
 
 " Commands {{{
 
-function! Grep(...) " accepts any number of args
+function! Grep(...) abort " accepts any number of args
   " Based on: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
   " expandcmd allows us to do :Grep 'leader' % and have % expanded to current
   " file like default :grep cmd does
@@ -411,8 +411,7 @@ let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
 " Grepping
-" TODO: make better
-nnoremap <Leader>/ :Grep<Space>
+nmap <Leader>/ :grep<Space>
 nnoremap <Leader>? :vimgrep //j **/*.md<S-Left><S-Left><Right>
 
 command! -nargs=1 Redir call utils#Redir(<q-args>)
