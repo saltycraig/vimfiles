@@ -294,14 +294,17 @@ nnoremap [t :tabfirst<CR>
 
 " Commands {{{
 
-" Based on: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! Grep(...) " accepts any number of args
-  " return system(join([&grepprg] + a:000))
-  echom 'Grep() running: ' .. &grepprg .. join(a:000)
-  return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+  " Based on: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
+  " expandcmd allows us to do :Grep 'leader' % and have % expanded to current
+  " file like default :grep cmd does
+  return system(join([&grepprg] + [expandcmd(join(a:000))]))
 endfunction
 command! -nargs=+ -complete=file_in_path -bar Grep cgetexpr Grep(<f-args>)
 command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)
+" replace standard :grep with ours automatically
+cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
+cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
 command! Api :help list-functions<CR>
 command! Cd :lcd %:h
