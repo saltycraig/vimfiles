@@ -52,3 +52,6 @@
 [submodule "pack/git/start/asyncrun.vim"]
 	path = pack/git/start/asyncrun.vim
 	url = https://github.com/skywind3000/asyncrun.vim
+[submodule "pack/git/start/apprentice"]
+	path = pack/git/start/apprentice
+	url = https://github.com/romainl/apprentice

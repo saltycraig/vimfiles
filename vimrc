@@ -133,7 +133,7 @@ set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
 set tabline=%!vim9utils#mytabline()
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
 set showtabline=2 | " Always show tabline
-set signcolumn=yes | " Always show it, too jarring when pops in/out
+set signcolumn=number
 set splitbelow " new horizontal split window always goes below current
 set splitright " same but with new vertical split window
 set tags=./tags;,tags; | " pwd and search up til root dir for tags file
@@ -435,45 +435,5 @@ inoremap <C-W> <C-G>u<C-W>
 " Command to load files changed in commit(?) from SO here:
 " https://vi.stackexchange.com/questions/13433/how-to-load-list-of-files-in-commit-into-quickfix
 " command -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}'))
-
-" TODO: insert cursor in terminal mode with guicursor?
-
-function! MyTabLabel(n) abort
-  " Give tabpage number n create a string to display on tabline
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  return getcwd(winnr, a:n)
-endfunction
-
-function! MyTabLine() abort
-  " Loop over pages and define labels for them, then get label for each tab
-  " page use MyTabLabel(). See :h 'statusline' for formatting, e.g., T, %, #, etc.
-  let s = ''
-  for i in range(tabpagenr('$'))
-    if i + 1 == tabpagenr()
-      " use hl-TabLineSel for current tabpage
-      let s .= '%#TabLineSel#'
-    else
-      let s .= '%#TabLine#'
-    endif
-
-    " set the tab page number, for mouse clicks
-    let s .= '%' . (i + 1) . 'T'
-
-    " call MyTabLabel() to make the label
-    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
-  endfor
-
-  " After last tab fill with hl-TabLineFill and reset tab page nr with %T
-  let s .= '%#TabLineFill#%T'
-
-  " Right-align (%=) hl-TabLine (%#TabLine#) style and use %999X for a close
-  " current tab mark, with 'X' as the character
-  if tabpagenr('$') > 1
-    let s .= '%=%#TabLine#%999XX'
-  endif
-
-  return s
-endfunction
 
 " }}}
