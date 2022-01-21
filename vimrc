@@ -462,8 +462,7 @@ inoremap <C-W> <C-G>u<C-W>
 
 " Experimental {{{
 
-" Command to load files changed in commit(?) from SO here:
 " https://vi.stackexchange.com/questions/13433/how-to-load-list-of-files-in-commit-into-quickfix
-" command -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}'))
+command -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
 
 " }}}
