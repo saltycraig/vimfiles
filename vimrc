@@ -30,7 +30,7 @@ packadd! apprentice
 packadd! fzf.vim
 packadd! vim-commentary
 packadd! vim-gitbranch
-packadd! vim-liquid
+packadd vim-liquid " needs no ! here to load ftdetect/liquid.vim
 packadd! vim-repeat
 packadd! vim-surround
 packadd! vim-textobj-user
