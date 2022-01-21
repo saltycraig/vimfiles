@@ -168,3 +168,36 @@ def vim9utils#myguitabline(): string
   s ..= ' %{GetCurrentTabLabel(' .. v:lnum  .. ')} '
   return s
 enddef
+
+# TODO: make a Make equivalent
+def vim9utils#Grep(...args: list<string>): string
+  # Based on: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
+  #
+  # 'expandcmd' allows us to do :Grep 'leader' % and have % expanded to current
+  # file like default :grep cmd does
+  #
+  return system(join([&grepprg] + [expandcmd(join(args))]))
+enddef
+
+def vim9utils#CCR(): string
+  # Local command we'll keep using to deal with more prompts
+  command! -bar Z silent set more|delcommand Z
+  if getcmdtype() ==# ':'
+    var cmdline = getcmdline()
+    # TODO: maybe wrap these in a try to catch cancelled jump and send <CR>
+    # to avoid the dreaded hit enter prompt
+    # :dlist|ilist becomes :djump/ijump instead
+    if cmdline =~# '\v\C^(dli|il)' | return "\<CR>:" .. cmdline[0] .. "jump   " .. split(cmdline, " ")[1] .. "\<S-Left>\<Left>\<Left>"
+    elseif cmdline =~# '\v\C^(cli|lli)' | return "\<CR>:silent " .. repeat(cmdline[0], 2) .. "\<Space>"
+    elseif cmdline =~# '\C^changes' | set nomore | return "\<CR>:Z|norm! g;\<S-Left>"
+    elseif cmdline =~# '\C^ju' | set nomore | return "\<CR>:Z|norm! \<C-o>\<S-Left>"
+    elseif cmdline =~# '\v\C(#|nu|num|numb|numbe|number)$' | return "\<CR>:"
+    elseif cmdline =~# '\C^ol' | set nomore | return "\<CR>:Z|e #<"
+    elseif cmdline =~# '\v\C^(ls|files|buffers)' | return "\<CR>:b"
+    elseif cmdline =~# '\C^marks' | return "\<CR>:norm! `"
+    elseif cmdline =~# '\C^undol' | return "\<CR>:u "
+    else | return "\<CR>" | endif
+  else | return "\<CR>" | endif
+enddef
+
+
