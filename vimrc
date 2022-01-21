@@ -181,10 +181,6 @@ endif
 " enable use of folding with ft-markdown-plugin
 let g:markdown_folding = 1
 
-" enable :Man command and use it's folding
-runtime! ftplugin/man.vim
-let g:ft_man_folding_enable=1
-
 " }}}
 
 " Mappings {{{
