@@ -10,8 +10,27 @@ let mapleader=' '
 
 " Plugin Settings {{{
 
-" pack/git/opt/<plugin>
-packadd matchit " extended 'matchpairs', basically
+" defaults I never use
+let g:loaded_getscriptPlugin = 1
+let g:loaded_logiPat = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_vimball = 1
+
+" $VIMRUNTIME/pack/dist/opt/<plugin>
+packadd! matchit " extended 'matchpairs', basically
+packadd! cfilter
+
+" pack/third-party/opt/<plugin>
+packadd! apprentice
+packadd! fzf.vim
+packadd! vim-commentary
+packadd! vim-gitbranch
+packadd! vim-liquid
+packadd! vim-repeat
+packadd! vim-surround
+packadd! vim-textobj-user
+packadd! vim-textobj-entire
+packadd! vim-textobj-indent
 
 " brew install fzf first
 if executable('fzf') && has('mac')
@@ -380,8 +399,10 @@ augroup END
 "
 " Colorscheme Extras for Plugins {{{
 " colorscheme apprentice " widest support
-set background=dark
+" colorscheme apprentice
 colorscheme apprentice
+
+
 "}}}
 
 function! SynGroup() " Outputs both the name of the syntax group, AND the translated syntax
@@ -439,18 +460,6 @@ inoremap <C-W> <C-G>u<C-W>
 " }}}
 
 " Experimental {{{
-
-" nnoremap <expr> <CR><CR> <SID>SendLine(getline('.')->trim())
-" Worry about getting single line send to REPL correct first
-" then think about multi lines, and blank lines separating spots in a function,
-" do we want to send those? No reason to enter blank lines in a REPL is there?
-" function! s:SendLine(line) abort
-"   if empty(a:line) | return | endif
-"   echom 'SendLine() received: ' .. a:line
-  " 1. need bufnr
-  " maybe buflisted(buf) will help with hidden terminals
-  " 2. call term_sendkeys(bufnr, keys)
-" endfunction
 
 " Command to load files changed in commit(?) from SO here:
 " https://vi.stackexchange.com/questions/13433/how-to-load-list-of-files-in-commit-into-quickfix
