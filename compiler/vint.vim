@@ -1,8 +1,3 @@
-" Vim compiler file
-" Compiler: Vint for .vim files
-" Maintainer: C.D. MacEachern <craigm@fastmail.com>
-" Last Modified: 2020-04-17
-
 if exists('current_compiler')
   finish
 endif

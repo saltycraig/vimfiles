@@ -19,3 +19,5 @@ nnoremap <buffer> gf :call utils#LiquidInclude()<CR>
 " SEARCH PATTERN:
 " /{{\s*page.version\s*}}\zs\/[^\.\)]\+\|\.\.\zs\/[^\.\)]\+
 setlocal include={{\\s*page.version\\s*}}\\zs\\/[^\\.\\)]\\+\\\|\\.\\.\\zs\\/[^\\.\\)]\\+
+
+compiler liquid

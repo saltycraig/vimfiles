@@ -31,3 +31,9 @@
 [submodule "pack/third-party/opt/vim-rhubarb"]
 	path = pack/third-party/opt/vim-rhubarb
 	url = https://github.com/tpope/vim-rhubarb
+[submodule "pack/third-party/opt/asyncrun.vim"]
+	path = pack/third-party/opt/asyncrun.vim
+	url = https://github.com/skywind3000/asyncrun.vim
+[submodule "pack/third-party/opt/vim-dispatch"]
+	path = pack/third-party/opt/vim-dispatch
+	url = https://github.com/tpope/vim-dispatch
