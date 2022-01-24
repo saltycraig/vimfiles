@@ -105,21 +105,13 @@ nnoremap <silent><Leader>gp :G pull<CR>
 " }}}
 
 " Options {{{
-" Indenting/Formatting
-" copy above line indent on enter
+" most ftplugin/*.vim have their own indentexpr, this is backup that
+" just copies indent from previous line
 set autoindent
-" indent after {, after a line with a keyword from 'cinwords',
-" before a line starting with }. } as first char is given same
-" indent as matching {. When 'cindent' is on or 'indentexpr' is set
-" smartindent has no effect. 'indentexpr' is the most advanced version.
-" 'cindent' is mainly for C stuff specifically.
-set smartindent
 set autoread " auto re-read files changes outside of Vim
 set belloff=all | " no sounds for all possible bell events
 " yank/delete/change/put ops go to clipboard registers * and +
 " Normally they would go to unnamed register.
-" This isn't supposed to work without :echo has('X11') and
-" :echo has('xterm_clipboard') but in my tests on macos both are 0 but work!
 set clipboard=unnamed,unnamedplus
 set complete+=d | " C-n/p scans include i_CTRL-X_CTRL-D results too
 " completion menu can show even when only one match, and instead of preview
