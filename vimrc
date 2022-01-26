@@ -383,6 +383,7 @@ augroup vimrc
   " I also set this in utils#Redir because it does 'nobuflisted'
   " This one catches other things that open 'nofile' buffers
   autocmd BufEnter * if &buftype ==# 'nofile' | nnoremap <buffer> q :bwipeout!<CR> | endif
+  autocmd BufWinEnter * if &previewwindow | setlocal nonumber norelativenumber nolist | endif
 augroup END
 
 " }}}
