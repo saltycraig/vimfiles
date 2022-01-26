@@ -181,7 +181,8 @@ else
 endif
 
 " $VIMRUNTIME/ftplugin/markdown.vim
-let g:markdown_fenced_languages = ['javascript', 'cpp', 'shell']
+" This works like dogshit, I'm afraid. Limits of regex vim. Not doc'd either.
+" let g:markdown_fenced_languages = ['js=javascript', 'jsx=javascript', 'json', 'cpp', 'shell=sh', 'bash=sh']
 let g:markdown_folding = 1
 
 " }}}
