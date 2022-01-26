@@ -99,7 +99,7 @@ nnoremap <silent><Leader>gg :G<CR>
 noremap <silent><Leader>gb :G blame<CR>
 nnoremap <silent><Leader>gl :Gclog<CR>
 nnoremap <silent><Leader>gc :G commit -av<CR>
-nnoremap <Leader>g/ :Ggrep! --quiet<Space>
+nnoremap <Leader>g/ :Ggrep! -Hnri --quiet<Space>
 nnoremap <silent><Leader>gP :G push<CR>
 nnoremap <silent><Leader>gp :G pull<CR>
 
