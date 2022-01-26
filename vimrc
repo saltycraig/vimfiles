@@ -29,6 +29,7 @@ packadd! cfilter
 packadd! apprentice
 packadd! fzf.vim
 packadd! vim-commentary
+packadd vim-liquid | " no ! here so it loads ftdetects (not lazy loaded)
 packadd! vim-repeat
 packadd! vim-surround
 packadd! vim-textobj-user
@@ -384,6 +385,7 @@ augroup vimrc
   " I also set this in utils#Redir because it does 'nobuflisted'
   " This one catches other things that open 'nofile' buffers
   autocmd BufEnter * if &buftype ==# 'nofile' | nnoremap <buffer> q :bwipeout!<CR> | endif
+  autocmd BufEnter * if &buftype ==# 'nofile' | setlocal nocursorcolumn | endif
   autocmd BufWinEnter * if &previewwindow | setlocal nonumber norelativenumber nolist | endif
 augroup END
 
@@ -395,9 +397,9 @@ augroup END
 " :so $VIMRUNTIME/syntax/hitest.vim
 "
 " Colorscheme Extras for Plugins {{{
-
-" colorscheme apprentice
-colorscheme elflord
+colorscheme apprentice
+" set background=light
+" colorscheme quiet
 
 
 "}}}
