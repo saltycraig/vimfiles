@@ -148,7 +148,11 @@ set hidden " hide buffers without needing to save them
 set history=10000 | " Max possible value, use <C-f> in commandline to browse
 set hlsearch " highlight all search matches until :nohl run
 set laststatus=2 | " always show statuslines in all windows
-set listchars=tab:\│\ ,space:·,trail:·,eol:¬ | " strings to show when :set list is on
+if has('patch-8.2.2454') " leading spaces char introduced
+  set listchars=tab:\│\ ,lead:·,trail:█,eol:
+else
+  set listchars=tab:\│\ ,space:·,trail:█,eol:
+endif
 set mouse=a
 set noswapfile " no annoying *.foo~ files left around
 set nowrap " defaults to line wrapping on
@@ -164,7 +168,7 @@ set statusline+=%{FugitiveStatusline()}
 set statusline+=\ [%Y]
 set statusline+=\ %P
 set statusline +=\ %l:%c\ 
-set suffixes+=.png,.jpeg,.jpg,.exe | " 
+set suffixes+=.png,.jpeg,.jpg,.exe
 set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
 " Use for non-gui tabline, for gui use :h 'guitablabel'
 set tabline=%!vim9utils#mytabline()
@@ -191,12 +195,6 @@ if has('termguicolors')
   if !$TERM_PROGRAM =~# 'Apple_Terminal'
     set termguicolors
   endif
-endif
-
-if executable('git')
-  set grepprg=git\ grep\ -Hnri\ 
-else
-  set grepprg=grep\ -Hnri
 endif
 
 " $VIMRUNTIME/ftplugin/markdown.vim
