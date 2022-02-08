@@ -142,7 +142,8 @@ catch /E474/
   set diffopt=vertical,iwhiteall,filler
 endtry
 set exrc | " Enable .vimrc/.exrc/.gvimrc auto read from pwd, for projects
-set foldlevelstart=99 | " No folds closed by default. Modeline 'fdls' overrules 
+set foldlevelstart=99 | " No folds closed by default. Modeline 'fdls' overrules
+set grepprg=grep\ -Hnri
 set hidden " hide buffers without needing to save them
 set history=10000 | " Max possible value, use <C-f> in commandline to browse
 set hlsearch " highlight all search matches until :nohl run
