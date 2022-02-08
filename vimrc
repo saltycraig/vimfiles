@@ -106,20 +106,54 @@ let g:fzf_colors =
   \ 'preview-bg': ['bg', 'Normal'],
   \ 'header':  ['fg', 'Comment'] }
 
-" vim-fugitive
-nnoremap <silent><Leader>gg :G<CR>
-noremap <silent><Leader>gb :G blame<CR>
-nnoremap <silent><Leader>gl :Gclog<CR>
-nnoremap <silent><Leader>gc :G commit -av<CR>
-nnoremap <silent><Leader>gd :Gvdiffsplit<CR>
+" vim-fugitive - status overview and quick one-off commands
+nnoremap <silent><Leader>gg <cmd>G<CR>
+nnoremap <Leader>g<Space> :G<space>
+
+" Add <cfile> to index and save, gW useful in 3 way merge diffs: choose
+" a buffer and use gW to use all that versions' changes, i.e., --ours/theirs
+nnoremap <silent><Leader>gw <cmd>Gwrite<CR>
+nnoremap <silent><Leader>gW <cmd>Gwrite!<CR>
+
+" Blames
+noremap <silent><Leader>gb <cmd>G blame<CR>
+
+" Location list no jump log of current file and general commit log (gL)
+nnoremap <silent><Leader>gl <cmd>0Git log<CR>
+nnoremap <silent><Leader>gL <cmd>Git log<CR>
+
+" :Gedit is 'git checkout %' => reverts work tree file to index, be careful!
+nnoremap <Leader>ge :Gedit<Space>
+nnoremap <silent><Leader>gE :Gedit <bar> only<CR>
+
+" Add all and start commit message with --verbose flag to show patches
+nnoremap <silent><Leader>gc <cmd>G commit -av<CR>
+
+" Vertical diffs on current file or any git object SHA.
+" :h fugitive-object helpers: @ aka HEAD, :% index version of <cfile>
+nnoremap <silent><Leader>gd <cmd>Gvdiffsplit<CR>
+nnoremap <Leader>gD :Gvdiffsplit<space>
+
+" Grepping git trees and commits messages. '!' to run it async.
+" git grep 'foo bar' [branch/SHA]
+" git log --grep='foobar' to search commit messages
+" git log -Sfoobar (when 'foobar' was added/removed)
 nnoremap <Leader>g/ :Ggrep! -Hnri --quiet<Space>
-nnoremap <silent><Leader>gP :G push<CR>
-nnoremap <silent><Leader>gp :G pull<CR>
+nnoremap <Leader>g? :Git! log --grep=
+nnoremap <Leader>gS :Git! log -S
+nnoremap <Leader>g* :Ggrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>
+
+" git push/pull/fetching
+" TODO: maybe use Dispatch for this?
+nnoremap <silent><Leader>gP <cmd>G push<CR>
+nnoremap <silent><Leader>gp <cmd>G pull<CR>
+nnoremap <silent><Leader>gf <cmd>G fetch<CR>
+
 " Requires vim-rhubarb, visual selection appends anchors to URL to highlight
-" Reminder: ["x]y<C-g> to yank relative path to clipboard
+" Reminder: ["register]y<C-g> to yank relative path to clipboard
 " Reminder: :GBrowse! doesn't open URL just yanks it to clipboard
-nnoremap <Leader>g@ :GBrowse<CR>
-xnoremap <Leader>g@ :GBrowse<CR>
+nnoremap <Leader>g@ <cmd>GBrowse<CR>
+xnoremap <Leader>g@ <cmd>GBrowse<CR>
 
 " }}}
 
@@ -129,12 +163,10 @@ xnoremap <Leader>g@ :GBrowse<CR>
 set autoindent
 set autoread " auto re-read files changes outside of Vim
 set belloff=all | " no sounds for all possible bell events
+set breakindent " wrapped line continue visually indented
 " yank/delete/change/put ops go to clipboard registers * and +
 " Normally they would go to unnamed register.
 set clipboard=unnamed,unnamedplus
-set complete+=d | " C-n/p scans include i_CTRL-X_CTRL-D results too
-" completion menu can show even when only one match, and instead of preview
-" window if there's extra information, use the 'popupwin' feature
 set completeopt=menuone,popup
 try " 8.1 something this became an option
   set diffopt+=algorithm:patience | " http://vimways.org/2018/the-power-of-diff/
@@ -156,7 +188,7 @@ endif
 set mouse=a
 set noswapfile " no annoying *.foo~ files left around
 set nowrap " defaults to line wrapping on
-set number relativenumber " current line number shown - rest shown relative
+set number
 set path-=/usr/include |  set path+=** | " Look recursively from ':pwd'
 set secure " autocmd, shell, and write commands not allow in dir exrc
 set shell=$SHELL | " macvim supposed to use this, but doesn't and sets 'sh'
@@ -180,6 +212,7 @@ set splitright " same but with new vertical split window
 set tags=./tags;,tags; | " pwd and search up til root dir for tags file
 set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
 set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
+set updatetime=250
 " Character to act as 'wildchar' in a macro because <Tab> is unrecognized there
 " Use in mapping to do auto-expansion like this:
 " set wcm=<C-Z> | cnnoremap ss so $VIM/sessions/*.vim<C-Z>
@@ -298,11 +331,14 @@ xmap > >gv
 xnoremap J :m '>+1<CR>gv=gv
 xnoremap K :m '<-2<CR>gv=gv
 
-nnoremap <silent><C-k> :silent! lprevious<CR>
-nnoremap <silent><C-j> :silent! lnext<CR>
-"
 " '%%' in command-line mode maybe expands to path of current buffer.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+if $TERM_PROGRAM =~# 'Apple_Terminal'
+  inoremap <Nul> <C-x><C-o>
+else
+  inoremap <C-Space> <C-x><C-o>
+endif
 
 " Function keys
 nnoremap <silent><F3> :call vim9utils#ToggleQuickfixList()<CR>
@@ -374,11 +410,15 @@ command! Api :help list-functions<CR>
 command! Cd :lcd %:h
 command! TodoLocal :botright silent! lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
-
-" cnoremap <expr> <CR> vim9utils#CCR()
-" Jekyll
+command! -nargs=1 Redir call utils#Redir(<q-args>)
 command! JekyllOpen call utils#JekyllOpenLive()
-nnoremap <Leader>@ :JekyllOpen<CR> 
+
+" :Gshow<CR> || :Gshow <SHA> || :Gshow HEAD^^
+" https://vi.stackexchange.com/questions/13433/how-to-load-list-of-files-in-commit-into-quickfix
+" for expr2 in map() here we use string where v:val is index of current item in
+" list, from systemlist() call. Since setqflist() requires a dict we use map to
+" create one.
+command! -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
 
 
 " }}}
@@ -389,6 +429,7 @@ nnoremap <Leader>@ :JekyllOpen<CR>
 augroup vimrc
   autocmd!
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufEnter $MYVIMRC setlocal fdm=marker
   autocmd BufWritePre /tmp/* setlocal noundofile
   autocmd QuickFixCmdPost [^l]* botright cwindow
   autocmd QuickFixCmdPost  l* botright lwindow
@@ -401,6 +442,8 @@ augroup vimrc
   autocmd BufEnter * if &buftype ==# 'nofile' | nnoremap <buffer> q :bwipeout!<CR> | endif
   autocmd BufEnter * if &buftype ==# 'nofile' | setlocal nocursorcolumn | endif
   autocmd BufWinEnter * if &previewwindow | setlocal nonumber norelativenumber nolist | endif
+  " Stop fugitive from littering buffer list
+  autocmd BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
 " }}}
@@ -448,8 +491,8 @@ let &t_EI = "\e[2 q"
 nmap <Leader>/ :grep<Space>
 nnoremap <Leader>? :vimgrep //j **/*.md<S-Left><S-Left><Right>
 
-command! -nargs=1 Redir call utils#Redir(<q-args>)
 nnoremap <Leader>! :Redir<Space>
+nnoremap <Leader>@ :JekyllOpen<CR>
 
 nnoremap g; g;zv
 nnoremap g, g,zv
@@ -473,9 +516,6 @@ inoremap <C-W> <C-G>u<C-W>
 " }}}
 
 " Experimental {{{
-
-" https://vi.stackexchange.com/questions/13433/how-to-load-list-of-files-in-commit-into-quickfix
-command! -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
 
 " Better :make
 command! -bar Make :silent! lgetexpr vim9utils#Make() <Bar> lwindow
