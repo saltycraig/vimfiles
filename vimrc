@@ -221,8 +221,11 @@ set wildignore=*.o,*.obj
 set wildignore+=*.exe,*.dylib,%*
 set wildignore+=*.png,*.jpeg,*.bmp,*.jpg
 set wildignore+=*.pyc
-set wildoptions=tagfile | " :tag <C-d> will show tag kind and file
-
+if has('patch-8.2.4328') " new vertical menu introduced here
+  set wildoptions=pum,tagfile | " :tag <C-d> will show tag kind and file
+else
+  set wildoptions=tagfile | " :tag <C-d> will show tag kind and file
+endif
 if has('termguicolors')
   " Terminal.app only supports 256 still (in 2021...)
   if !$TERM_PROGRAM =~# 'Apple_Terminal'
@@ -265,8 +268,8 @@ cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
 
 " If completion menu open use C-j/k instead of arrow keys to navigate
 " parent/child folders.
-cnoremap <expr> <C-j> wildmenumode() ? "\<Down>\<C-z>" : "\<C-j>"
-cnoremap <expr> <C-k> wildmenumode() ? "\<Up>\<C-z>" : "\<C-k>"
+cnoremap <expr> <C-j> wildmenumode() ? "\<Left>\<C-z>" : "\<C-j>"
+cnoremap <expr> <C-k> wildmenumode() ? "\<Right>\<C-z>" : "\<C-k>"
 
 " keeps marks, settings, and you can still do e.g., <C-o> to jump to it
 nnoremap <Leader>dd <Cmd>bdelete!<CR> 
