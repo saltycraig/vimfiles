@@ -2,9 +2,7 @@ vim9script
 # vim9utils.vim
 # Summary: Utility functions I use, written in vim9 script.
 
-# TODO: make ftdetect to set vim9script ft if found in first line, and
-# create a after/ftplugin/vim9script file with better include/defines
-def SwitchSourceHeader()
+export def SwitchSourceHeader()
   # Switch between cpp/.h files, user must set relevant 'path'
   # value for this to work, e.g., 'set path=.,,**5'
   if &ft ==# 'cpp'
@@ -18,7 +16,7 @@ def SwitchSourceHeader()
   endif
 enddef
 
-def StripTrailingWhitespaces()
+export def StripTrailingWhitespaces()
   # Don't touch binary files or diff files
   if !&binary && &filetype !=# 'diff'
     var _s = @
@@ -28,7 +26,7 @@ def StripTrailingWhitespaces()
   endif
 enddef
 
-def ToggleQuickfixList()
+export def ToggleQuickfixList()
   var qwinid = getqflist({'winid': 0}).winid
   if qwinid > 0
     cclose
@@ -37,7 +35,7 @@ def ToggleQuickfixList()
   endif
 enddef
 
-def ToggleLocationList()
+export def ToggleLocationList()
   # Tries to toggle open/close location list for current window,
   # if no loclist exists then just ignore error stating such
   var lwinid = getloclist(0, {'winid': 0}).winid
@@ -55,7 +53,7 @@ def ToggleLocationList()
   endif
 enddef
 
-def MaybeReplaceCrWithCrColon()
+export def MaybeReplaceCrWithCrColon()
   # Return <CR>: and maybe followed by a 'b' or 'u' or more, depending on what
   # the command requires to user to enter to work.
   # https://gist.github.com/romainl/047aca21e338df7ccf771f96858edb86
@@ -92,7 +90,7 @@ def MaybeReplaceCrWithCrColon()
   endif
 enddef
 
-def Redir(cmd: string)
+export def Redir(cmd: string)
   var output = execute(cmd)
   botright split +enew
   setlocal nobuflisted nonumber norelativenumber buftype=nofile bufhidden=wipe noswapfile
@@ -100,7 +98,7 @@ def Redir(cmd: string)
   call setline(1, split(output, "\n"))
 enddef
 
-def JekyllOpenLive()
+export def JekyllOpenLive()
   # Requires 'devx' as &pwd for '%:.' to work correctly with forming the final URL to open
   if !getcwd() =~ 'devx' 
     echoerr 'Command only works when &pwd is "devx"'
@@ -169,7 +167,7 @@ export def Myguitabline(): string
   return s
 enddef
 
-def Grep(...args: list<string>): string
+export def Grep(...args: list<string>): string
   # Based on: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
   #
   # 'expandcmd' allows us to do :Grep 'leader' % and have % expanded to current
@@ -178,13 +176,13 @@ def Grep(...args: list<string>): string
   return system(join([&grepprg] + [expandcmd(join(args))]))
 enddef
 
-def Make(): string
+export def Make(): string
   # TODO: works for simple cases but I will need to escape more I think to get
   # things like makeprg value of :compiler liquid to work correctly.
   return system(expandcmd(&makeprg))
 enddef
 
-def CCR(): string
+export def CCR(): string
   # Local command we'll keep using to deal with more prompts
   command! -bar Z silent set more|delcommand Z
   if getcmdtype() ==# ':'
@@ -207,7 +205,7 @@ enddef
 
 # TODO: finish this. takes a 'site', next, nextonly, prod, etc.
 # to determine which prefix URL to use
-def JekyllOpen(site: string)
+export def JekyllOpen(site: string)
   # Requires 'devx' as &pwd for '%:.' to work correctly with forming the final URL to open
   if !getcwd() =~ 'devx' 
     echoerr 'Command only works when &pwd is "devx"'
