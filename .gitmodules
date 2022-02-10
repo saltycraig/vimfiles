@@ -37,3 +37,6 @@
 [submodule "pack/third-party/opt/vim-markdown"]
 	path = pack/third-party/opt/vim-markdown
 	url = https://github.com/preservim/vim-markdown
+[submodule "pack/third-party/opt/YouCompleteMe"]
+	path = pack/third-party/opt/YouCompleteMe
+	url = https://github.com/ycm-core/YouCompleteMe

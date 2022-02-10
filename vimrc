@@ -39,6 +39,7 @@ packadd! vim-fugitive
 packadd! vim-rhubarb
 packadd! tagbar
 packadd! ale
+packadd! YouCompleteMe
 
 " brew install fzf first
 if executable('fzf') && has('mac')
@@ -461,7 +462,6 @@ augroup END
 colorscheme apprentice
 " set background=light
 " colorscheme quiet
-
 
 "}}}
 
