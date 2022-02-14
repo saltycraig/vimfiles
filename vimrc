@@ -212,7 +212,8 @@ set statusline +=\ %l:%c\
 set suffixes+=.png,.jpeg,.jpg,.exe
 set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
 " Use for non-gui tabline, for gui use :h 'guitablabel'
-set tabline=%!vim9utils#MyTabline()
+" Use this one to show :tcd value in tabpage labels
+" set tabline=%!vim9utils#MyTabline()
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
 set showtabline=2 | " Always show tabline
 set signcolumn=number
@@ -250,12 +251,6 @@ let g:markdown_folding = 1
 " }}}
 
 " Mappings {{{
-
-if has('gui_macvim') && has('gui_running')
-  " macvim installation 'vim' binary requires check if gui_running as well
-  set guitablabel=%!vim9utils#Myguitablabel()
-  let g:macvim_skip_cmd_opt_movement = 1
-endif
 
 " I want C-n/C-p to always be nearest and/or in same buffer,
 " For more intelligent/farther reaching completions use C-Space
