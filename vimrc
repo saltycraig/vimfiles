@@ -25,36 +25,30 @@ let g:loaded_2html_plugin = 1
 packadd! matchit " extended 'matchpairs', basically
 packadd! cfilter
 
-" pack/third-party/opt/<plugin>
-packadd! apprentice
-packadd! fzf.vim
-packadd! vim-commentary
-" no ! here to load ftdetect scripts it provides, immediately
-packadd vim-markdown
-packadd! vim-repeat
-packadd! vim-surround
-packadd! vim-textobj-user
-packadd! vim-textobj-entire
-packadd! vim-textobj-indent
-packadd! vim-fugitive
-packadd! vim-rhubarb
-packadd! tagbar
-packadd! ale | " https://github.com/wOrp/ale
-packadd! YouCompleteMe | " https://github.com/ycm-core/YouCompleteMe
+" vim-polyglot
+" Turn off 'vim-sensible' stuff it does.
+let g:polyglot_disabled = ['sensible']
+
+call plug#begin()
+  Plug 'romainl/apprentice'
+  Plug 'junegunn/fzf.vim'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-surround'
+  Plug 'kana/vim-textobj-user'
+  Plug 'kana/vim-textobj-entire'
+  Plug 'kana/vim-textobj-indent'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rhubarb'
+  Plug 'sheerun/vim-polyglot'
+  Plug 'preservim/tagbar'
+  Plug 'w0rp/ale'
+call plug#end()
 
 " brew install fzf first
 if executable('fzf') && has('mac')
     set runtimepath+=/usr/local/opt/fzf
 endif
-
-" YouCompleteMe
-let g:ycm_auto_trigger = 0
-let g:ycm_min_num_of_chars_for_completion = 99
-let g:ycm_key_detailed_diagnostics = ''
-nmap k <plug>(YCMHover)
-let g:ycm_key_invoke_completion = '<C-Space>'
-let g:ycm_disable_for_files_larger_than_kb = 0
-let g:ycm_update_diagnostics_in_insert_mode = 0
 
 " ale
 let g:ale_linters_explicit = 1
@@ -68,7 +62,7 @@ let g:ale_linters = {
 let g:vim_markdown_frontmatter = 1
 
 " fzf.vim
-nnoremap <C-p> :GFiles<CR>
+nnoremap <Leader><Leader> :GFiles<CR>
 " FZF from directory buffer is in, use this when not in Git repo
 nnoremap <Leader>e. :FZF %:h<CR>
 " Jump to buffer in existing window if possible with this option
@@ -178,6 +172,7 @@ set breakindent " wrapped line continue visually indented
 " yank/delete/change/put ops go to clipboard registers * and +
 " Normally they would go to unnamed register.
 set clipboard=unnamed,unnamedplus
+set complete-=i
 set completeopt=menuone,popup
 try " 8.1 something this became an option
   set diffopt+=algorithm:patience | " http://vimways.org/2018/the-power-of-diff/
@@ -186,6 +181,7 @@ catch /E474/
 endtry
 set exrc | " Enable .vimrc/.exrc/.gvimrc auto read from pwd, for projects
 set foldlevelstart=99 | " No folds closed by default. Modeline 'fdls' overrules
+set formatoptions+=j | " Remove leading comment char when joining lines
 set grepprg=grep\ -Hnri
 set hidden " hide buffers without needing to save them
 set history=10000 | " Max possible value, use <C-f> in commandline to browse
@@ -217,7 +213,7 @@ set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
 set tabline=%!vim9utils#MyTabline()
 set ignorecase smartcase " ignore case in searches, UNLESS capitals used
 set showtabline=2 | " Always show tabline
-set signcolumn=yes
+set signcolumn=number
 set splitbelow " new horizontal split window always goes below current
 set splitright " same but with new vertical split window
 set tags=./tags;,tags; | " pwd and search up til root dir for tags file
@@ -260,7 +256,7 @@ if has('gui_macvim') && has('gui_running')
 endif
 
 " I want C-n/C-p to always be nearest and/or in same buffer,
-" if I need to go further I'll use C-Space for YCM
+" For more intelligent/farther reaching completions use C-Space
 inoremap <C-p> <C-x><C-p>
 inoremap <C-n> <C-x><C-n>
 
@@ -374,7 +370,7 @@ nnoremap <silent><Leader>* :grep <cword><CR>
 nnoremap <Leader>w <cmd>update<CR>
 nnoremap <Leader>, <cmd>edit $MYVIMRC<CR>
 nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
-nnoremap <Leader><Leader> <cmd>buffer #<CR>
+nnoremap <Leader>bb <cmd>buffer #<CR>
 nnoremap <Leader><CR> :source %<CR>
 
 " Vimdiff
@@ -385,10 +381,10 @@ nnoremap [q <cmd>cprevious<CR>
 nnoremap ]q <cmd>cnext<CR>
 nnoremap [Q <cmd>cfirst<CR>
 nnoremap ]Q <cmd>clast<CR>
-nnoremap [e <cmd>lprevious<CR>
-nnoremap ]e <cmd>lnext<CR>
-nnoremap ]E <cmd>llast<CR>
-nnoremap [E <cmd>lfirst<CR>
+nnoremap <C-p> <cmd>lprevious<CR>
+nnoremap p <cmd>lfirst<CR>
+nnoremap <C-n> <cmd>lnext<CR>
+nnoremap n <cmd>llast<CR>
 nnoremap ]t <cmd>tabnext<CR>
 nnoremap [t <cmd>tabprev<CR>
 nnoremap [T <cmd>tabfirst<CR>
