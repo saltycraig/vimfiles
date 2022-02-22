@@ -88,7 +88,7 @@ endfunction
 let g:fzf_action = {
   \ 'ctrl-q': function('s:build_quickfix_list'),
   \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
+  \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 " Layout of fzf UI
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
@@ -130,8 +130,8 @@ nnoremap <silent><Leader>gl <cmd>0Git log<CR>
 nnoremap <silent><Leader>gL <cmd>Git log<CR>
 
 " :Gedit is 'git checkout %' => reverts work tree file to index, be careful!
-nnoremap <Leader>ge :Gedit<Space>
-nnoremap <silent><Leader>gE :Gedit <bar> only<CR>
+nnoremap <Leader>gE :Gedit<Space>
+nnoremap <silent><Leader>ge :Gedit <bar> only<CR>
 
 " Add all and start commit message with --verbose flag to show patches
 nnoremap <silent><Leader>gc <cmd>G commit -av<CR>
@@ -220,6 +220,7 @@ set signcolumn=number
 set splitbelow " new horizontal split window always goes below current
 set splitright " same but with new vertical split window
 set tags=./tags;,tags; | " pwd and search up til root dir for tags file
+set title 
 set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
 set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
 set updatetime=250
@@ -243,10 +244,15 @@ if has('termguicolors')
   endif
 endif
 
-" $VIMRUNTIME/ftplugin/markdown.vim
-" This works like dogshit, I'm afraid. Limits of regex vim. Not doc'd either.
-" let g:markdown_fenced_languages = ['js=javascript', 'jsx=javascript', 'json', 'cpp', 'shell=sh', 'bash=sh']
-let g:markdown_folding = 1
+" Terminal cursors:
+"https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+" Cursor settings:
+"  1 -> blinking block  2 -> solid block  3 -> blinking underscore  4 -> solid underscore
+"  5 -> blinking vertical bar 6 -> solid vertical bar
+" Insert mode
+let &t_SI = "\e[6 q"
+" Normal mode
+let &t_EI = "\e[2 q"
 
 " }}}
 
@@ -429,6 +435,7 @@ command! JekyllOpen call utils#JekyllOpenLive()
 " list, from systemlist() call. Since setqflist() requires a dict we use map to
 " create one.
 command! -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
+command! -bar Gprfiles call setqflist(map(systemlist("git diff --name-only $(git merge-base HEAD develop)"), '{"filename": v:val, "lnum": 1}')) | copen
 
 " }}}
 
@@ -454,6 +461,7 @@ augroup vimrc
   autocmd BufWinEnter * if &previewwindow | setlocal nonumber norelativenumber nolist | endif
   " Stop fugitive from littering buffer list
   autocmd BufReadPost fugitive://* set bufhidden=delete
+  autocmd DirChanged * let &titlestring = fnamemodify(getcwd(), ":~")
 augroup END
 
 " }}}
@@ -465,8 +473,6 @@ augroup END
 "
 " Colorscheme Extras for Plugins {{{
 colorscheme apprentice
-" set background=light
-" colorscheme quiet
 
 "}}}
 
@@ -486,15 +492,6 @@ nnoremap <F2> :call SynGroup()<CR>
 
 " Playground {{{
 
-" Terminal cursors:
-"https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
-" Cursor settings:
-"  1 -> blinking block  2 -> solid block  3 -> blinking underscore  4 -> solid underscore
-"  5 -> blinking vertical bar 6 -> solid vertical bar
-" Insert mode
-let &t_SI = "\e[6 q"
-" Normal mode
-let &t_EI = "\e[2 q"
 
 " Grepping
 nmap <Leader>/ :grep<Space>
