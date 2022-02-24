@@ -1,14 +1,87 @@
 " vim: fdm=marker nowrap ft=vim et sts=2 ts=2 sw=2 fdl=99
 
-" Bare-basics {{{
-unlet! skip_defaults_vim
-source $VIMRUNTIME/defaults.vim
-set encoding=utf-8
+" Options {{{
+set nocompatible
+filetype plugin indent on
+syntax on
 scriptencoding utf-8
 let mapleader=' '
+
+set autoindent
+set autoread
+set backspace=indent,eol,start
+set belloff=all
+set breakindent
+set clipboard=unnamed,unnamedplus
+set complete-=i
+set completeopt=menuone,popup
+set diffopt+=algorithm:patience | " http://vimways.org/2018/the-power-of-diff/
+set display=truncate
+set encoding=utf-8
+set exrc
+set foldlevelstart=99
+set formatoptions+=j
+set grepprg=grep\ -Hnri
+set hidden
+set history=10000
+set hlsearch
+set incsearch
+set laststatus=2
+set listchars=tab:\│\ ,lead:·,trail:█,eol:
+set mouse=a
+set nolangremap
+set noswapfile
+set nowrap
+set nrformats-=octal
+set number
+set path-=/usr/include |  set path+=**
+set ruler
+set scrolloff=2
+set secure
+set sessionoptions-=options
+set showcmd
+set showmatch
+set sidescrolloff=5
+set statusline=\ %f
+set statusline+=%m%r%h
+set statusline+=%=
+set statusline+=%{FugitiveStatusline()}
+set statusline+=\ [%Y]
+set statusline+=\ %P
+set statusline +=\ %l:%c\ 
+set suffixes+=.png,.jpeg,.jpg,.exe
+set shortmess-=cS
+" set tabline=%!vim9utils#MyTabline()
+set ignorecase smartcase
+set signcolumn=number
+set splitbelow splitright
+set tags=./tags;,tags;
+set title
+set thesaurus=~/.vim/thesaurus/english.txt
+set ttimeout ttimeoutlen=100
+set undofile undodir=~/.vim/undodir
+set updatetime=250
+set viewoptions-=options
+set wildcharm=<C-z>
+set wildignore=*.o,*.obj
+set wildignore+=*.exe,*.dylib,%*
+set wildignore+=*.png,*.jpeg,*.bmp,*.jpg
+set wildignore+=*.pyc
+set wildoptions=pum,tagfile
+set wildmenu
+
+if has('termguicolors')
+  if !$TERM_PROGRAM =~# 'Apple_Terminal'
+    set termguicolors
+  endif
+endif
+
+"https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
 " }}}
 
-" Plugin Settings {{{
+" Plugins {{{
 
 " defaults I never use
 let g:loaded_getscriptPlugin = 1
@@ -24,31 +97,36 @@ let g:loaded_2html_plugin = 1
 " $VIMRUNTIME/pack/dist/opt/<plugin>
 packadd! matchit " extended 'matchpairs', basically
 packadd! cfilter
+packadd minpac
 
-" vim-polyglot
-" Turn off 'vim-sensible' stuff it does.
-let g:polyglot_disabled = ['sensible']
+call minpac#init()
 
-call plug#begin()
-  Plug 'romainl/apprentice'
-  Plug 'junegunn/fzf.vim'
-  Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-surround'
-  Plug 'kana/vim-textobj-user'
-  Plug 'kana/vim-textobj-entire'
-  Plug 'kana/vim-textobj-indent'
-  Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-rhubarb'
-  Plug 'sheerun/vim-polyglot'
-  Plug 'preservim/tagbar'
-  Plug 'w0rp/ale'
-call plug#end()
+call minpac#add('k-takata/minpac', { 'type': 'opt' })
+call minpac#add('romainl/apprentice')
+call minpac#add('tpope/vim-commentary')
+call minpac#add('tpope/vim-repeat')
+call minpac#add('tpope/vim-surround')
+call minpac#add('kana/vim-textobj-user')
+call minpac#add('kana/vim-textobj-entire')
+call minpac#add('kana/vim-textobj-indent')
+call minpac#add('tpope/vim-fugitive')
+call minpac#add('tpope/vim-rhubarb')
+call minpac#add('sheerun/vim-polyglot')
+call minpac#add('preservim/tagbar')
+call minpac#add('w0rp/ale')
+call minpac#add('junegunn/fzf.vim')
+
+command! PackUpdate call minpac#update()
+command! PackClean call minpac#clean()
 
 " brew install fzf first
 if executable('fzf') && has('mac')
     set runtimepath+=/usr/local/opt/fzf
 endif
+
+" vim-polyglot
+" Turn off 'vim-sensible' stuff it does.
+let g:polyglot_disabled = ['sensible']
 
 " ale
 let g:ale_set_signs = 0
@@ -164,100 +242,6 @@ xnoremap <Leader>g@ <cmd>GBrowse<CR>
 
 " }}}
 
-" Options {{{
-" most ftplugin/*.vim have their own indentexpr, this is backup that
-" just copies indent from previous line
-set autoindent
-set autoread " auto re-read files changes outside of Vim
-set belloff=all | " no sounds for all possible bell events
-set breakindent " wrapped line continue visually indented
-" yank/delete/change/put ops go to clipboard registers * and +
-" Normally they would go to unnamed register.
-set clipboard=unnamed,unnamedplus
-set complete-=i
-set completeopt=menuone,popup
-try " 8.1 something this became an option
-  set diffopt+=algorithm:patience | " http://vimways.org/2018/the-power-of-diff/
-catch /E474/
-  set diffopt=vertical,iwhiteall,filler
-endtry
-set exrc | " Enable .vimrc/.exrc/.gvimrc auto read from pwd, for projects
-set foldlevelstart=99 | " No folds closed by default. Modeline 'fdls' overrules
-set formatoptions+=j | " Remove leading comment char when joining lines
-set grepprg=grep\ -Hnri
-set hidden " hide buffers without needing to save them
-set history=10000 | " Max possible value, use <C-f> in commandline to browse
-set hlsearch " highlight all search matches until :nohl run
-set laststatus=2 | " always show statuslines in all windows
-if has('patch-8.2.2454') " leading spaces char introduced
-  set listchars=tab:\│\ ,lead:·,trail:█,eol:
-else
-  set listchars=tab:\│\ ,space:·,trail:█,eol:
-endif
-set mouse=a
-set noswapfile " no annoying *.foo~ files left around
-set nowrap " defaults to line wrapping on
-set number
-set path-=/usr/include |  set path+=** | " Look recursively from ':pwd'
-set scrolloff=2
-set secure " autocmd, shell, and write commands not allow in dir exrc
-set shell=$SHELL | " macvim supposed to use this, but doesn't and sets 'sh'
-set showmatch " on brackets briefly jump to matching to show it
-set sidescrolloff=5
-set statusline=\ %f | " buffer name relative to :pwd
-set statusline+=%m%r%h | " [+] when modified, [-] no modify [RO] and [help]
-set statusline+=%= | " Start right-hand side of statusline
-set statusline+=%{FugitiveStatusline()}
-set statusline+=\ [%Y]
-set statusline+=\ %P
-set statusline +=\ %l:%c\ 
-set suffixes+=.png,.jpeg,.jpg,.exe
-set shortmess-=cS | "  No '1 of x' pmenu messages. [1/15] search results shown.
-" Use for non-gui tabline, for gui use :h 'guitablabel'
-" Use this one to show :tcd value in tabpage labels
-" set tabline=%!vim9utils#MyTabline()
-set ignorecase smartcase " ignore case in searches, UNLESS capitals used
-set showtabline=1 | " Always show tabline
-set signcolumn=number
-set splitbelow " new horizontal split window always goes below current
-set splitright " same but with new vertical split window
-set tags=./tags;,tags; | " pwd and search up til root dir for tags file
-set title 
-set thesaurus=~/.vim/thesaurus/english.txt | " Use for :h i_CTRL-X_CTRL-T
-set undofile undodir=~/.vim/undodir | " persistent undo on and where to save
-set updatetime=250
-" Character to act as 'wildchar' in a macro because <Tab> is unrecognized there
-" Use in mapping to do auto-expansion like this:
-" set wcm=<C-Z> | cnnoremap ss so $VIM/sessions/*.vim<C-Z>
-set wildcharm=<C-z>
-set wildignore=*.o,*.obj
-set wildignore+=*.exe,*.dylib,%*
-set wildignore+=*.png,*.jpeg,*.bmp,*.jpg
-set wildignore+=*.pyc
-if has('patch-8.2.4328') " new vertical menu introduced here
-  set wildoptions=pum,tagfile | " :tag <C-d> will show tag kind and file
-else
-  set wildoptions=tagfile | " :tag <C-d> will show tag kind and file
-endif
-if has('termguicolors')
-  " Terminal.app only supports 256 still (in 2021...)
-  if !$TERM_PROGRAM =~# 'Apple_Terminal'
-    set termguicolors
-  endif
-endif
-
-" Terminal cursors:
-"https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
-" Cursor settings:
-"  1 -> blinking block  2 -> solid block  3 -> blinking underscore  4 -> solid underscore
-"  5 -> blinking vertical bar 6 -> solid vertical bar
-" Insert mode
-let &t_SI = "\e[6 q"
-" Normal mode
-let &t_EI = "\e[2 q"
-
-" }}}
-
 " Mappings {{{
 
 " I want C-n/C-p to always be nearest and/or in same buffer,
@@ -305,9 +289,6 @@ nnoremap <Leader>b<Tab> :buffer *<C-z><S-Tab>
 nnoremap <Leader>bs :sbuffer <C-d>
 nnoremap <Leader>bv :vert sbuffer <C-d>
 
-" NOTE: these need nmap to fire the CCR() function to determine how
-" to handle the <CR> key at the end.
-" tags
 cnoremap <expr> <CR> vim9utils#CCR()
 nmap <Leader>tj :tjump /<CR>
 " preview window, close with C-w z
@@ -330,12 +311,6 @@ tnoremap <silent><C-b>v <C-\><C-n>:vertical terminal ++close zsh<CR>
 tnoremap <silent><C-b>s <C-\><C-n>:terminal ++close zsh<CR>
 nnoremap <silent><C-b>! <C-w>T
 
-" resizing windows
-nnoremap <silent><S-Up> <Cmd>2wincmd+<CR>
-nnoremap <silent><S-Down> <Cmd>2wincmd-<CR>
-nnoremap <silent><S-Left> <Cmd>2wincmd <<CR>
-nnoremap <silent><S-Right> <Cmd>2wincmd ><CR>
-
 nnoremap <silent><C-b><CR> :terminal make<CR>
 
 " Re-select visually selected area after indenting/dedenting.
@@ -350,7 +325,7 @@ xnoremap K :m '<-2<CR>gv=gv
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 if $TERM_PROGRAM =~# 'Apple_Terminal'
-  " inoremap <Nul> <C-x><C-o>
+  inoremap <Nul> <C-x><C-o>
   nnoremap <silent>OA <Cmd>2wincmd+<CR>
   nnoremap <silent>OB <Cmd>2wincmd-<CR>
   nnoremap <silent>[1;5D <Cmd>2wincmd <<CR>
@@ -431,6 +406,8 @@ command! TodoLocal :botright silent! lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 command! -nargs=1 Redir call utils#Redir(<q-args>)
 command! JekyllOpen call utils#JekyllOpenLive()
+command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+  \ | wincmd p | diffthis
 
 " Git-related
 " :Gshow<CR> || :Gshow <SHA> || :Gshow HEAD^^
@@ -468,9 +445,12 @@ augroup vimrc
   autocmd BufEnter * if &buftype ==# 'nofile' | nnoremap <buffer> q :bwipeout!<CR> | endif
   autocmd BufEnter * if &buftype ==# 'nofile' | setlocal nocursorcolumn | endif
   autocmd BufWinEnter * if &previewwindow | setlocal nonumber norelativenumber nolist | endif
-  " Stop fugitive from littering buffer list
   autocmd BufReadPost fugitive://* set bufhidden=delete
   autocmd DirChanged * let &titlestring = fnamemodify(getcwd(), ":~")
+  autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
 augroup END
 
 " }}}
@@ -518,8 +498,6 @@ nnoremap <silent> { :keepjumps normal! {<CR>
 
 " Neovim backports {{{
 " Don't restore global maps/options, let vimrc handle that
-set viewoptions-=options
-set sessionoptions-=options
 " Neovim really maps Q to execute last recorded macro which could be any
 " register, but I mostly just use qq so no need to create elaborate backport
 nnoremap Q @q
