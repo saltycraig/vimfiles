@@ -54,69 +54,67 @@ endif
 let g:colors_name='enso'
 
 " original cc color. cursorlinenr, cursorline, statuslineNC, Pmenu
-hi! Conceal ctermfg=232 ctermbg=231 guifg=#080808 guibg=#ffffff 
-hi! CursorColumn ctermbg=255 guibg=#ffffff
-hi! CursorLine ctermbg=255 guibg=#ffffff cterm=NONE gui=NONE
-hi! CursorLineNr ctermbg=255 ctermfg=232 guifg=#080808 guibg=#ffffff cterm=NONE gui=NONE
-hi! Directory ctermfg=244 guifg=#808080
-hi! DiffAdd ctermbg=118 ctermfg=232 guibg=#87ff00 guifg=#080808
-hi! DiffDelete ctermbg=196 ctermfg=232 guibg=#ff0000 guifg=#080808 cterm=NONE gui=NONE
-hi! DiffChange ctermbg=214 cterm=NONE gui=NONE ctermfg=232 guifg=#080808 guibg=#ffaf00
-hi! DiffText ctermbg=118 cterm=NONE gui=NONE ctermfg=232 guifg=#080808 guibg=#87ff00
-hi! EndOfBuffer ctermfg=232 ctermbg=231 guifg=#080808 guibg=#ffffff
-hi! ErrorMsg ctermfg=231 ctermbg=196 guifg=#eeeeee guibg=#800000
-hi! VertSplit ctermfg=232 ctermbg=232 guifg=#080808 guibg=#080808
-hi! Folded ctermfg=232 ctermbg=255 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
-hi! FoldColumn ctermfg=232 ctermbg=231 guibg=#080808 guibg=#ffffff
-hi! SignColumn ctermfg=232 ctermbg=231 guifg=#080808 guibg=#ffffff
-hi! IncSearch cterm=NONE gui=NONE ctermbg=226 ctermfg=232 guibg=#ffff00 guifg=#080808
-hi! LineNr ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#ffffff
+hi! Conceal ctermfg=232 ctermbg=231 
+hi! CursorColumn ctermbg=255 
+hi! CursorLine ctermbg=255 cterm=NONE
+hi! CursorLineNr ctermbg=255 ctermfg=232 cterm=NONE
+hi! Directory ctermfg=244
+hi! DiffAdd ctermbg=114 ctermfg=232
+hi! DiffDelete ctermbg=174 ctermfg=232 cterm=NONE
+hi! DiffChange ctermbg=146 cterm=NONE ctermfg=232
+hi! DiffText ctermbg=176 cterm=NONE ctermfg=232
+hi! EndOfBuffer ctermfg=232 ctermbg=231
+hi! ErrorMsg ctermfg=231 ctermbg=196
+hi! VertSplit ctermfg=232 ctermbg=232
+hi! Folded ctermfg=232 ctermbg=255 cterm=NONE
+hi! FoldColumn ctermfg=232 ctermbg=231
+hi! SignColumn ctermfg=232 ctermbg=231
+hi! IncSearch cterm=NONE ctermbg=226 ctermfg=232
+hi! LineNr ctermfg=232 ctermbg=231 cterm=NONE
 hi! link LineNrAbove LineNr
 hi! link LineNrBelow LineNr
 hi! link CursorLineNr CursorLine
-hi! MatchParen cterm=NONE gui=NONE ctermbg=232 ctermfg=231 guibg=#080808 guifg=#eeeeee
-hi! ModeMsg cterm=bold gui=bold
-hi! MoreMsg cterm=bold gui=bold ctermfg=232 ctermbg=231 guibg=#ffffff guifg=#080808
-hi! NonText cterm=NONE gui=NONE ctermfg=232 ctermbg=231 guibg=#ffffff guifg=#080808
-hi! Normal ctermfg=232 ctermbg=231 guifg=#080808 guibg=#ffffff
-hi! Pmenu ctermfg=232 ctermbg=255 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
-hi! PmenuSel ctermfg=231 ctermbg=244 cterm=NONE gui=NONE guifg=#eeeeee guibg=#808080
-hi! PmenuSbar ctermbg=255 guibg=#eeeeee
-hi! PmenuThumb ctermbg=232 guibg=#080808
-hi! Question ctermbg=231 ctermfg=232 cterm=bold gui=bold guifg=#080808 guibg=#ffffff
-hi! Search ctermbg=226 ctermfg=232 guibg=#ffff00 guifg=#080808 cterm=NONE gui=NONE
+hi! MatchParen cterm=NONE ctermbg=232 ctermfg=231
+hi! ModeMsg cterm=bold 
+hi! MoreMsg cterm=bold ctermfg=232 ctermbg=231
+hi! NonText cterm=NONE ctermfg=232 ctermbg=231
+hi! Normal ctermfg=232 ctermbg=231
+hi! Pmenu ctermfg=232 ctermbg=255 cterm=NONE
+hi! PmenuSel ctermfg=231 ctermbg=244 cterm=NONE
+hi! PmenuSbar ctermbg=255
+hi! PmenuThumb ctermbg=232
+hi! Question ctermbg=231 ctermfg=232 cterm=bold
+hi! Search ctermbg=226 ctermfg=232 cterm=NONE
 hi! link QuickFixLine Search
-" Used for listchars but also for meta/map keys listed with :map. Neovim does
-" this better by breaking them into two separate groups, with a ListChar group.
-hi! SpecialKey ctermbg=231 ctermfg=255 guifg=#eeeeee guibg=#ffffff
-hi! SpellBad cterm=underline gui=underline ctermfg=196 ctermbg=231 guifg=#ff0000 guibg=#ffffff
+hi! SpecialKey ctermbg=231 ctermfg=255
+hi! SpellBad cterm=underline ctermfg=196 ctermbg=231
 hi! link SpellCap SpellBad
 hi! link SpellLocal SpellBad
 hi! link SpellRare SpellBad
-hi! StatusLine ctermfg=231 ctermbg=244 cterm=NONE gui=NONE guifg=#eeeeee guibg=#808080
-hi! StatusLineNC ctermfg=232 ctermbg=255 cterm=NONE gui=NONE guifg=#080808 guibg=#eeeeee
-hi! Tabline cterm=NONE gui=NONE ctermbg=255 ctermfg=232 guifg=#080808 guibg=#eeeeee
-hi! TabLineFill cterm=NONE ctermbg=231 ctermfg=231 gui=NONE guibg=#ffffff guifg=#080808
-hi! TabLineSel ctermbg=244 cterm=NONE gui=NONE ctermfg=231 guifg=#ffffff guibg=#808080
-hi! Title ctermbg=231 ctermfg=232 cterm=bold gui=bold guifg=#080808 guibg=#ffffff
-hi! Visual ctermbg=244 ctermfg=231 guifg=#080808 guibg=#eeeeee
-hi! VisualNOS ctermbg=244 ctermfg=231 guifg=#080808 guibg=#eeeeee
-hi! WarningMsg ctermbg=231 ctermfg=196 guibg=#ffffff guifg=#ff0000
-hi! WildMenu ctermbg=255 guibg=#ffffff
-hi! ColorColumn ctermbg=255 guibg=#ffffff
+hi! StatusLine ctermfg=231 ctermbg=232 cterm=NONE
+hi! StatusLineNC ctermfg=232 ctermbg=255 cterm=NONE
+hi! Tabline cterm=NONE gui=NONE ctermbg=255 ctermfg=232
+hi! TabLineFill cterm=NONE ctermbg=231 ctermfg=231
+hi! TabLineSel ctermbg=232 ctermfg=231 cterm=NONE
+hi! Title ctermbg=231 ctermfg=232 cterm=bold
+hi! Visual ctermbg=244 ctermfg=231
+hi! VisualNOS ctermbg=244 ctermfg=231
+hi! WarningMsg ctermbg=231 ctermfg=196
+hi! WildMenu ctermbg=255
+hi! ColorColumn ctermbg=255
 
 " Preferred groups
-hi! Comment cterm=italic ctermfg=244 ctermbg=231 cterm=NONE gui=NONE gui=italic guifg=#080808 guibg=#ffffff
-hi! Constant ctermfg=244 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#ffffff
-hi! Identifier ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#ffffff
-hi! Statement ctermfg=232 ctermbg=231 cterm=bold gui=bold guifg=#080808 guibg=#ffffff
-hi! PreProc ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#ffffff
-hi! Type ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#ffffff
-hi! Special ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guifg=#080808 guibg=#ffffff
-hi! Underlined cterm=underline gui=underline ctermfg=232 ctermbg=231 guifg=#080808 guibg=#ffffff
-hi! Ignore ctermbg=231 ctermfg=231 guibg=#ffffff guifg=#eeeeee
-hi! Error ctermbg=196 ctermfg=231 guibg=#ff0000 guifg=#eeeeee
-hi! Todo cterm=NONE gui=NONE ctermbg=255 ctermfg=232 guibg=#eeeeee guifg=#080808
+hi! Comment cterm=italic ctermfg=244 ctermbg=231 cterm=NONE
+hi! Constant ctermfg=244 ctermbg=231 cterm=NONE
+hi! Identifier ctermfg=232 ctermbg=231 cterm=NONE
+hi! Statement ctermfg=232 ctermbg=231 cterm=bold
+hi! PreProc ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guibg=#ffffff
+hi! Type ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guibg=#ffffff
+hi! Special ctermfg=232 ctermbg=231 cterm=NONE gui=NONE guibg=#ffffff
+hi! Underlined cterm=underline gui=underline ctermfg=232 ctermbg=231 guibg=#ffffff
+hi! Ignore ctermbg=231 ctermfg=231 guifg=#eeeeee
+hi! Error ctermbg=196 ctermfg=231 guifg=#eeeeee
+hi! Todo cterm=NONE gui=NONE ctermbg=255 ctermfg=232 guifg=#080808
 hi! SignColumn ctermbg=231 guibg=#ffffff
 
 hi! link StatusLineTerm StatusLine
