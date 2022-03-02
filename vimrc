@@ -115,6 +115,8 @@ call minpac#add('sheerun/vim-polyglot')
 call minpac#add('preservim/tagbar')
 call minpac#add('w0rp/ale')
 call minpac#add('junegunn/fzf.vim')
+call minpac#add('skywind3000/asyncrun.vim')
+call minpac#add('skywind3000/asynctasks.vim')
 
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
@@ -124,13 +126,38 @@ if executable('fzf') && has('mac')
     set runtimepath+=/usr/local/opt/fzf
 endif
 
+" asyncrun/asynctasks.vim
+let g:asyncrun_open = 6
+let g:asynctasks_term_pos = "bottom"
+let g:asynctasks_term_reuse = 1
+let g:asynctasks_term_focus = 0
+
 " vim-polyglot
 " Turn off 'vim-sensible' stuff it does.
 let g:polyglot_disabled = ['sensible']
 
 " ale
-let g:ale_set_signs = 0
-let g:ale_virtualtext_cursor = 1
+let g:ale_set_loclist = 1 | " update loclist, bound to C-n/p for me
+let g:ale_set_signs = 0 | " no marks in number/sign columns
+let g:ale_disable_lsp = 1 | " turn off ale lsp stuff completely
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
+let g:ale_set_highlights = 1 | " in-text highlights, not including signs
+let g:ale_virtualtext_cursor = 0 | " virtual text at EOL showing lint msg
+" Related, use same logic to find warn/err when cursor moves to new line
+let g:ale_echo_cursor = 0 | " echo closeby warn/errs on cursor line
+let g:ale_cursor_detail = 0 | " open preview win when cursor on line with errs
+" Floats and hovers
+let g:ale_detail_to_floating_preview = 1 | " Use float win for :ALEDetail
+let g:ale_hover_to_floating_preview = 1 
+" Docs say this one equivalen to setting both above to 1
+let g:ale_floating_preview = 1 | " Use float for everything
+let g:ale_hover_to_preview = 0 | " Use preview win for hover messages
+let g:ale_hover_cursor = 0
+nnoremap <silent><C-p> :silent! lprevious<CR>:ALEDetail<CR><Esc>
+nnoremap <silent>p :silent! lfirst<CR>:ALEDetail<CR><Esc>
+nnoremap <silent><C-n> :silent! lnext<CR>:ALEDetail<CR><Esc>
+nnoremap <silent>n :silent! llast<CR>:ALEDetail<CR><Esc>
+
 let g:ale_linters_explicit = 1
 let g:ale_linters = {
   \ 'markdown': ['vale', 'cspell'],
@@ -155,8 +182,8 @@ nnoremap <Leader>C :FZFCd!<CR>
 nnoremap <Leader><C-]> :Tags<CR>
 command! -bang -bar -nargs=? -complete=dir FZFCd
   \ call fzf#run(fzf#wrap(
-  \ {'source': 'find '.( empty("<args>") ? ( <bang>0 ? "~" : "." ) : "<args>" ) .' -type d',
-  \ 'sink': 'cd'}))
+  \ {'source': 'find '..( empty("<args>") ? ( <bang>0 ? "~" : "." ) : "<args>" ) ..
+  \ ' -type d -maxdepth 1', 'sink': 'cd'}))
 " Function used to populate Quickfix with selected lines
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -229,7 +256,7 @@ nnoremap <Leader>gS :Git! log -S
 nnoremap <Leader>g* :Ggrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>
 
 " git push/pull/fetching
-" TODO: maybe use Dispatch for this?
+" TODO: Turn into asyncrun calls
 nnoremap <silent><Leader>gP <cmd>G push<CR>
 nnoremap <silent><Leader>gp <cmd>G pull<CR>
 nnoremap <silent><Leader>gf <cmd>G fetch<CR>
@@ -246,8 +273,8 @@ xnoremap <Leader>g@ <cmd>GBrowse<CR>
 
 " I want C-n/C-p to always be nearest and/or in same buffer,
 " For more intelligent/farther reaching completions use C-Space
-inoremap <C-p> <C-x><C-p>
-inoremap <C-n> <C-x><C-n>
+" inoremap <C-p> <C-x><C-p>
+" inoremap <C-n> <C-x><C-n>
 
 " manual expansions, when I want it
 inoremap (<CR> (<CR>)<Esc>O
@@ -306,7 +333,7 @@ nnoremap ]I ]I:djump<Space><Space><Space><C-r><C-w><S-Left><Left>
 
 " Tmux functionality that I used
 nnoremap <silent><C-b>v :vertical terminal ++close zsh<CR>
-nnoremap <silent><C-b>s :terminal ++close zsh<CR>
+noremap <silent><C-b>s :terminal ++close zsh<CR>
 tnoremap <silent><C-b>v <C-\><C-n>:vertical terminal ++close zsh<CR>
 tnoremap <silent><C-b>s <C-\><C-n>:terminal ++close zsh<CR>
 nnoremap <silent><C-b>! <C-w>T
@@ -341,6 +368,9 @@ endif
 " Function keys
 nnoremap <silent><F3> :call vim9utils#ToggleQuickfixList()<CR>
 nnoremap <silent><F4> :call vim9utils#ToggleLocationList()<CR>
+nnoremap <F5> :AsyncTask <C-z>
+" on macos Terminal below is alt-F5
+nnoremap [21~ :AsyncTaskProfile<space>
 nnoremap <silent><F7> :15Lexplore<CR>
 nnoremap <silent>gO :TagbarOpenAutoClose<CR>
 nnoremap <silent><F8> :TagbarOpenAutoClose<CR>
@@ -362,10 +392,6 @@ nnoremap [q <cmd>cprevious<CR>
 nnoremap ]q <cmd>cnext<CR>
 nnoremap [Q <cmd>cfirst<CR>
 nnoremap ]Q <cmd>clast<CR>
-nnoremap <C-p> <cmd>lprevious<CR>
-nnoremap p <cmd>lfirst<CR>
-nnoremap <C-n> <cmd>lnext<CR>
-nnoremap n <cmd>llast<CR>
 nnoremap ]t <cmd>tabnext<CR>
 nnoremap [t <cmd>tabprev<CR>
 nnoremap [T <cmd>tabfirst<CR>
@@ -375,30 +401,6 @@ nnoremap [t <cmd>tabfirst<CR>
 " }}}
 
 " Commands {{{
-
-" <f-args> macro expansion explained/notes {{{
-" <f-args> is maybe replaced with list of all whitespace/tab separated arguments
-" to the command, e.g., :Grep argone -argtwo 'argthree' preserve\ literall
-" spaces\ here\ for\ this\ argument
-" => ['argone', '-argtwo', 'argthree', 'preserve literal spaces here for this
-" argument'].
-"
-" Command         <f-args> transform args to:
-" :grep           (Nothing, <f-args> is removed)
-" :grep ab        ['ab']
-" :grep a\b       ['a\b']
-" :grep a\ b      ['a b']
-" :grep a\  b     ['a ', 'b']
-" :grep a\\ b     ['a\', 'b']
-" :grep a\\\b     ['a\\b']
-" :grep a\\\ b    ['a\ b']
-" :grep a\\\\b    ['a\\b']
-" }}}
-command! -nargs=+ -complete=file_in_path -bar Grep cgetexpr vim9utils#Grep(<f-args>)
-command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr vim9utils#Grep(<f-args>)
-" replace standard :grep with ours automatically
-cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
-cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
 command! Api :help list-functions<CR>
 command! Cd :lcd %:h
@@ -459,9 +461,11 @@ augroup END
 
 " See all active highlight groups with:
 " :so $VIMRUNTIME/syntax/hitest.vim
-"
-" Colorscheme Extras for Plugins {{{
+set background=dark
 colorscheme apprentice
+
+" Colorscheme Extras for Plugins {{{
+
 
 "}}}
 
@@ -510,8 +514,5 @@ inoremap <C-W> <C-G>u<C-W>
 
 " Experimental {{{
 
-" Better :make
-command! -bar Make :silent! lgetexpr vim9utils#Make() <Bar> lwindow
-" cnoreabbrev <expr> make (getcmdtype() ==# ':' && getcmdline() ==# 'make')  ? 'Make'  : 'make'
 " }}}
 
