@@ -4,6 +4,9 @@ setlocal foldlevel=99
 setlocal suffixesadd=.md
 setlocal list
 setlocal expandtab
+setlocal shiftwidth=3
+setlocal softtabstop=3
+setlocal tabstop=3
 " setlocal foldmethod=expr
 " setlocal foldexpr=MarkdownYamlFold()
 

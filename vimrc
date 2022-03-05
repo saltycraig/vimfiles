@@ -43,13 +43,13 @@ set sessionoptions-=options
 set showcmd
 set showmatch
 set sidescrolloff=5
-set statusline=\ %f
+set statusline=%f
 set statusline+=%m%r%h
 set statusline+=%=
 set statusline+=%{FugitiveStatusline()}
 set statusline+=\ [%Y]
 set statusline+=\ %P
-set statusline +=\ %l:%c\ 
+set statusline +=\ %l:%c
 set suffixes+=.png,.jpeg,.jpg,.exe
 set shortmess-=cS
 " set tabline=%!vim9utils#MyTabline()
@@ -191,7 +191,7 @@ let g:ale_echo_cursor = 0 | " echo closeby warn/errs on cursor line
 let g:ale_cursor_detail = 0 | " open preview win when cursor on line with errs
 " Floats and hovers
 let g:ale_detail_to_floating_preview = 1 | " Use float win for :ALEDetail
-let g:ale_hover_to_floating_preview = 1 
+let g:ale_hover_to_floating_preview = 1
 " Docs say this one equivalen to setting both above to 1
 let g:ale_floating_preview = 1 | " Use float for everything
 let g:ale_hover_to_preview = 0 | " Use preview win for hover messages
@@ -529,7 +529,7 @@ nnoremap <silent> { :keepjumps normal! {<CR>
 
 " }}}
 
-" Neovim backports {{{
+" Neovim backports {{{   
 " Don't restore global maps/options, let vimrc handle that
 " Neovim really maps Q to execute last recorded macro which could be any
 " register, but I mostly just use qq so no need to create elaborate backport
@@ -541,7 +541,8 @@ inoremap <C-W> <C-G>u<C-W>
 
 " }}}
 
-" Experimental {{{
+" Experimental {{{   
 
+" TODO: move to autoload/vim9utils.vim
 " }}}
 

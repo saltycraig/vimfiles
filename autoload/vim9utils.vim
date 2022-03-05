@@ -19,10 +19,13 @@ enddef
 export def StripTrailingWhitespaces()
   # Don't touch binary files or diff files
   if !&binary && &filetype !=# 'diff'
-    var _s = @
-    execute "normal! %s/\s\+$//e"
+    var lastsearch = getreg('/')
+		var l = line(".")
+		var c = col(".")
+    execute ':%s/\s\+$//e'
     # restore last search to last search register, ignore above one
-    var @/ = _s
+    setreg('/', lastsearch)
+		cursor(l, c)
   endif
 enddef
 
