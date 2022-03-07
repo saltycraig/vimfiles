@@ -68,7 +68,7 @@ set wildignore=*.o,*.obj
 set wildignore+=*.exe,*.dylib,%*
 set wildignore+=*.png,*.jpeg,*.bmp,*.jpg
 set wildignore+=*.pyc
-set wildoptions=pum,tagfile
+set wildoptions=fuzzy,pum,tagfile
 set wildmenu
 
 if has('termguicolors')
@@ -342,17 +342,17 @@ cnoremap <expr> <C-k> wildmenumode() ? "\<Right>\<C-z>" : "\<C-k>"
 
 nnoremap <Leader>dd <Cmd>bwipeout!<CR>
 
-nnoremap <Leader>ff :find *
-nnoremap <Leader>fs :sfind *
-nnoremap <Leader>fv :vert sfind *
+nnoremap <Leader>ff :find<space>
+nnoremap <Leader>fs :sfind<space>
+nnoremap <Leader>fv :vert sfind<space> 
 " Tab-expand to show wildmenu then untab to unselect but still see menu
-nnoremap <Leader>ee :edit *<C-z><S-Tab>
-nnoremap <Leader>es :split *<C-z><S-Tab>
-nnoremap <Leader>ev :vert split *<C-z><S-Tab>
+nnoremap <Leader>ee :edit <C-z><S-Tab>
+nnoremap <Leader>es :split <C-z><S-Tab>
+nnoremap <Leader>ev :vert split <C-z><S-Tab>
 " buffers not part of :pwd show '/' or '~' at the beginning, so we can remove
 " those using filter magic. No wildmenu though, bummer.
 nnoremap <Leader>b. :filter! /^\~\\|^\// ls t<CR>:b
-nnoremap <Leader>b<Tab> :buffer *<C-z><S-Tab>
+nnoremap <Leader>b<Tab> :buffer <C-z><S-Tab>
 nnoremap <Leader>bs :sbuffer <C-d>
 nnoremap <Leader>bv :vert sbuffer <C-d>
 
