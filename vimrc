@@ -120,6 +120,8 @@ call minpac#add('skywind3000/asynctasks.vim')
 call minpac#add('prabirshrestha/vim-lsp')
 call minpac#add('prabirshrestha/asyncomplete.vim')
 call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
+call minpac#add('wellle/targets.vim')
+call minpac#add('mbbill/undotree')
 
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
@@ -127,7 +129,14 @@ command! PackClean call minpac#clean()
 " vim-markdown
 let g:markdown_fenced_languages = ['javascriptreact', 'cpp', 'sh', 'cmake']
 let g:markdown_syntax_conceal = 0
-let g:markdown_minlines = 500 | " Default 50. sync lines for highlighting
+let g:markdown_minlines = 5000 | " Default 50. sync lines for highlighting
+
+" undotree
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_ShortIndicators = 1
+let g:undotree_HelpLine = 0
+nnoremap <Leader>u <cmd>UndotreeToggle<CR>
+
 
 " vim-lsp and asyncomplete.vim
 let g:asyncomplete_auto_popup = 0
@@ -228,7 +237,7 @@ nnoremap <Leader><C-]> :Tags<CR>
 command! -bang -bar -nargs=? -complete=dir FZFCd
 	\ call fzf#run(fzf#wrap(
 	\ {'source': 'find '..( empty("<args>") ? ( <bang>0 ? "~" : "." ) : "<args>" ) ..
-	\ ' -type d -maxdepth 1', 'sink': 'cd'}))
+	\ ' -type d -maxdepth 1', 'sink': 'tcd'}))
 " Function used to populate Quickfix with selected lines
 function! s:build_quickfix_list(lines)
 	call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -529,7 +538,7 @@ nnoremap <silent> { :keepjumps normal! {<CR>
 
 " }}}
 
-" Neovim backports {{{   
+" Neovim backports {{{
 " Don't restore global maps/options, let vimrc handle that
 " Neovim really maps Q to execute last recorded macro which could be any
 " register, but I mostly just use qq so no need to create elaborate backport
@@ -539,9 +548,10 @@ nnoremap <C-L> <Cmd>nohlsearch<Bar>diffupdate<CR><C-L>
 inoremap <C-U> <C-G>u<C-U>
 inoremap <C-W> <C-G>u<C-W>
 
+
 " }}}
 
-" Experimental {{{   
+" Experimental {{{
 
 " TODO: move to autoload/vim9utils.vim
 " }}}

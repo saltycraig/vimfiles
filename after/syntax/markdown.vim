@@ -13,3 +13,12 @@ unlet b:current_syntax
 syntax include @Yaml syntax/yaml.vim
 syntax region yamlFrontmatter start=/\%^---$/ end=/^---$/ keepend contains=@Yaml
 
+" Also correctly identify Liquid tags used by Jekyll, I'd rather do this than
+" switch the entire filetype to 'liquid' and how to work around plugin
+" integration issues not identifying liquid ft as markdown, e.g., Tagbar won't
+" work correctly unless you tell it that liquid ft is markdown, and there are
+" some other instances like that where having a markdown file that is marked as
+" 'liquid' in &ft becomes a hindrance.
+syntax match liquidTag /{[{%].*[}%]}/
+highlight! link liquidTag Statement
+

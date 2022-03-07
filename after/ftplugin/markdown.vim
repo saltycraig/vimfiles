@@ -13,6 +13,7 @@ setlocal tabstop=3
 " TODO: could be made more robust to support other style Markdown headings
 let &l:define = '\v^#+\s*.+$'
 
+" TODO: redo this
 nnoremap <buffer> gf :call utils#LiquidInclude()<CR>
 
 " MATCHES:
@@ -24,42 +25,32 @@ nnoremap <buffer> gf :call utils#LiquidInclude()<CR>
 " /{{\s*page.version\s*}}\zs\/[^\.\)]\+\|\.\.\zs\/[^\.\)]\+
 setlocal include={{\\s*page.version\\s*}}\\zs\\/[^\\.\\)]\\+\\\|\\.\\.\\zs\\/[^\\.\\)]\\+
 
-" Based on:
-" https://habamax.github.io/2019/03/07/vim-markdown-frontmatter.html
-" Don't recognize '---' in frontmatter as being a markdown fold.
-" function! MarkdownYamlFold() abort
-"   let line = getline(v:lnum)
-
-"   " Regular headers
-"   let depth = match(line, '\(^#\+\)\@<=\( .*$\)\@=')
-"   if depth > 0
-"     return ">" . depth
-"   endif
-
-"   " Setext style headings
-"   let prevline = getline(v:lnum - 1)
-"   let nextline = getline(v:lnum + 1)
-"   if (line =~ '^.\+$') && (nextline =~ '^=\+$') && (prevline =~ '^\s*$')
-"     return ">1"
-"   endif
-
-"   if (line =~ '^.\+$') && (nextline =~ '^-\+$') && (prevline =~ '^\s*$')
-"     return ">2"
-"   endif
-
-"   " frontmatter
-"   if (v:lnum == 1) && (line =~ '^----*$')
-" 	  return ">1"
-"   endif
-
-"   return "="
-" endfunction
-
-" Taken from upstream tpope/vim-markdown, remove this when runtime markdown.vim
+" Taken from upstream tpope/vim-markdown, remove this when $VIMRUNTIME/ftplugin/markdown.vim
 " catches up (current version is from 2019).
 nnoremap <silent><buffer> [[ :<C-U>call search('\%(^#\{1,5\}\s\+\S\\|^\S.*\n^[=-]\+$\)', "bsW")<CR>
 nnoremap <silent><buffer> ]] :<C-U>call search('\%(^#\{1,5\}\s\+\S\\|^\S.*\n^[=-]\+$\)', "sW")<CR>
 xnoremap <silent><buffer> [[ :<C-U>exe "normal! gv"<Bar>call search('\%(^#\{1,5\}\s\+\S\\|^\S.*\n^[=-]\+$\)', "bsW")<CR>
 xnoremap <silent><buffer> ]] :<C-U>exe "normal! gv"<Bar>call search('\%(^#\{1,5\}\s\+\S\\|^\S.*\n^[=-]\+$\)', "sW")<CR>
+
+setlocal foldmethod=expr
+setlocal foldexpr=MarkdownLiquidFolding(v:lnum)
+" My own Markdown folding that only folds on '=\+\s\.+$' lines based on
+" syntax group, using shipped syntax groups from
+" $VIMRUNTIME/syntax/markdown.vim.
+function! MarkdownLiquidFolding(lnum) abort
+	for synID in synstack(a:lnum, 1) " => [912, 934]
+		let name = synIDattr(synID, "name") " => 'vimFunction'
+		" Give foldlevel based on the grouping name:
+		if name ==# 'markdownH1Delimiter' | return ">1"
+		elseif name ==# 'markdownH2Delimiter' | return ">2"
+		elseif name ==# 'markdownH3Delimiter' | return ">3"
+		elseif name ==# 'markdownH4Delimiter' | return ">4"
+		elseif name ==# 'markdownH5Delimiter' | return ">5"
+		elseif name ==# 'markdownH6Delimiter' | return ">6"
+		endif
+	endfor
+	return "="
+endfunction
+
 " vim:set sw=2:
 
