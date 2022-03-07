@@ -1,6 +1,6 @@
-" vim: fdm=marker nowrap ft=vim fdl=99
+" vim: fdm=marker nowrap ft=vim fdl=2
 
-" Options {{{
+" Options {{{1
 set nocompatible
 filetype plugin indent on
 syntax on
@@ -80,11 +80,14 @@ endif
 "https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
-" }}}
 
-" Plugins {{{
+" brew install fzf first
+if executable('fzf') && has('mac')
+		set runtimepath+=/usr/local/opt/fzf
+endif
 
-" defaults I never use
+" Plugins {{{1
+" Turn on/off some shipped plugins {{{2
 let g:loaded_getscriptPlugin = 1
 let g:loaded_logiPat = 1
 let g:loaded_vimballPlugin = 1
@@ -98,6 +101,8 @@ let g:loaded_2html_plugin = 1
 " $VIMRUNTIME/pack/dist/opt/<plugin>
 packadd! matchit " extended 'matchpairs', basically
 packadd! cfilter
+
+" minpac {{{2
 packadd minpac
 
 call minpac#init()
@@ -126,19 +131,18 @@ call minpac#add('mbbill/undotree')
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
 
-" vim-markdown
+" vim-markdown {{{2
 let g:markdown_fenced_languages = ['javascriptreact', 'cpp', 'sh', 'cmake']
 let g:markdown_syntax_conceal = 0
 let g:markdown_minlines = 5000 | " Default 50. sync lines for highlighting
 
-" undotree
+" undotree {{{2
 let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_ShortIndicators = 1
 let g:undotree_HelpLine = 0
 nnoremap <Leader>u <cmd>UndotreeToggle<CR>
 
-
-" vim-lsp and asyncomplete.vim
+" vim-lsp and asyncomplete.vim {{{2
 let g:asyncomplete_auto_popup = 0
 
 if executable('pyls')
@@ -177,18 +181,13 @@ augroup lsp_install
 	autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-" brew install fzf first
-if executable('fzf') && has('mac')
-		set runtimepath+=/usr/local/opt/fzf
-endif
-
-" asyncrun/asynctasks.vim
+" asyncrun/asynctasks.vim {{{2
 let g:asyncrun_open = 6
 let g:asynctasks_term_pos = "bottom"
 let g:asynctasks_term_reuse = 1
 let g:asynctasks_term_focus = 0
 
-" ale
+" ale {{{2
 let g:ale_set_loclist = 1 | " update loclist, bound to C-n/p for me
 let g:ale_set_signs = 0 | " no marks in number/sign columns
 let g:ale_disable_lsp = 1 | " turn off ale lsp stuff completely
@@ -217,12 +216,13 @@ let g:ale_linters = {
 \}
 " let g:ale_fixers = {}
 
+" vim-markdown {{{2
 " https://github.com/tpope/vim-markdown (ships w vim, link is to dev version)
 let g:markdown_fenced_languages = ['cpp', 'javascriptreact', 'cmake', 'bash=sh', 'json']
 let g:markdown_syntax_conceal = 0
 let g:markdown_minlines = 200 | " 100 default. # lines to sync highlighting
 
-" fzf.vim
+" fzf.vim {{{2
 nnoremap <Leader><Leader> :GFiles<CR>
 " FZF from directory buffer is in, use this when not in Git repo
 nnoremap <Leader>e. :FZF %:h<CR>
@@ -230,7 +230,6 @@ nnoremap <Leader>e. :FZF %:h<CR>
 let g:fzf_buffers_jump = 1
 nnoremap <Leader><Tab> :Buffers<CR>
 
-" Change to git project directory
 nnoremap <Leader>c :FZFCd ~/git<CR>
 nnoremap <Leader>C :FZFCd!<CR>
 nnoremap <Leader><C-]> :Tags<CR>
@@ -272,7 +271,7 @@ let g:fzf_colors =
 	\ 'preview-bg': ['bg', 'Normal'],
 	\ 'header':  ['fg', 'Comment'] }
 
-" vim-fugitive - status overview and quick one-off commands
+" vim-fugitive {{{2
 nnoremap <silent><Leader>gg <cmd>G<CR>
 nnoremap <Leader>g<Space> :G<space>
 
@@ -300,7 +299,6 @@ nnoremap <silent><Leader>gc <cmd>G commit -av<CR>
 nnoremap <silent><Leader>gd <cmd>Gvdiffsplit<CR>
 nnoremap <Leader>gD :Gvdiffsplit<space>
 
-" Grepping git trees and commits messages. '!' to run it async.
 " git grep 'foo bar' [branch/SHA]
 " git log --grep='foobar' to search commit messages
 " git log -Sfoobar (when 'foobar' was added/removed)
@@ -308,27 +306,26 @@ nnoremap <Leader>g/ :Ggrep! -Hnri --quiet<Space>
 nnoremap <Leader>g? :Git! log --grep=
 nnoremap <Leader>gS :Git! log -S
 nnoremap <Leader>g* :Ggrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>
-
-" git push/pull/fetching
 " TODO: Turn into asyncrun calls
 nnoremap <silent><Leader>gP <cmd>G push<CR>
 nnoremap <silent><Leader>gp <cmd>G pull<CR>
 nnoremap <silent><Leader>gf <cmd>G fetch<CR>
 
-" Requires vim-rhubarb, visual selection appends anchors to URL to highlight
-" Reminder: ["register]y<C-g> to yank relative path to clipboard
-" Reminder: :GBrowse! doesn't open URL just yanks it to clipboard
 nnoremap <Leader>g@ <cmd>GBrowse<CR>
 xnoremap <Leader>g@ <cmd>GBrowse<CR>
 
-" }}}
+" Mappings {{{1
 
-" Mappings {{{
+nmap <Leader>/ :grep<Space>
+nnoremap <Leader>? :vimgrep //j **/*.md<S-Left><S-Left><Right>
 
-" inoremap <C-p> <C-x><C-p>
-" inoremap <C-n> <C-x><C-n>
+nnoremap <Leader>! :Redir<Space>
+nnoremap <Leader>@ :JekyllOpen<CR>
 
-" manual expansions, when I want it
+nnoremap g; g;zv
+nnoremap g, g,zv
+nnoremap <silent> } :keepjumps normal! }<CR>
+nnoremap <silent> { :keepjumps normal! {<CR>
 inoremap (<CR> (<CR>)<Esc>O
 inoremap (; (<CR>);<Esc>O
 inoremap (, (<CR>),<Esc>O
@@ -338,20 +335,11 @@ inoremap [<CR> [<CR>]<Esc>O
 inoremap [; [<CR>];<Esc>O
 inoremap [, [<CR>],<Esc>O
 
-" e.g. typing ':help g<C-p>' by default does not search history and simply
-" goes to previous entry, but ':help g<Up>' will search history for previous
-" pattern matching ':help g'. Also Up/Down go in/out of subfolders listings
-" when wildmenu showing - default C-n/p here is to traverse results, equivalent
-" to <Tab>/<S-Tab>.
 cnoremap <expr> <C-p> wildmenumode() ? "<C-P>" : "<Up>"
 cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
-
-" If completion menu open use C-j/k instead of arrow keys to navigate
-" parent/child folders.
 cnoremap <expr> <C-j> wildmenumode() ? "\<Left>\<C-z>" : "\<C-j>"
 cnoremap <expr> <C-k> wildmenumode() ? "\<Right>\<C-z>" : "\<C-k>"
 
-" when I use this, I want a buffer GONE completely, no traces left.
 nnoremap <Leader>dd <Cmd>bwipeout!<CR>
 
 nnoremap <Leader>ff :find *
@@ -390,8 +378,6 @@ tnoremap <silent><C-b>v <C-\><C-n>:vertical terminal ++close zsh<CR>
 tnoremap <silent><C-b>s <C-\><C-n>:terminal ++close zsh<CR>
 nnoremap <silent><C-b>! <C-w>T
 
-nnoremap <silent><C-b><CR> :terminal make<CR>
-
 " Re-select visually selected area after indenting/dedenting.
 xmap < <gv
 xmap > >gv
@@ -417,27 +403,22 @@ else
 	nnoremap <silent><C-Right> <Cmd>2wincmd ><CR>
 endif
 
-" Function keys
 nnoremap <silent><F2> :call vim9utils#SynGroup()<CR>
 nnoremap <silent><F3> :call vim9utils#ToggleQuickfixList()<CR>
 nnoremap <silent><F4> :call vim9utils#ToggleLocationList()<CR>
 nnoremap <F5> :AsyncTask <C-z>
-" on macos Terminal below is alt-F5
-nnoremap [21~ :AsyncTaskProfile<space>
 nnoremap <silent><F7> :15Lexplore<CR>
 nnoremap <silent>gO :TagbarOpenAutoClose<CR>
 nnoremap <silent><F8> :TagbarOpenAutoClose<CR>
 nnoremap <silent><F9> :set list!<CR>
 nnoremap <silent><Leader>* :grep <cword><CR>
 
-" Leader keys
 nnoremap <Leader>w <cmd>update<CR>
 nnoremap <Leader>, <cmd>edit $MYVIMRC<CR>
 nnoremap <Leader>ft :e <C-R>=expand('~/.vim/after/ftplugin/'.&ft.'.vim')<CR><CR>
 nnoremap <Leader>bb <cmd>buffer #<CR>
 nnoremap <Leader><CR> :source %<CR>
 
-" Vimdiff
 nnoremap gh :diffget //2<CR>
 nnoremap gl :diffget //3<CR>
 
@@ -451,10 +432,7 @@ nnoremap [T <cmd>tabfirst<CR>
 nnoremap ]T <cmd>tablast<CR>
 nnoremap [t <cmd>tabfirst<CR>
 
-" }}}
-
-" Commands {{{
-
+" Commands {{{1
 command! Api :help list-functions<CR>
 command! Cd :lcd %:h
 command! TodoLocal :botright silent! lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
@@ -478,9 +456,7 @@ function! Ghlistprs(ArgLead, CmdLine, CursorPos) abort
 	return systemlist('gh pr list | cut -f1')
 endfunction
 
-" }}}
-
-" Autocmd {{{
+" Autocmd {{{1
 " Put all autocmds into this group so this file is
 " safe to be re-sourced, by clearing all first with autocmd!
 augroup vimrc
@@ -495,8 +471,7 @@ augroup vimrc
 	autocmd FileType gitcommit call feedkeys('i')
 	autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
 	autocmd WinLeave * setlocal nocursorline
-	" I also set this in utils#Redir because it does 'nobuflisted'
-	" This one catches other things that open 'nofile' buffers
+	" Also set in utils#Redir, this catches other things that open 'nofile' buffers
 	autocmd BufEnter * if &buftype ==# 'nofile' | nnoremap <buffer> q :bwipeout!<CR> | endif
 	autocmd BufEnter * if &buftype ==# 'nofile' | setlocal nocursorcolumn | endif
 	autocmd BufWinEnter * if &previewwindow | setlocal nonumber norelativenumber nolist | endif
@@ -508,9 +483,7 @@ augroup vimrc
 		\ | endif
 augroup END
 
-" }}}
-
-" Colorscheme and Syntax {{{
+" Colorscheme and Syntax {{{1
 
 " See all active highlight groups with:
 " :so $VIMRUNTIME/syntax/hitest.vim
@@ -519,26 +492,9 @@ augroup END
 set background=dark
 colorscheme apprentice
 
-"}}}
+" Playground {{{1
 
-" Playground {{{
-
-
-" Grepping
-nmap <Leader>/ :grep<Space>
-nnoremap <Leader>? :vimgrep //j **/*.md<S-Left><S-Left><Right>
-
-nnoremap <Leader>! :Redir<Space>
-nnoremap <Leader>@ :JekyllOpen<CR>
-
-nnoremap g; g;zv
-nnoremap g, g,zv
-nnoremap <silent> } :keepjumps normal! }<CR>
-nnoremap <silent> { :keepjumps normal! {<CR>
-
-" }}}
-
-" Neovim backports {{{
+" Neovim backports {{{1
 " Don't restore global maps/options, let vimrc handle that
 " Neovim really maps Q to execute last recorded macro which could be any
 " register, but I mostly just use qq so no need to create elaborate backport
@@ -547,12 +503,4 @@ nnoremap Y y$
 nnoremap <C-L> <Cmd>nohlsearch<Bar>diffupdate<CR><C-L>
 inoremap <C-U> <C-G>u<C-U>
 inoremap <C-W> <C-G>u<C-W>
-
-
-" }}}
-
-" Experimental {{{
-
-" TODO: move to autoload/vim9utils.vim
-" }}}
 
