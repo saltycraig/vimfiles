@@ -1,4 +1,4 @@
-" vim: fdm=marker nowrap ft=vim fdl=2
+" vim: fdm=marker nowrap ft=vim fdl=2 list
 
 " Options {{{1
 set nocompatible
@@ -18,6 +18,9 @@ set completeopt=menuone,popup
 set diffopt+=algorithm:patience | " http://vimways.org/2018/the-power-of-diff/
 set display=truncate
 set encoding=utf-8
+" Now we can load a list of filenames into quickfix from a file, e.g.,:
+" :cexpr system('cat /tmp/list-o-filenames.txt')
+set errorformat+=%f
 set exrc
 set foldlevelstart=99
 set formatoptions+=j
@@ -483,15 +486,12 @@ augroup vimrc
 augroup END
 
 " Colorscheme and Syntax {{{1
-
 " See all active highlight groups with:
 " :so $VIMRUNTIME/syntax/hitest.vim
 " set background=light
 " colorscheme quiet
 set background=dark
 colorscheme apprentice
-
-" Playground {{{1
 
 " Neovim backports {{{1
 " Don't restore global maps/options, let vimrc handle that
@@ -503,3 +503,5 @@ nnoremap <C-L> <Cmd>nohlsearch<Bar>diffupdate<CR><C-L>
 inoremap <C-U> <C-G>u<C-U>
 inoremap <C-W> <C-G>u<C-W>
 
+" Playground {{{1
+" }}}
