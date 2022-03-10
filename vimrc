@@ -131,9 +131,14 @@ call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
 call minpac#add('wellle/targets.vim')
 call minpac#add('mbbill/undotree')
 call minpac#add('romainl/vim-cool')
+call minpac#add('romainl/vim-qf')
 
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
+
+" https://github.com/romainl/vim-qf {{{2
+let g:qf_mapping_ack_style = 1
+let g:qf_auto_quit = 1
 
 " https://github.com/romainl/vim-cool {{{2
 let g:CoolTotalMatches = 1
@@ -398,21 +403,23 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 if $TERM_PROGRAM =~# 'Apple_Terminal'
 	imap <Nul> <Plug>(asyncomplete_force_refresh)
-	nnoremap <silent>OA <Cmd>2wincmd+<CR>
-	nnoremap <silent>OB <Cmd>2wincmd-<CR>
-	nnoremap <silent>[1;5D <Cmd>2wincmd <<CR>
-	nnoremap <silent>[1;5C <Cmd>2wincmd ><CR>
+	nnoremap <silent>[1;2A <Cmd>2wincmd+<CR>
+	nnoremap <silent>[1;2B <Cmd>2wincmd-<CR>
+	nnoremap <silent>[1;2D <Cmd>2wincmd <<CR>
+	nnoremap <silent>[1;2C <Cmd>2wincmd ><CR>
 else
 	imap <C-@> <Plug>(asyncomplete_force_refresh)
-	nnoremap <silent><C-Up> <Cmd>2wincmd+<CR>
-	nnoremap <silent><C-Down> <Cmd>2wincmd-<CR>
-	nnoremap <silent><C-Left> <Cmd>2wincmd <<CR>
-	nnoremap <silent><C-Right> <Cmd>2wincmd ><CR>
+	nnoremap <silent><S-Up> <Cmd>2wincmd+<CR>
+	nnoremap <silent><S-Down> <Cmd>2wincmd-<CR>
+	nnoremap <silent><S-Left> <Cmd>2wincmd <<CR>
+	nnoremap <silent><S-Right> <Cmd>2wincmd ><CR>
 endif
 
 nnoremap <silent><F2> :call vim9utils#SynGroup()<CR>
-nnoremap <silent><F3> :call vim9utils#ToggleQuickfixList()<CR>
-nnoremap <silent><F4> :call vim9utils#ToggleLocationList()<CR>
+" nnoremap <silent><F3> :call vim9utils#ToggleQuickfixList()<CR>
+" nnoremap <silent><F4> :call vim9utils#ToggleLocationList()<CR>
+nmap <silent><F3> <Plug>(qf_qf_toggle)
+nmap <silent><F4> <Plug>(qf_loc_toggle)
 nnoremap <F5> :AsyncTask <C-z>
 nnoremap <silent><F7> :15Lexplore<CR>
 nnoremap <silent>gO :TagbarOpenAutoClose<CR>
