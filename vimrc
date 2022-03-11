@@ -38,7 +38,7 @@ set nolangremap
 set noswapfile
 set nrformats-=octal
 set number
-set path-=/usr/include |	set path+=**
+set path-=/usr/include | set path+=**
 set ruler
 set scrolloff=2
 set secure
@@ -61,7 +61,6 @@ set signcolumn=number
 set splitbelow splitright
 set tags=./tags;,tags;
 set title
-set thesaurus=~/.vim/thesaurus/english.txt
 set ttimeout ttimeoutlen=100
 set undofile undodir=~/.vim/undodir
 set updatetime=250
@@ -105,6 +104,10 @@ let g:loaded_2html_plugin = 1
 packadd! matchit " extended 'matchpairs', basically
 packadd! cfilter
 
+let g:markdown_fenced_languages = ['cpp', 'javascriptreact', 'cmake', 'bash=sh', 'json']
+let g:markdown_syntax_conceal = 0
+let g:markdown_minlines = 200 | " 100 default. # lines to sync highlighting
+
 " minpac {{{2
 packadd minpac
 
@@ -132,9 +135,23 @@ call minpac#add('wellle/targets.vim')
 call minpac#add('mbbill/undotree')
 call minpac#add('romainl/vim-cool')
 call minpac#add('romainl/vim-qf')
+call minpac#add('tpope/vim-liquid')
 
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
+
+" https://github.com/preservim/tagbar {{{2
+let g:tagbar_type_liquid = {
+		\ 'kinds' : [
+			\ 'c:chapter',
+		\ 's:section',
+		\ 'S:subsection',
+		\ 't:subsubsection',
+		\ 'T:13subsection',
+		\ 'u:14subsection',
+		\ '?:unknown',
+	\ ],
+\ }
 
 " https://github.com/romainl/vim-qf {{{2
 let g:qf_mapping_ack_style = 1
@@ -143,18 +160,13 @@ let g:qf_auto_quit = 1
 " https://github.com/romainl/vim-cool {{{2
 let g:CoolTotalMatches = 1
 
-" vim-markdown {{{2
-let g:markdown_fenced_languages = ['javascriptreact', 'cpp', 'sh', 'cmake']
-let g:markdown_syntax_conceal = 0
-let g:markdown_minlines = 5000 | " Default 50. sync lines for highlighting
-
-" undotree {{{2
+" https://github.com/mbbill/undotree {{{2
 let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_ShortIndicators = 1
 let g:undotree_HelpLine = 0
 nnoremap <Leader>u <cmd>UndotreeToggle<CR>
 
-" vim-lsp and asyncomplete.vim {{{2
+" https://github.com/prabirshrestha/vim-lsp and asyncomplete.vim {{{2
 let g:asyncomplete_auto_popup = 0
 
 if executable('pyls')
@@ -193,13 +205,13 @@ augroup lsp_install
 	autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-" asyncrun/asynctasks.vim {{{2
+" https://github.com/skywind3000/asyncrun.vim  & asynctasks.vim {{{2
 let g:asyncrun_open = 6
 let g:asynctasks_term_pos = "bottom"
 let g:asynctasks_term_reuse = 1
 let g:asynctasks_term_focus = 0
 
-" ale {{{2
+" https://github.com/w0rp/ale {{{2
 let g:ale_set_loclist = 1 | " update loclist, bound to C-n/p for me
 let g:ale_set_signs = 0 | " no marks in number/sign columns
 let g:ale_disable_lsp = 1 | " turn off ale lsp stuff completely
@@ -228,13 +240,7 @@ let g:ale_linters = {
 \}
 " let g:ale_fixers = {}
 
-" vim-markdown {{{2
-" https://github.com/tpope/vim-markdown (ships w vim, link is to dev version)
-let g:markdown_fenced_languages = ['cpp', 'javascriptreact', 'cmake', 'bash=sh', 'json']
-let g:markdown_syntax_conceal = 0
-let g:markdown_minlines = 200 | " 100 default. # lines to sync highlighting
-
-" fzf.vim {{{2
+" https://github.com/junegunn/fzf.vim {{{2
 nnoremap <Leader><Leader> :GFiles<CR>
 " FZF from directory buffer is in, use this when not in Git repo
 nnoremap <Leader>e. :FZF %:h<CR>
@@ -283,7 +289,7 @@ let g:fzf_colors =
 	\ 'preview-bg': ['bg', 'Normal'],
 	\ 'header':  ['fg', 'Comment'] }
 
-" vim-fugitive {{{2
+" https://github.com/tpope/vim-fugitive {{{2
 nnoremap <silent><Leader>gg <cmd>G<CR>
 nnoremap <Leader>g<Space> :G<space>
 
@@ -315,8 +321,7 @@ nnoremap <Leader>gD :Gvdiffsplit<space>
 " git log --grep='foobar' to search commit messages
 " git log -Sfoobar (when 'foobar' was added/removed)
 nnoremap <Leader>g/ :Ggrep! -HnriqE <Space>
-nnoremap <Leader>g? :Git! log --grep=
-nnoremap <Leader>gS :Git! log -S
+nnoremap <Leader>g? :Git! log -p -S %
 nnoremap <Leader>g* :Ggrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>
 " TODO: Turn into asyncrun calls
 nnoremap <silent><Leader>gP <cmd>G push<CR>
@@ -327,7 +332,6 @@ nnoremap <Leader>g@ <cmd>GBrowse<CR>
 xnoremap <Leader>g@ <cmd>GBrowse<CR>
 
 " Mappings {{{1
-
 nmap <Leader>/ :grep<Space>
 nnoremap <Leader>? :noautocmd vimgrep /\v/gj **/*.md<S-Left><S-Left><Right>
 
