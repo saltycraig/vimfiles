@@ -130,6 +130,7 @@ call minpac#add('mbbill/undotree')
 call minpac#add('romainl/vim-cool')
 call minpac#add('romainl/vim-qf')
 call minpac#add('tpope/vim-liquid')
+call minpac#add('lifepillar/vim-solarized8')
 
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
@@ -439,16 +440,44 @@ augroup vimrc
 augroup END
 
 " Colorscheme and Syntax {{{1
-function! CustomHighlights() abort
+if (has('termguicolors') && &termguicolors) || has('gui_running')
+	set termguicolors
+endif
+
+function! CustomApprentice() abort
 	" https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f
 	" highlight! Comment cterm=italic
 	hi! LineNr ctermbg=235 guibg=#262626
 endfunction
 
+function! CustomSolarizedLight() abort
+	" custom highlights here.
+	hi! SpecialKey ctermbg=15
+endfunction
+
 augroup MyColors
 	autocmd!
-	autocmd ColorScheme apprentice call CustomHighlights()
+	autocmd ColorScheme apprentice call CustomApprentice()
+	autocmd ColorScheme solarized8_flat call CustomSolarizedLight()
 augroup END
 
+set background=dark
 colorscheme apprentice
+
+if (has('termguicolors') && &termguicolors) || has('gui_running')
+	" let g:solarized_
+	let g:solarized_italics = 1
+	let g:solarized_old_cursor_style = 1
+else
+	if ($TERM =~# 'italic') && ($TERM_PROGRAM =~# 'Apple_Terminal')
+		" when using custom terminfo 'xterm-256color-italic'
+		let g:solarized_italics = 1
+		" 16 ANSI colors method, term emulator 16 ANSI must match!
+		let g:solarized_use16 = 1
+	endif
+endif
+let g:solarized_enable_extra_hi_groups = 1
+let g:solarized_statusline = "flat" | " low, flat, normal
+" set background=light
+" colorscheme solarized8_flat
 
