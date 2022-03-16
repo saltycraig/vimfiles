@@ -1,8 +1,8 @@
 " vim: fdm=marker nowrap ft=vim fdl=2 list
 " Options {{{1
-set nocompatible
 filetype plugin indent on
 syntax on
+set encoding=utf-8
 scriptencoding utf-8
 let mapleader=' '
 
@@ -16,7 +16,6 @@ set complete-=i
 set completeopt=menuone,popup
 set diffopt+=algorithm:patience
 set display=truncate
-set encoding=utf-8
 set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
 set exrc
 set foldlevelstart=99
@@ -132,8 +131,6 @@ call minpac#add('romainl/vim-cool')
 call minpac#add('romainl/vim-qf')
 call minpac#add('tpope/vim-liquid')
 
-call minpac#add('habamax/vim-habaurora')
-
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
 
@@ -203,7 +200,7 @@ augroup END
 
 " https://github.com/skywind3000/asyncrun.vim  & asynctasks.vim {{{2
 let g:asyncrun_open = 6
-let g:asynctasks_term_pos = "bottom"
+let g:asynctasks_term_pos = 'bottom'
 let g:asynctasks_term_reuse = 1
 let g:asynctasks_term_focus = 0
 
@@ -406,7 +403,7 @@ inoremap <C-W> <C-G>u<C-W>
 
 " Commands {{{1
 command! Api :help list-functions<CR>
-command! Cd :lcd %:h
+command! Cd :tcd %:h
 command! TodoLocal :botright silent! lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 command! -nargs=1 Redir call utils#Redir(<q-args>)
@@ -442,25 +439,16 @@ augroup vimrc
 augroup END
 
 " Colorscheme and Syntax {{{1
-function! CustomHighlightsLight() abort
+function! CustomHighlights() abort
 	" https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f
-	" 'cursorline' coloring overrules syntax highlighting of background
-	" below and gets in the way with e.g., DiffAdd
-	highlight! Comment cterm=italic
-	" highlight Normal ctermbg=255
-	" fugitive
-	highlight! link diffAdded DiffAdd
-	highlight! link diffRemoved DiffDelete
-	highlight! link diffChanged DiffChange
-	highlight! LineNr ctermfg=161
+	" highlight! Comment cterm=italic
+	hi! LineNr ctermbg=235 guibg=#262626
 endfunction
-
-" TODO: stuff!
 
 augroup MyColors
 	autocmd!
-	autocmd ColorScheme habaurora call CustomHighlightsLight()
+	autocmd ColorScheme apprentice call CustomHighlights()
 augroup END
 
-colorscheme habaurora
+colorscheme apprentice
 
