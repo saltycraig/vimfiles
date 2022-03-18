@@ -97,7 +97,7 @@ let g:loaded_2html_plugin = 1
 packadd! matchit
 packadd! cfilter
 
-let g:markdown_fenced_languages = ['cpp', 'javascriptreact', 'cmake', 'bash=sh', 'json']
+let g:markdown_fenced_languages = ['cpp', 'javascript=javascriptreact', 'js=javascriptreact', 'cmake', 'bash=sh', 'json']
 let g:markdown_syntax_conceal = 0
 let g:markdown_minlines = 1000
 
@@ -136,6 +136,12 @@ call minpac#add('lifepillar/vim-solarized8')
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
 
+" https://github.com/tpope/vim-liquid {{{2
+" for {% highlight %} // code here {% endhighlight %} liquid tag highlighting
+" NOTE: until vim-liquid upstream incorporates my hack, I enable fenced
+" highlighting in ~/.vim/after/syntax/liquid.vim
+let g:liquid_highlight_types = g:markdown_fenced_languages
+"
 " https://github.com/preservim/tagbar {{{2
 let g:tagbar_type_liquid = {
 	\ 'kinds' : [
@@ -220,16 +226,18 @@ let g:ale_hover_to_floating_preview = 1
 let g:ale_floating_preview = 1 | " Use float for everything
 let g:ale_hover_to_preview = 0 | " Use preview win for hover messages
 let g:ale_hover_cursor = 0
-nnoremap <silent><C-p> :silent! lprevious<CR>:ALEDetail<CR><Esc>
-nnoremap <silent>p :silent! lfirst<CR>:ALEDetail<CR><Esc>
-nnoremap <silent><C-n> :silent! lnext<CR>:ALEDetail<CR><Esc>
-nnoremap <silent>n :silent! llast<CR>:ALEDetail<CR><Esc>
+" TODO: figure out how to call :ALEDetail automatically after the jump
+nnoremap [E <Plug>(ale_first)
+nnoremap ]E <Plug>(ale_last)
+nnoremap ]e <Plug>(ale_next)
+nnoremap [e <Plug>(ale_previous)
 
 let g:ale_linters_explicit = 1
 let g:ale_linters = {
 	\ 'markdown': ['vale', 'cspell', 'markdownlintcli2'],
 	\ 'vim': ['vint'],
 \}
+let g:ale_linter_aliases = { 'liquid': 'markdown' }
 " let g:ale_fixers = {}
 
 " https://github.com/junegunn/fzf.vim {{{2
