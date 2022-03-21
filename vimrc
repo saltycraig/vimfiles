@@ -132,7 +132,7 @@ call minpac#add('mbbill/undotree')
 call minpac#add('romainl/vim-cool')
 call minpac#add('romainl/vim-qf')
 call minpac#add('tpope/vim-liquid')
-call minpac#add('lifepillar/vim-solarized8')
+call minpac#add('tpope/vim-markdown') " upstream of shipped runtime files
 
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
