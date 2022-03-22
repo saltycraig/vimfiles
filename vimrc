@@ -85,6 +85,7 @@ if executable('fzf') && has('mac')
 endif
 
 " Plugins {{{1
+" builtins {{{2
 let g:loaded_getscriptPlugin = 1
 let g:loaded_logiPat = 1
 let g:loaded_vimballPlugin = 1
@@ -98,7 +99,7 @@ let g:loaded_2html_plugin = 1
 packadd! matchit
 packadd! cfilter
 
-let g:markdown_fenced_languages = ['cpp', 'javascript=javascriptreact', 'js=javascriptreact', 'cmake', 'bash=sh', 'json']
+let g:markdown_fenced_languages = ['cpp', 'jsx=javascriptreact', 'js=javascript', 'cmake', 'bash=sh', 'json']
 let g:markdown_syntax_conceal = 0
 let g:markdown_minlines = 1000
 
@@ -133,6 +134,8 @@ call minpac#add('romainl/vim-cool')
 call minpac#add('romainl/vim-qf')
 call minpac#add('tpope/vim-liquid')
 call minpac#add('tpope/vim-markdown') " upstream of shipped runtime files
+
+call minpac#add('habamax/vim-habaurora')
 
 command! PackUpdate call minpac#update()
 command! PackClean call minpac#clean()
@@ -238,7 +241,7 @@ let g:ale_linters_explicit = 1
 let g:ale_linters = {
 	\ 'markdown': ['vale', 'cspell', 'markdownlintcli2'],
 	\ 'vim': ['vint'],
-	\ 'liquid': ['vale', 'cspell', "markdownlintcli2"],
+	\ 'liquid': ['vale', 'cspell', 'markdownlintcli2'],
 \}
 " let g:ale_linter_aliases = { 'liquid': 'markdown' }
 " let g:ale_fixers = {}
@@ -264,28 +267,10 @@ let g:fzf_action = {
 	\ 'ctrl-q': function('s:build_quickfix_list'),
 	\ 'ctrl-t': 'tab split',
 	\ 'ctrl-x': 'split',
-	\ 'ctrl-v': 'vsplit' }
+	\ 'ctrl-v': 'vsplit'
+\}
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-o']
-let g:fzf_colors =
-	\ {
-		\ 'fg': ['fg', 'Normal'],
-		\ 'bg': ['bg', 'Normal'],
-		\ 'hl': ['bg', 'Error'],
-		\ 'fg+': ['fg', 'Pmenu'],
-		\ 'bg+': ['bg', 'Pmenu'],
-		\ 'hl+': ['bg', 'Error'],
-		\ 'info': ['fg', 'Normal'],
-		\ 'border': ['fg', 'Normal'],
-		\ 'prompt': ['fg', 'Statement'],
-		\ 'pointer': ['fg', 'Statement'],
-		\ 'marker': ['fg', 'Statement'],
-		\ 'gutter': ['bg', 'Normal'],
-		\ 'spinner': ['fg', 'Label'],
-		\ 'preview-fg': ['fg', 'Normal'],
-		\ 'preview-bg': ['bg', 'Normal'],
-		\ 'header': ['fg', 'Comment']
-\ }
 
 " https://github.com/tpope/vim-fugitive {{{2
 nnoremap <silent><Leader>gg <cmd>G<CR>
@@ -460,13 +445,22 @@ endif
 function! CustomApprentice() abort
 	" https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f
 	" highlight! Comment cterm=italic
-	hi! LineNr ctermbg=235 guibg=#262626
+	hi LineNr ctermbg=235 guibg=#262626
+endfunction
+
+function! CustomHabaurora() abort
+	" FIX: 'T' was showing next to tabpages
+	hi! TabLineFill ctermfg=246 guifg=#949494
 endfunction
 
 augroup MyColors
 	autocmd!
 	autocmd ColorScheme apprentice call CustomApprentice()
+	autocmd ColorScheme habaurora call CustomHabaurora()
 augroup END
 
-colorscheme apprentice
+" Dark
+" colorscheme apprentice
+" Light
+colorscheme habaurora
 
