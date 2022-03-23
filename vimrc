@@ -35,7 +35,6 @@ set noswapfile
 set nrformats-=octal
 set number relativenumber
 set path-=/usr/include | set path+=**
-set pumheight=5
 set ruler
 set scrolloff=1
 set secure
@@ -413,16 +412,28 @@ function! CustomApprentice() abort
 	highlight! LineNr ctermbg=235 guibg=#262626
 endfunction
 
-function! CustomHabaurora() abort
-	highlight! Comment cterm=italic
+function! CustomLight() abort
+	highlight! Comment cterm=italic gui=italic
+	" Extras not shipped
+	highlight! link diffAdded String
+	highlight! link diffBDiffer WarningMsg
+	highlight! link diffCommon WarningMsg
+	highlight! link diffDiffer WarningMsg
+	highlight! link diffIdentical WarningMsg
+	highlight! link diffIsA WarningMsg
+	highlight! link diffNoEOL WarningMsg
+	highlight! link diffOnly WarningMsg
+	highlight! link diffRemoved WarningMsg
 endfunction
 
 augroup MyColors
 	autocmd!
 	autocmd ColorScheme apprentice call CustomApprentice()
-	autocmd ColorScheme habaurora call CustomHabaurora()
+	autocmd ColorScheme habaurora call CustomLight()
+	autocmd ColorScheme habalbum call CustomLight()
 augroup END
 
 " colorscheme apprentice
-colorscheme habaurora
+colorscheme habalbum
+
 
