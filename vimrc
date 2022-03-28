@@ -269,7 +269,7 @@ nnoremap <Leader>gg <cmd>G<CR>
 nnoremap <silent><Leader>ge :Gedit <bar> only<CR>
 nnoremap <silent><Leader>gd <cmd>Gvdiffsplit<CR>
 nnoremap <Leader>gD :Gvdiffsplit<space>
-nnoremap <Leader>g/ :Ggrep! -HnriqE <Space>
+nnoremap <Leader>g/ :Ggrep! -HnriqE<Space>
 nnoremap <Leader>g? :Git! log -p -S %
 nnoremap <Leader>g* :Ggrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>
 nnoremap <silent><Leader>gP <cmd>G push<CR>
@@ -352,16 +352,6 @@ nnoremap <Leader><CR> :source %<CR>
 
 nnoremap gh :diffget //2<CR>
 nnoremap gl :diffget //3<CR>
-
-nnoremap [q <cmd>cprevious<CR>
-nnoremap ]q <cmd>cnext<CR>
-nnoremap [Q <cmd>cfirst<CR>
-nnoremap ]Q <cmd>clast<CR>
-nnoremap ]t <cmd>tabnext<CR>
-nnoremap [t <cmd>tabprev<CR>
-nnoremap [T <cmd>tabfirst<CR>
-nnoremap ]T <cmd>tablast<CR>
-nnoremap [t <cmd>tabfirst<CR>
 
 " Neovim backports
 nnoremap Q @q
