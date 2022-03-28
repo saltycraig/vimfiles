@@ -413,7 +413,7 @@ function! CustomApprentice() abort
 endfunction
 
 function! CustomLight() abort
-	highlight! Comment cterm=italic gui=italic
+	" highlight! Comment cterm=italic gui=italic
 	" Extras not shipped
 	highlight! link diffAdded String
 	highlight! link diffBDiffer WarningMsg
@@ -424,12 +424,16 @@ function! CustomLight() abort
 	highlight! link diffNoEOL WarningMsg
 	highlight! link diffOnly WarningMsg
 	highlight! link diffRemoved WarningMsg
+	highlight! link ALEError SpellBad
+	highlight! link ALEWarning SpellBad
+	highlight! link ALEStyleError ALEError
+	highlight! link ALEStyleWarning ALEError
+	highlight! link ALEInfo ALEError
 endfunction
 
 augroup MyColors
 	autocmd!
 	autocmd ColorScheme apprentice call CustomApprentice()
-	autocmd ColorScheme habaurora call CustomLight()
 	autocmd ColorScheme habalbum call CustomLight()
 augroup END
 
