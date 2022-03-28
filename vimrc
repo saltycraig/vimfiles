@@ -86,7 +86,6 @@ endif
 " Plugins {{{1
 " builtins {{{2
 packadd! matchit
-packadd! cfilter
 
 let g:markdown_fenced_languages = ['cpp', 'jsx=javascriptreact', 'js=javascript', 'cmake', 'bash=sh', 'json']
 let g:markdown_syntax_conceal = 0
