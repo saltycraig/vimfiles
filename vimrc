@@ -69,10 +69,10 @@ set wildignore+=*.pyc
 set wildoptions=fuzzy,pum,tagfile
 set wildmenu
 
-if has('termguicolors')
-	if !$TERM_PROGRAM =~# 'Apple_Terminal'
-		set termguicolors
-	endif
+if $TERM_PROGRAM ==# 'Apple_Terminal'
+	set notermguicolors
+else
+	set termguicolors
 endif
 
 " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
