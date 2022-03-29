@@ -216,7 +216,7 @@ let g:ale_hover_to_preview = 0 | " Use preview win for hover messages
 let g:ale_hover_cursor = 0
 " These plug mappings taken into consideration the location of cursor,
 " and need to wrapped this way to add on manual call to ALEDetail for popup
-if $TERM_PROGRAM =~# 'Apple_Terminal'
+if $TERM_PROGRAM =~# '[Apple_Terminal\|tmux\>]'
 	nnoremap <silent>n :execute "normal \<Plug>(ale_next)"<CR>:ALEDetail<CR>
 	nnoremap <silent>p :execute "normal \<Plug>(ale_previous)"<CR>:ALEDetail<CR>
 else
@@ -314,7 +314,9 @@ xnoremap K :m '<-2<CR>gv=gv
 
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-if $TERM_PROGRAM =~# 'Apple_Terminal'
+if $TERM_PROGRAM =~# '[Apple_Terminal\|tmux\>]'
+	" NOTE: vim inside tmux will be 'tmux'
+	" tmux ones will S-Arrow keys to resize
 	imap <Nul> <Plug>(asyncomplete_force_refresh)
 	nnoremap <silent>k <Cmd>2wincmd+<CR>
 	nnoremap <silent>j <Cmd>2wincmd-<CR>
@@ -397,7 +399,7 @@ augroup END
 " Colorscheme and Syntax {{{1
 " NOTE: $TERM_PROGRAM when running vim inside tmux reports 'tmux'
 " instead of Apple_Terminal
-if $TERM_PROGRAM ==# '[Apple_Terminal\|tmux\>]'
+if $TERM_PROGRAM =~# '[Apple_Terminal\|tmux\>]'
 	set notermguicolors
 endif
 
