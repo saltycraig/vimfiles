@@ -101,6 +101,7 @@ call minpac#add('kana/vim-textobj-entire')
 call minpac#add('kana/vim-textobj-indent')
 call minpac#add('wellle/targets.vim')
 call minpac#add('tpope/vim-unimpaired')
+call minpac#add('AndrewRadev/splitjoin.vim')
 " Integrations
 call minpac#add('tpope/vim-fugitive')
 call minpac#add('tpope/vim-rhubarb')
