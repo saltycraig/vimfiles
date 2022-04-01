@@ -1,73 +1,75 @@
-" vim: fdm=marker nowrap ft=vim fdl=2 list
 " Options {{{1
+" Syntax/FileType/Encoding {{{2
 filetype plugin indent on
 syntax on
 set encoding=utf-8
 scriptencoding utf-8
 let mapleader=' '
-
-set autoindent
-set autoread
-set backspace=indent,eol,start
-set belloff=all
+" Whitespace/Indenting/Linebreaks {{{2
+" Leave 'tabstop' at 8! See ':h tabstop' and ':h ins-expandtab'
+" if 'shiftwidth'is 0, uses &ts, affects 'cindent', >>, <<, i_CTRL_T, i_CTRL_D
+" if 'softtabstop' is 0, it's off. Will insert mix of tabs and spaces. -1 
+" will use &shiftwidth.
+	" set smarttab
+set autoindent smartindent
 set breakindent
+set listchars=tab:⇥\ ,lead:·,trail:█,eol:,precedes:«,extends:»
+set backspace=indent,eol,start
+set linebreak showbreak=↪
+set formatoptions+=j
+" Visuals {{{2
+set completeopt=menuone,popup
+set diffopt+=algorithm:patience
+set showcmd showmatch
+set showtabline=2
+set scrolloff=1 sidescrolloff=2
+set signcolumn=number
+set belloff=all
+set cursorline
+set display=truncate
+set hlsearch incsearch
+set foldlevelstart=99
+set laststatus=2
+set nolangremap
+set mouse=a
+set number relativenumber
+set tabline=%!vim9utils#MyTabline()
+set ruler
+set shortmess-=cS
+" set statusline=%!vim9utils#MyStatusline()
+set statusline=%f\ %M\ %R\ %H\ %=%{FugitiveStatusline()}\ %Y
+" Editing {{{2
 set clipboard=unnamed,unnamedplus
 set complete-=i
-set completeopt=menuone,popup
-set cursorline
-set diffopt+=algorithm:patience
-set display=truncate
-set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
 set exrc
-set foldlevelstart=99
-set formatoptions+=j
-set grepprg=grep\ -HnriE\ $*
+set nrformats-=octal
+set secure
+set ttimeout ttimeoutlen=100
+set updatetime=250
+set undofile undodir=~/.vim/undodir
+" Buffers/Windows/Views/Sessions/Tabpages {{{2
+set autoread
 set hidden
 set history=10000
-set hlsearch
-set incsearch
-set laststatus=2
-set linebreak showbreak=↪
-set listchars=tab:⇥\ ,lead:·,trail:█,eol:,precedes:«,extends:»
-set mouse=a
-set nolangremap
 set noswapfile
-set nrformats-=octal
-set number relativenumber
-set path-=/usr/include | set path+=**
-set ruler
-set scrolloff=1
-set secure
-set sessionoptions-=options
-set showcmd
-set showmatch
-set showtabline=2
-set sidescrolloff=2
-" set statusline=%!vim9utils#MyStatusline()
-set statusline=%f
-set statusline+=\ %M\ %R\ %H
-set statusline+=%=
-set statusline+=%{FugitiveStatusline()}
-set statusline+=\ %Y
-set suffixes+=.png,.jpeg,.jpg,.exe
-set shortmess-=cS
-set tabline=%!vim9utils#MyTabline()
-set ignorecase smartcase
-set signcolumn=number
 set splitbelow splitright
-set tags=./tags;,tags;
 set title
-set ttimeout ttimeoutlen=100
-set undofile undodir=~/.vim/undodir
-set updatetime=250
 set viewoptions-=options
+set sessionoptions-=options
+" Menus/Regex/Wildcards/Finding {{{2
+set path-=/usr/include | set path+=**
+set tags=./tags;,tags;
+set ignorecase smartcase
+set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
+set grepprg=grep\ -HnriE\ $*
+set suffixes+=.png,.jpeg,.jpg,.exe
 set wildcharm=<C-z>
+set wildoptions=fuzzy,pum,tagfile
+set wildmenu
 set wildignore=*.o,*.obj
 set wildignore+=*.exe,*.dylib,%*
 set wildignore+=*.png,*.jpeg,*.bmp,*.jpg
 set wildignore+=*.pyc
-set wildoptions=fuzzy,pum,tagfile
-set wildmenu
 
 " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
 let &t_SI="\e[6 q"
@@ -122,7 +124,6 @@ call minpac#add('tpope/vim-liquid')
 call minpac#add('tpope/vim-markdown') " upstream of shipped runtime files
 " Chrome
 call minpac#add('mbbill/undotree')
-call minpac#add('habamax/vim-habaurora')
 call minpac#add('romainl/apprentice')
 call minpac#add('romainl/vim-cool')
 
@@ -406,33 +407,15 @@ endif
 
 function! CustomApprentice() abort
 	" https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f
-	highlight! LineNr ctermbg=235 guibg=#262626
-endfunction
-
-function! CustomLight() abort
-	highlight! link diffAdded String
-	highlight! link diffBDiffer WarningMsg
-	highlight! link diffCommon WarningMsg
-	highlight! link diffDiffer WarningMsg
-	highlight! link diffIdentical WarningMsg
-	highlight! link diffIsA WarningMsg
-	highlight! link diffNoEOL WarningMsg
-	highlight! link diffOnly WarningMsg
-	highlight! link diffRemoved WarningMsg
-	highlight! link ALEError SpellBad
-	highlight! link ALEWarning SpellBad
-	highlight! link ALEStyleError ALEError
-	highlight! link ALEStyleWarning ALEError
-	highlight! link ALEInfo ALEError
+	" highlight! LineNr ctermbg=235 guibg=#262626
 endfunction
 
 augroup MyColors
 	autocmd!
-	autocmd ColorScheme apprentice call CustomApprentice()
-	autocmd ColorScheme habalbum call CustomLight()
+	" autocmd ColorScheme apprentice call CustomApprentice()
 augroup END
 
 colorscheme apprentice
-" colorscheme habalbum
 
+" vim: fdm=marker nowrap ft=vim fdl=2 list
 

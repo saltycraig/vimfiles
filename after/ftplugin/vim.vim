@@ -7,10 +7,6 @@ setlocal foldmethod=indent
 " create 1 fold inside a function/endfunction, no more
 setlocal foldnestmax=1
 setlocal foldlevel=0
-
-setlocal cinwords+=function!
-setlocal cinwords+=abort
-setlocal cinwords+=augroup
 setlocal suffixesadd=.vim
 
 nnoremap <silent><buffer> gf :call VimInclude()<CR>
