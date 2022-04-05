@@ -61,3 +61,6 @@
 [submodule "pack/third-party/opt/vimspector"]
 	path = pack/third-party/opt/vimspector
 	url = https://github.com/puremourning/vimspector
+[submodule "pack/third-party/start/vim-habaurora"]
+	path = pack/third-party/start/vim-habaurora
+	url = https://github.com/habamax/vim-habaurora

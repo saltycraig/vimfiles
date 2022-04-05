@@ -193,7 +193,7 @@ export def CCR(): string
   if cmdline =~ filter_stub .. '(ls|files|buffers)$'
 		# like :ls but prompt for a buffer
 		return "\<CR>:b"
-	elseif cmdline =~ '\v\C(#|nu|num|numb|numbe|number|l|li|lis|list)$'
+	elseif cmdline =~ '\v\C^(#|nu|num|numb|numbe|number|l|li|lis|list)$'
 		# like :g//# but prompts for a command
 		return "\<CR>:"
 	elseif cmdline =~ filter_stub .. '(\%)*(#|nu|num|numb|numbe|number|l|li|lis|list)$'
@@ -279,3 +279,6 @@ export def SynGroup()
   var s = synID(line('.'), col('.'), 1)
   echo synIDattr(s, 'name') .. ' -> ' .. synIDattr(synIDtrans(s), 'name')
 enddef
+
+# TODO: universal ctags pattern to match:
+# /\v^exp%[ort]\s+%[def\|class\|const\|final\|interface]\s+

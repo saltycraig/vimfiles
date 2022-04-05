@@ -243,6 +243,8 @@ nnoremap <Leader>ev :vert split <C-z><S-Tab>*
 " buffers not part of :pwd show '/' or '~' at the beginning, so we can remove
 nnoremap <Leader><Leader> :buffer #<CR>
 nnoremap <Leader>b. :filter! /^\~\\|^\// ls t<CR>:b
+" TODO: extra : added here because of CCR(), investigate further.
+" Recreate with :buffer #<CR> will switch buffer then put ':' in cmd line
 nnoremap <Leader>bb :buffer <C-z><S-Tab>
 nnoremap <Leader>bd <Cmd>bwipeout!<CR>
 nnoremap <Leader>bs :sbuffer <C-d>
@@ -332,5 +334,8 @@ augroup vimrc
 augroup END
 
 " Colorscheme and Syntax {{{1
+" colorscheme habalbum
+" colorscheme habarena
 colorscheme apprentice
+
 " vim: fdm=marker nowrap ft=vim fdl=2 list
