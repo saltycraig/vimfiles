@@ -222,8 +222,9 @@ nnoremap <silent><Leader>gp <cmd>G pull<CR>
 nmap <Leader>/ :grep<Space>
 nnoremap <Leader>? :noautocmd vimgrep /\v/gj **/*.md<S-Left><S-Left><Right><Right><Right>
 nnoremap <Leader>! :Redir<Space>
+
 " TODO: put this in liquid local mapping
-nnoremap <Leader>@ :JekyllOpen<CR>
+nnoremap <Leader>@ :call vim9utils#JekyllOpen()<CR>
 
 cnoremap <expr> <C-p> wildmenumode() ? "<C-P>" : "<Up>"
 cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
@@ -294,11 +295,14 @@ command! Cd :tcd %:h
 command! TodoLocal :botright silent! lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 command! -nargs=1 Redir call utils#Redir(<q-args>)
-command! JekyllOpen call utils#JekyllOpenLive()
+command! JekyllOpenDevx call utils#JekyllOpenDevx()
 
-" https://vi.stackexchange.com/questions/13433/how-to-load-list-of-files-in-commit-into-quickfix
-command! -nargs=? -bar GitShow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
-command! -complete=customlist,Gitbranches -nargs=1 -bar GitPRFiles call setqflist(map(systemlist("git diff --name-only $(git merge-base HEAD <args>)"), '{"filename": v:val, "lnum": 1}')) | copen
+" usage: :GitQFShowChanged<CR> to load quickfix with files changes in last commit, or
+" :GitQFShowChanged [HEAD^|SHA] to load quickfix with files changed in SHA
+command! -nargs=? -bar GitQFShowChanged call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
+" usage: :GitQFPRFiles {branchname}<CR> files that are different from given
+" branchname are loaded into quickfix. Compared branch is the active one.
+command! -complete=customlist,Gitbranches -nargs=1 -bar GitQFPRFiles call setqflist(map(systemlist("git diff --name-only $(git merge-base HEAD <args>)"), '{"filename": v:val, "lnum": 1}')) | copen
 
 function! Gitbranches(ArgLead, CmdLine, CursorPos) abort
 	return systemlist('git branch')

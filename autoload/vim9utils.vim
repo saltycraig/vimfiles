@@ -238,33 +238,26 @@ export def CCR(): string
 	endif
 enddef
 
-# TODO: finish this. takes a 'site', next, nextonly, prod, etc.
-# to determine which prefix URL to use
-export def JekyllOpen(site: string)
-  # Requires 'devx' as &pwd for '%:.' to work correctly with forming the final URL to open
-  if !getcwd() =~ 'devx' 
-    echoerr 'Command only works when &pwd is "devx"'
+export def JekyllOpen()
+  if !getcwd() =~ 'youi-platform-docs'
+    echoerr 'Command currently only works when &pwd is ~/git/hbo/youi-platform-docs'
     return
   endif
-  var relpath = expand('%:.')
-        \ ->substitute('_ver_', '', '')
-        \ ->substitute('^docs', '', '')
-        \ ->substitute('\.md$', '/', '')
 
-  # cases:
-  # docs/_ver_6.14/path/to/file
-  # docs/release-details/file-with-version-6.8.md
-  var newversion = relpath->matchstr('\d\.\d\d\?')
+	# TODO: Review how this will work with new site, if we just use 'latest'
+	# docset, e.g., docs/latest/rn/guides/crash-reporting.md
+  var topicpath = expand('%:.') # docs/_ver_6.16/rn/guides/crash-reporting.md
+		->substitute('_ver_', '', '') # docs/6.16/rn/guides/crash-reporting.md
+		->substitute('^docs', '', '') # /6.16/rn/guides/crash-reporting.md
+		->substitute('\.md$', '/', '') # /6.16/rn/guides/crash-reporting/
 
-  # When relpath = version/path/to/topic we need to drop leading \d\.\d\d\? dir, otherwise we end
-  # up with 6.15/6.15/path/to/file. We only check up to first / to limit to first folder.
-  var newpath = newversion .. relpath->substitute('\d\.\d\d\?/', '', '')
+	# echom topicpath
 
-  # any version 6.14 and over requires localhost only
-  var host = str2float(newversion) >= 6.14 ? 'https://localhost.com:8080/' : 'https://developer-staging.youi.tv/'
+	var host = 'https://docs.hbo.com'
 
-  var finalurl = host .. newpath
+  var finalurl = host .. topicpath
   execute "silent! !open " .. finalurl
+	redraw!
 enddef
 
 export def SynGroup() 

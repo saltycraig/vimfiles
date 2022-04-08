@@ -98,7 +98,7 @@ function! utils#MaybeReplaceCrWithCrColon() abort
   endif
 endfunction
 
-function! utils#JekyllOpenLive() abort
+function! utils#JekyllOpenDevx() abort
   " Requires 'devx' as &pwd for '%:.' to work correctly with forming the final URL to open
   if !getcwd() =~ 'devx' 
     echoerr 'Command only works when &pwd is "devx"'
