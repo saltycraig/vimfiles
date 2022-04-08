@@ -40,9 +40,6 @@
 [submodule "pack/third-party/start/asynctasks.vim"]
 	path = pack/third-party/start/asynctasks.vim
 	url = https://github.com/skywind3000/asynctasks.vim
-[submodule "pack/third-party/start/fzf.vim"]
-	path = pack/third-party/start/fzf.vim
-	url = https://github.com/junegunn/fzf.vim
 [submodule "pack/third-party/start/tagbar"]
 	path = pack/third-party/start/tagbar
 	url = https://github.com/preservim/tagbar

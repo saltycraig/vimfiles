@@ -65,10 +65,6 @@ set wildignore+=*.exe,*.dylib,%*,*.png,*.jpeg,*.bmp,*.jpg,*.pyc,*.o,*.obj
 let &t_SI="\e[6 q"
 let &t_EI="\e[2 q"
 
-if executable('fzf') && has('mac')
-	set runtimepath+=/usr/local/opt/fzf
-endif
-
 " Plugins {{{1
 " builtins {{{2
 packadd! matchit
@@ -182,30 +178,6 @@ let g:ale_linters = {
 let g:ale_linter_aliases = { 'liquid': 'markdown' }
 " let g:ale_fixers = {}
 
-" https://github.com/junegunn/fzf.vim {{{2
-nnoremap <C-p> :GFiles<CR>
-nnoremap <Leader>e. :FZF %:h<CR>
-let g:fzf_buffers_jump = 1
-nnoremap <Leader><Tab> :Buffers<CR>
-nnoremap <Leader><C-]> :Tags<CR>
-nnoremap <Leader>c :FZFCd ~/git<CR>
-command! -bang -bar -nargs=? -complete=dir FZFCd
-	\ call fzf#run(fzf#wrap(
-	\ {'source': 'find '..( empty("<args>") ? ( <bang>0 ? "~" : "." ) : "<args>" ) ..
-	\ ' -type d -maxdepth 1', 'sink': 'tcd'}))
-function! s:build_quickfix_list(lines)
-	call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-	copen
-	cc
-endfunction
-let g:fzf_action = {
-	\ 'ctrl-q': function('s:build_quickfix_list'),
-	\ 'ctrl-t': 'tab split',
-	\ 'ctrl-x': 'split',
-	\ 'ctrl-v': 'vsplit'
-\}
-let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.6 } }
-let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-o']
 
 " https://github.com/tpope/vim-fugitive {{{2
 nnoremap <Leader>gg <cmd>G<CR>
@@ -257,6 +229,10 @@ nnoremap [e :lprevious<CR>
 nnoremap ]e :lnext<CR>
 nnoremap ]E :llast<CR>
 nnoremap [E :lfirst<CR>
+nnoremap [a :previous<CR>
+nnoremap ]a :next<CR>
+nnoremap [A :first<CR>
+nnoremap ]A :last<CR>
 
 xmap < <gv
 xmap > >gv
@@ -341,4 +317,6 @@ colorscheme apprentice
 " }}}
 "
 " TODO: j/k mapped to gj/gk based on tertiary &wrap
+"
+command! -bar ArglistToQuickfix call setqflist(map(argv(-1), '{"filename": v:val}')) <Bar> copen
 " vim: fdm=marker nowrap ft=vim fdl=2 list
