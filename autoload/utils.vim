@@ -1,4 +1,4 @@
-" vim: set foldmethod=indent foldlevel=0 textwidth=100 filetype=vim :
+" vim: set foldmethod=indent foldlevel=1 textwidth=100 filetype=vim :
 " Author: C.D. MacEachern <craigm@fastmail.com> vim 7.4+ config file.
 " Last Modified: 2020-09-17
 " local.vim -- utility functions that I use
@@ -119,12 +119,13 @@ function! utils#JekyllOpenDevx() abort
   let newpath = newversion .. relpath->substitute('\d\.\d\d\?/', '', '')
 
   " any version 6.14 and over requires localhost only
-  let host = str2float(newversion) >= 6.14 ? 'https://localhost.com:8080/' : 'https://developer-staging.youi.tv/'
+  let host = str2float(newversion) >= 6.14 ? 'http://localhost:4000' : 'https://developer-staging.youi.tv/'
 
   let finalurl = host .. newpath
   " TODO: make more robust, calling os-specific open like netrw does,
   " like xdg-open on Linux
   execute "silent! !open " . finalurl
+  redraw!
 endfunction
 
 function! utils#Redir(cmd) abort
@@ -186,4 +187,142 @@ function! utils#MarkdownInclude() abort
   endif
 endfunction
 
+" Background here: https://gist.github.com/romainl/047aca21e338df7ccf771f96858edb86
+" with help from https://github.com/teoljungberg
+
+function! CCR()
+    let cmdline = getcmdline()
+    let filter_stub = '\v\C^((filt|filte|filter) .+ )*'
+    command! -bar Z silent set more|delcommand Z
+    if getcmdtype() !~ ':'
+        return "\<CR>"
+    endif
+    if cmdline =~ filter_stub . '(ls|files|buffers)$'
+        " like :ls but prompts for a buffer command
+        return "\<CR>:b"
+    elseif cmdline =~ '\v\C/(#|nu|num|numb|numbe|number|l|li|lis|list)$'
+        " like :g//# but prompts for a command
+        return "\<CR>:"
+    elseif cmdline =~ filter_stub . '(\%)*(#|nu|num|numb|numbe|number|l|li|lis|list)$'
+        " like :g//# but prompts for a command
+        return "\<CR>:"
+    elseif cmdline =~ '\v\C^(dli|il)'
+        " like :dlist or :ilist but prompts for a count for :djump or :ijump
+        return "\<CR>:" . cmdline[0] . "j  " . split(cmdline, " ")[1] . "\<S-Left>\<Left>"
+    elseif cmdline =~ filter_stub . '(cli)'
+        " like :clist or :llist but prompts for an error/location number
+        return "\<CR>:sil cc\<Space>"
+    elseif cmdline =~ filter_stub . '(lli)'
+        " like :clist or :llist but prompts for an error/location number
+        return "\<CR>:sil ll\<Space>"
+    elseif cmdline =~ filter_stub . 'old'
+        " like :oldfiles but prompts for an old file to edit
+        set nomore
+        return "\<CR>:Z|e #<"
+    elseif cmdline =~ filter_stub . 'changes'
+        " like :changes but prompts for a change to jump to
+        set nomore
+        return "\<CR>:Z|norm! g;\<S-Left>"
+    elseif cmdline =~ filter_stub . 'ju'
+        " like :jumps but prompts for a position to jump to
+        set nomore
+        return "\<CR>:Z|norm! \<C-o>\<S-Left>"
+    elseif cmdline =~ filter_stub . 'marks'
+        " like :marks but prompts for a mark to jump to
+        return "\<CR>:norm! `"
+    elseif cmdline =~ '\v\C^undol'
+        " like :undolist but prompts for a change to undo
+        return "\<CR>:u "
+    elseif cmdline =~ '\v\C^tabs'
+        set nomore
+        return "\<CR>:Z| tabnext\<S-Left>"
+    elseif cmdline =~ '^\k\+$'
+        " handle cabbrevs gracefully
+        " https://www.reddit.com/r/vim/comments/jgyqhl/nightly_hack_for_vimmers/
+        return "\<C-]>\<CR>"
+    else
+        return "\<CR>"
+    endif
+endfunction
+cnoremap <expr> <CR> CCR()
+
+" TODO: convert back to vimscript
+" export def Grep(...args: list<string>): string
+"   # Based on: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
+"   #
+"   # 'expandcmd' allows us to do :Grep 'leader' % and have % expanded to current
+"   # file like default :grep cmd does
+"   #
+"   return system(join([&grepprg] + [expandcmd(join(args))]))
+" enddef
+
+" export def Make(): string
+"   # TODO: works for simple cases but I will need to escape more I think to get
+"   # things like makeprg value of :compiler liquid to work correctly.
+"   return system(expandcmd(&makeprg))
+" enddef
+
+ " OLD: I use vim-qf functions now
+" export def ToggleQuickfixList()
+ "  var qwinid = getqflist({'winid': 0}).winid
+ "  if qwinid > 0
+ "    cclose
+ "  else
+ "    botright copen 10
+ "  endif
+" enddef
+
+" # OLD: I use vim-qf functions now
+" export def ToggleLocationList()
+ "  # Tries to toggle open/close location list for current window,
+ "  # if no loclist exists then just ignore error stating such
+ "  var lwinid = getloclist(0, {'winid': 0}).winid
+ "  if lwinid > 0
+ "    lclose
+ "  else
+ "    try
+ "      botright lopen 10
+ "    catch /E776/
+ "      echohl WarningMsg
+ "      echo 'Window has no associated location list.'
+ "      echohl None
+ "      return
+ "    endtry
+ "  endif
+" enddef
+"
+" export def JekyllOpen()
+"   if !getcwd() =~ 'youi-platform-docs'
+"     echoerr 'Command currently only works when &pwd is ~/git/hbo/youi-platform-docs'
+"     return
+"   endif
+
+" 	# TODO: Review how this will work with new site, if we just use 'latest'
+" 	# docset, e.g., docs/latest/rn/guides/crash-reporting.md
+"   var topicpath = expand('%:.') # docs/_ver_6.16/rn/guides/crash-reporting.md
+" 		->substitute('_ver_', '', '') # docs/6.16/rn/guides/crash-reporting.md
+" 		->substitute('^docs', '', '') # /6.16/rn/guides/crash-reporting.md
+" 		->substitute('\.md$', '/', '') # /6.16/rn/guides/crash-reporting/
+
+" 	# echom topicpath
+
+" 	var host = 'https://docs.hbo.com'
+
+"   var finalurl = host .. topicpath
+"   execute "silent! !open " .. finalurl
+" 	redraw!
+" enddef
+"
+function! utils#SynGroup() abort
+  " Outputs both the name of the syntax group, AND the translated syntax
+  " group of the character the cursor is on.
+  " line('.') and col('.') return the current position
+  " synID(...) returns a numeric syntax ID
+  " synIDtrans(l:s) translates the numeric syntax id l:s by following highlight links
+  " synIDattr(l:s, 'name') returns the name corresponding to the numeric syntax ID
+  " example output:
+  " vimMapModKey -> Special
+  let l:s = synID(line('.'), col('.'), 1)
+  echo synIDattr(l:s, 'name') .. ' -> ' .. synIDattr(synIDtrans(l:s), 'name')
+endfunction
 

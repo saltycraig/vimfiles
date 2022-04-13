@@ -1,3 +1,4 @@
+" vim:set fdm=marker nowrap ft=vim fdl=2 nolist:
 " Options {{{1
 " Syntax/FileType/Encoding {{{2
 filetype plugin indent on
@@ -8,17 +9,17 @@ let mapleader=' '
 " Whitespace/Indenting/Linebreaks {{{2
 set autoindent smartindent
 set backspace=indent,eol,start
-set breakindent
 set formatoptions+=j
-set linebreak showbreak=↪
-set listchars=tab:⇥\ ,lead:·,trail:█,eol:,precedes:«,extends:»
+set linebreak breakindent showbreak=+
+set listchars=tab:\|\ ,lead:*,trail:*,eol:$,precedes:<,extends:>
 " Visuals {{{2
 set belloff=all
 set completeopt=menuone,popup
-set cursorline
-set diffopt+=algorithm:patience
+set modeline modelines=5
+set nocursorline
+" set diffopt+=algorithm:patience
 set display=truncate
-set foldlevelstart=99
+set foldlevelstart=1
 set foldopen+=jump
 set hlsearch incsearch
 set laststatus=2
@@ -36,10 +37,10 @@ set tabline=%!vim9utils#MyTabline()
 set statusline=%f\ %M\ %R\ %H\ %=%{FugitiveStatusline()}\ %Y
 " Editing {{{2
 set clipboard=unnamed,unnamedplus
+set omnifunc=syntaxcomplete#Complete
 set complete-=i
-set exrc
+set exrc secure
 set nrformats-=octal
-set secure
 set ttimeout ttimeoutlen=100
 set undofile undodir=~/.vim/undodir
 set updatetime=250
@@ -50,7 +51,6 @@ set history=10000
 set noswapfile
 set sessionoptions-=options
 set splitbelow splitright
-set title
 set viewoptions-=options
 " Menus/Regex/Wildcards/Finding {{{2
 set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
@@ -59,7 +59,8 @@ set ignorecase smartcase
 set path-=/usr/include | set path+=**
 set suffixes+=.png,.jpeg,.jpg,.exe
 set tags=./tags;,tags;
-set wildcharm=<C-z> wildmenu wildoptions=fuzzy,pum,tagfile
+set wildcharm=<C-z> wildmenu 
+" set wildoptions=fuzzy,pum,tagfile
 set wildignore+=*.exe,*.dylib,%*,*.png,*.jpeg,*.bmp,*.jpg,*.pyc,*.o,*.obj
 " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
 let &t_SI="\e[6 q"
@@ -96,55 +97,6 @@ let g:qf_auto_quit = 1
 " https://github.com/romainl/vim-cool {{{2
 let g:CoolTotalMatches = 1
 
-" https://github.com/mbbill/undotree {{{2
-let g:undotree_SetFocusWhenToggle = 1
-let g:undotree_ShortIndicators = 1
-let g:undotree_HelpLine = 0
-nnoremap <Leader>u <cmd>UndotreeToggle<CR>
-
-" https://github.com/prabirshrestha/vim-lsp and asyncomplete.vim {{{2
-let g:asyncomplete_auto_popup = 0
-
-" if executable('pyls')
-	" pip install python-language-server
-	" autocmd User lsp_setup call lsp#register_server({
-	" 	\ 'name': 'pyls',
-	" 	\ 'cmd': {server_info->['pyls']},
-	" 	\ 'allowlist': ['python'],
-	" 	\ })
-" endif
-
-function! s:on_lsp_buffer_enabled() abort
-	setlocal omnifunc=lsp#complete
-	setlocal signcolumn=yes
-	if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-	nmap <buffer> gd <plug>(lsp-definition)
-	nmap <buffer> gs <plug>(lsp-document-symbol-search)
-	nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-	nmap <buffer> gr <plug>(lsp-references)
-	nmap <buffer> gi <plug>(lsp-implementation)
-	nmap <buffer> gt <plug>(lsp-type-definition)
-	nmap <buffer> <leader>rn <plug>(lsp-rename)
-	nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-	nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-	nmap <buffer> K <plug>(lsp-hover)
-	nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-	nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-	let g:lsp_format_sync_timeout = 1000
-endfunction
-
-augroup lsp_install
-	autocmd!
-	" call s:on_lsp_buffer_enabled only for languages that has the server registered.
-	autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-" https://github.com/skywind3000/asyncrun.vim  & asynctasks.vim {{{2
-let g:asyncrun_open = 6
-let g:asynctasks_term_pos = 'bottom'
-let g:asynctasks_term_reuse = 1
-let g:asynctasks_term_focus = 0
-
 " https://github.com/w0rp/ale {{{2
 let g:ale_set_loclist = 1 | " update loclist, bound to C-n/p for me
 let g:ale_set_signs = 0 | " no marks in number/sign columns
@@ -178,7 +130,6 @@ let g:ale_linters = {
 let g:ale_linter_aliases = { 'liquid': 'markdown' }
 " let g:ale_fixers = {}
 
-
 " https://github.com/tpope/vim-fugitive {{{2
 nnoremap <Leader>gg <cmd>G<CR>
 nnoremap <silent><Leader>ge :Gedit <bar> only<CR>
@@ -196,7 +147,7 @@ nnoremap <Leader>? :noautocmd vimgrep /\v/gj **/*.md<S-Left><S-Left><Right><Righ
 nnoremap <Leader>! :Redir<Space>
 
 " TODO: put this in liquid local mapping
-nnoremap <Leader>@ :call vim9utils#JekyllOpen()<CR>
+nnoremap <Leader>@ :call utils#JekyllOpen()<CR>
 
 cnoremap <expr> <C-p> wildmenumode() ? "<C-P>" : "<Up>"
 cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
@@ -219,8 +170,6 @@ nnoremap <Leader>bd <Cmd>bwipeout!<CR>
 nnoremap <Leader>bs :sbuffer <C-d>
 nnoremap <Leader>bv :vert sbuffer <C-d>
 
-cnoremap <expr> <CR> vim9utils#CCR()
-
 nnoremap [q :cprevious<CR>
 nnoremap ]q :cnext<CR>
 nnoremap [Q :cfirst<CR>
@@ -241,12 +190,9 @@ xnoremap K :m '<-2<CR>gv=gv
 
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-nnoremap <silent><F2> :call vim9utils#SynGroup()<CR>
+nnoremap <silent><F2> :call utils#SynGroup()<CR>
 nmap <silent><F3> <Plug>(qf_qf_toggle)
 nmap <silent><F4> <Plug>(qf_loc_toggle)
-nnoremap <F5> :AsyncTask <C-z>
-nnoremap <silent><F7> :15Lexplore<CR>
-nnoremap <silent>gO :TagbarOpenAutoClose<CR>
 nnoremap <silent><F8> :TagbarOpenAutoClose<CR>
 nnoremap <silent><F9> :set list!<CR>
 nnoremap <silent><Leader>* :grep <cword> *<CR>
@@ -272,6 +218,7 @@ command! TodoLocal :botright silent! lvimgrep /\v\CTODO|FIXME|HACK|DEV/ %<CR>
 command! Todo :botright silent! vimgrep /\v\CTODO|FIXME|HACK|DEV/ *<CR>
 command! -nargs=1 Redir call utils#Redir(<q-args>)
 command! JekyllOpenDevx call utils#JekyllOpenDevx()
+command! -bar ArglistToQuickfix call setqflist(map(argv(-1), '{"filename": v:val}')) <Bar> copen
 
 " usage: :GitQFShowChanged<CR> to load quickfix with files changes in last commit, or
 " :GitQFShowChanged [HEAD^|SHA] to load quickfix with files changed in SHA
@@ -284,39 +231,5 @@ function! Gitbranches(ArgLead, CmdLine, CursorPos) abort
 	return systemlist('git branch')
 endfunction
 
-" Autocmd {{{1
-augroup vimrc
-	autocmd!
-	autocmd FileType * if !&omnifunc | setlocal omnifunc=syntaxcomplete#Complete | endif
-	autocmd BufWritePost $MYVIMRC nested source $MYVIMRC | nohlsearch
-	autocmd BufWritePre /tmp/* setlocal noundofile
-	autocmd QuickFixCmdPost [^l]* botright cwindow
-	autocmd QuickFixCmdPost  l* botright lwindow
-	autocmd VimEnter * cwindow
-	autocmd FileType gitcommit call feedkeys('i')
-	autocmd BufEnter * if &buftype ==# 'nofile' | nnoremap <buffer> q :bwipeout!<CR> | endif
-	autocmd BufEnter * if &buftype ==# 'nofile' | setlocal nocursorcolumn | endif
-	autocmd BufWinEnter * if &previewwindow | setlocal nonumber norelativenumber nolist | endif
-	autocmd BufReadPost fugitive://* set bufhidden=delete
-	autocmd DirChanged * let &titlestring = fnamemodify(getcwd(), ":~")
-	autocmd TabEnter * let &titlestring = fnamemodify(getcwd(), ":~")
-	autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-	autocmd WinLeave * setlocal nocursorline
-	autocmd VimEnter,WinEnter,BufWinEnter * if &diff | setlocal nocursorline | endif
-	autocmd BufReadPost *
-		\ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-		\ | exe "normal! g`\""
-		\ | endif
-augroup END
-
 " Colorscheme and Syntax {{{1
-" colorscheme habalbum
-" colorscheme habarena
 colorscheme apprentice
-
-" }}}
-"
-" TODO: j/k mapped to gj/gk based on tertiary &wrap
-"
-command! -bar ArglistToQuickfix call setqflist(map(argv(-1), '{"filename": v:val}')) <Bar> copen
-" vim: fdm=marker nowrap ft=vim fdl=2 list
