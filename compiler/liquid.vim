@@ -11,6 +11,4 @@ endif
 CompilerSet makeprg=\(\ markdownlint-cli2\ %\ >\ /dev/null\ ;\ vale\ --no-wrap\ --no-exit\ --output='line'\ %\ ;\ \) 
 
 " Only Add otherwise it wipes out all others
-CompilerSet errorformat+=%f:%l:%c:%m
-CompilerSet errorformat+=%f:%l\ %m
-" CompilerSet errorformat=%f:%l:%c\ %m,%f:%l:%c:%m
+CompilerSet errorformat=%f:%l:%c\ %m,%f:%l:%c:%m,%f:%l\ %m

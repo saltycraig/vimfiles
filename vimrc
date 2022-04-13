@@ -65,15 +65,25 @@ let g:markdown_minlines = 1000
 let g:liquid_highlight_types = g:markdown_fenced_languages
 "
 " https://github.com/preservim/tagbar {{{2
+" when using Universal ctags uncomment this:
+" let g:tagbar_type_liquid = {
+" 	\ 'kinds' : [
+" 		\ 'c:chapter',
+" 		\ 's:section',
+" 		\ 'S:subsection',
+" 		\ 't:subsubsection',
+" 		\ 'T:13subsection',
+" 		\ 'u:14subsection',
+" 		\ '?:unknown',
+" 	\ ],
+" \ }
+" using Exuberant ctags with markdown in ~/.ctags defined as
+" --langdef=markdown
+" --langmap=markdown:.md
+" --regex-markdown=/^(#+[ \t]+.*)/\1/h,heading,headings/
 let g:tagbar_type_liquid = {
 	\ 'kinds' : [
-		\ 'c:chapter',
-		\ 's:section',
-		\ 'S:subsection',
-		\ 't:subsubsection',
-		\ 'T:13subsection',
-		\ 'u:14subsection',
-		\ '?:unknown',
+		\ 'h:heading',
 	\ ],
 \ }
 
@@ -150,12 +160,13 @@ xnoremap K :m '<-2<CR>gv=gv
 
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-nnoremap <silent><F2> :call utils#SynGroup()<CR>
-nmap <silent><F3> <Plug>(qf_qf_toggle)
-nmap <silent><F4> <Plug>(qf_loc_toggle)
-nnoremap <silent><F8> :TagbarOpenAutoClose<CR>
-nnoremap <silent><F9> :set list!<CR>
-nnoremap <silent><Leader>* :grep <cword> *<CR>
+nnoremap <F2> :call utils#SynGroup()<CR>
+nmap <F3> <Plug>(qf_qf_toggle)
+nmap <F4> <Plug>(qf_loc_toggle)
+nnoremap <F5> :silent! lmake \| redraw!<CR>
+nnoremap <F8> :TagbarOpenAutoClose<CR>
+nnoremap <F9> :set list!<CR>
+nnoremap <Leader>* :grep <cword> *<CR>
 
 nnoremap <Leader>w <cmd>update<CR>
 nnoremap <Leader>, <cmd>edit $MYVIMRC<CR>
