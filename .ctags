@@ -1,4 +1,4 @@
 --recurse
---exclude=pack/*
 --exclude=undodir/*
+--exclude=.git/*
 --languages=Vim

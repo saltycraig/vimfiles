@@ -1,4 +1,5 @@
 setlocal list
+compiler liquid
 
 " TODO: redo this
 nnoremap <buffer> gf :call utils#LiquidInclude()<CR>

@@ -22,9 +22,6 @@
 [submodule "pack/third-party/start/vim-cool"]
 	path = pack/third-party/start/vim-cool
 	url = https://github.com/romainl/vim-cool
-[submodule "pack/third-party/start/ale"]
-	path = pack/third-party/start/ale
-	url = https://github.com/w0rp/ale
 [submodule "pack/third-party/start/tagbar"]
 	path = pack/third-party/start/tagbar
 	url = https://github.com/preservim/tagbar
@@ -43,12 +40,6 @@
 [submodule "pack/third-party/opt/vimspector"]
 	path = pack/third-party/opt/vimspector
 	url = https://github.com/puremourning/vimspector
-[submodule "pack/third-party/start/gruvbox"]
-	path = pack/third-party/start/gruvbox
-	url = https://github.com/morhetz/gruvbox
-[submodule "pack/third-party/start/nord-vim"]
-	path = pack/third-party/start/nord-vim
-	url = https://github.com/articicestudios/nord-vim
 [submodule "pack/third-party/start/apprentice"]
 	path = pack/third-party/start/apprentice
 	url = https://github.com/romainl/apprentice

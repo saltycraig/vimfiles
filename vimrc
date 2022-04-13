@@ -1,71 +1,58 @@
 " vim:set fdm=marker nowrap ft=vim fdl=2 nolist:
 " Options {{{1
-" Syntax/FileType/Encoding {{{2
 filetype plugin indent on
 syntax on
 set encoding=utf-8
 scriptencoding utf-8
 let mapleader=' '
-" Whitespace/Indenting/Linebreaks {{{2
+colorscheme apprentice
+
+" set statusline=%!vim9utils#MyStatusline()
 set autoindent smartindent
+set autoread
 set backspace=indent,eol,start
+set belloff=all
+set clipboard=unnamed,unnamedplus
+set complete-=i
+set completeopt=menuone,popup
+set display=truncate
+set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
+set exrc secure
+set foldlevelstart=1 foldopen+=jump
 set formatoptions+=j
+set grepprg=grep\ -HnriE\ $*
+set hidden
+set history=10000
+set hlsearch incsearch
+set ignorecase smartcase
+set laststatus=2
 set linebreak breakindent showbreak=+
 set listchars=tab:\|\ ,lead:*,trail:*,eol:$,precedes:<,extends:>
-" Visuals {{{2
-set belloff=all
-set completeopt=menuone,popup
 set modeline modelines=5
-set nocursorline
-" set diffopt+=algorithm:patience
-set display=truncate
-set foldlevelstart=1
-set foldopen+=jump
-set hlsearch incsearch
-set laststatus=2
 set mouse=a
 set nolangremap
+set noswapfile
+set nrformats-=octal
 set number relativenumber
+set omnifunc=syntaxcomplete#Complete
+set path-=/usr/include | set path+=**20
 set ruler
 set scrolloff=1 sidescrolloff=2
+set sessionoptions-=options
 set shortmess-=cS
 set showcmd showmatch
-set showtabline=1
-set signcolumn=number
-set tabline=%!vim9utils#MyTabline()
-" set statusline=%!vim9utils#MyStatusline()
+set splitbelow splitright
 set statusline=%f\ %M\ %R\ %H\ %=%{FugitiveStatusline()}\ %Y
-" Editing {{{2
-set clipboard=unnamed,unnamedplus
-set omnifunc=syntaxcomplete#Complete
-set complete-=i
-set exrc secure
-set nrformats-=octal
+set suffixes+=.png,.jpeg,.jpg,.exe
+set tabline=%!vim9utils#MyTabline()
+set tags=./tags;,tags;
 set ttimeout ttimeoutlen=100
 set undofile undodir=~/.vim/undodir
 set updatetime=250
-" Buffers/Windows/Views/Sessions/Tabpages {{{2
-set autoread
-set hidden
-set history=10000
-set noswapfile
-set sessionoptions-=options
-set splitbelow splitright
 set viewoptions-=options
-" Menus/Regex/Wildcards/Finding {{{2
-set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
-set grepprg=grep\ -HnriE\ $*
-set ignorecase smartcase
-set path-=/usr/include | set path+=**
-set suffixes+=.png,.jpeg,.jpg,.exe
-set tags=./tags;,tags;
 set wildcharm=<C-z> wildmenu 
-" set wildoptions=fuzzy,pum,tagfile
 set wildignore+=*.exe,*.dylib,%*,*.png,*.jpeg,*.bmp,*.jpg,*.pyc,*.o,*.obj
-" https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
-let &t_SI="\e[6 q"
-let &t_EI="\e[2 q"
-
+set wildoptions=tagfile
 " Plugins {{{1
 " builtins {{{2
 packadd! matchit
@@ -97,39 +84,6 @@ let g:qf_auto_quit = 1
 " https://github.com/romainl/vim-cool {{{2
 let g:CoolTotalMatches = 1
 
-" https://github.com/w0rp/ale {{{2
-let g:ale_set_loclist = 1 | " update loclist, bound to C-n/p for me
-let g:ale_set_signs = 0 | " no marks in number/sign columns
-let g:ale_disable_lsp = 1 | " turn off ale lsp stuff completely
-let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
-let g:ale_set_highlights = 1 | " in-text highlights, not including signs
-let g:ale_virtualtext_cursor = 0 | " virtual text at EOL showing lint msg
-let g:ale_echo_cursor = 0 | " echo closeby warn/errs on cursor line
-let g:ale_cursor_detail = 0 | " open preview win when cursor on line with errs
-let g:ale_detail_to_floating_preview = 1 | " Use float win for :ALEDetail
-let g:ale_hover_to_floating_preview = 1
-let g:ale_floating_preview = 1 | " Use float for everything
-let g:ale_hover_to_preview = 0 | " Use preview win for hover messages
-let g:ale_hover_cursor = 0
-" These plug mappings taken into consideration the location of cursor,
-" and need to wrapped this way to add on manual call to ALEDetail for popup
-if $TERM_PROGRAM =~# '[Apple_Terminal\|tmux\>]'
-	nnoremap <silent>n :execute "normal \<Plug>(ale_next)"<CR>:ALEDetail<CR>
-	nnoremap <silent>p :execute "normal \<Plug>(ale_previous)"<CR>:ALEDetail<CR>
-else
-	nnoremap <silent><M-n> :execute "normal \<Plug>(ale_next)"<CR>:ALEDetail<CR>
-	nnoremap <silent><M-p> :execute "normal \<Plug>(ale_previous)"<CR>:ALEDetail<CR>
-endif
-
-let g:ale_linters_explicit = 1
-let g:ale_linters = {
-	\ 'markdown': ['vale', 'cspell', 'markdownlintcli2'],
-	\ 'vim': ['vint'],
-	\ 'liquid': ['vale', 'cspell', 'markdownlintcli2'],
-\}
-let g:ale_linter_aliases = { 'liquid': 'markdown' }
-" let g:ale_fixers = {}
-
 " https://github.com/tpope/vim-fugitive {{{2
 nnoremap <Leader>gg <cmd>G<CR>
 nnoremap <silent><Leader>ge :Gedit <bar> only<CR>
@@ -149,10 +103,16 @@ nnoremap <Leader>! :Redir<Space>
 " TODO: put this in liquid local mapping
 nnoremap <Leader>@ :call utils#JekyllOpen()<CR>
 
-cnoremap <expr> <C-p> wildmenumode() ? "<C-P>" : "<Up>"
-cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
-cnoremap <expr> <C-j> wildmenumode() ? "\<Left>\<C-z>" : "\<C-j>"
-cnoremap <expr> <C-k> wildmenumode() ? "\<Right>\<C-z>" : "\<C-k>"
+if has('patch-8.2.4325')
+	set wildoptions+=pum
+	cnoremap <expr> <C-p> wildmenumode() ? "<C-P>" : "<Up>"
+	cnoremap <expr> <C-n> wildmenumode() ? "<C-N>" : "<Down>"
+	cnoremap <expr> <C-j> wildmenumode() ? "\<Left>\<C-z>" : "\<C-j>"
+	cnoremap <expr> <C-k> wildmenumode() ? "\<Right>\<C-z>" : "\<C-k>"
+else
+	cnoremap <expr> <C-j> wildmenumode() ? "\<Down>\<C-z>" : "\<C-j>"
+	cnoremap <expr> <C-k> wildmenumode() ? "\<Up>\<C-z>" : "\<C-k>"
+endif
 
 nnoremap <Leader>ff :find *
 nnoremap <Leader>fs :sfind *
@@ -220,16 +180,12 @@ command! -nargs=1 Redir call utils#Redir(<q-args>)
 command! JekyllOpenDevx call utils#JekyllOpenDevx()
 command! -bar ArglistToQuickfix call setqflist(map(argv(-1), '{"filename": v:val}')) <Bar> copen
 
-" usage: :GitQFShowChanged<CR> to load quickfix with files changes in last commit, or
-" :GitQFShowChanged [HEAD^|SHA] to load quickfix with files changed in SHA
-command! -nargs=? -bar GitQFShowChanged call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
-" usage: :GitQFPRFiles {branchname}<CR> files that are different from given
-" branchname are loaded into quickfix. Compared branch is the active one.
-command! -complete=customlist,Gitbranches -nargs=1 -bar GitQFPRFiles call setqflist(map(systemlist("git diff --name-only $(git merge-base HEAD <args>)"), '{"filename": v:val, "lnum": 1}')) | copen
+" load quickfix w files changed in last commit, or given SHA, or HEAD^ style
+command! -nargs=? -bar GitQfLoadFilesChanged call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}')) | copen
 
+" load quickfix w files different that given branch name 
+command! -complete=customlist,Gitbranches -nargs=1 -bar GitQfChangedFilesOnCurrentBranchVersusGivenBranch call setqflist(map(systemlist("git diff --name-only $(git merge-base HEAD <args>)"), '{"filename": v:val, "lnum": 1}')) | copen
 function! Gitbranches(ArgLead, CmdLine, CursorPos) abort
 	return systemlist('git branch')
 endfunction
 
-" Colorscheme and Syntax {{{1
-colorscheme apprentice
