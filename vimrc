@@ -14,8 +14,13 @@ set belloff=all
 set clipboard=unnamed,unnamedplus
 set complete-=i
 set completeopt=menuone,popup
-" BUG: see https://github.com/vim/vim/issues/10250
-" if has('patch-8.1.0360') | set diffopt+=algorithm:patience | endif
+" macOS /usr/bin/vim removed 'xdiff' lib bc of GPL
+if has('mac') && has('patch-8.1.0360') && $VIM == '/usr/share/vim'
+	set diffopt-=internal
+elseif has('patch-8.1.0360')
+	set diffopt+=algorithm:patience
+endif
+set diffopt+=vertical
 set display=truncate
 set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
 set exrc secure
