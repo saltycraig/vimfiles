@@ -5,9 +5,8 @@ syntax on
 set encoding=utf-8
 scriptencoding utf-8
 let mapleader=' '
-colorscheme apprentice
+colorscheme solarized
 
-" set statusline=%!vim9utils#MyStatusline()
 set autoindent smartindent
 set autoread
 set backspace=indent,eol,start
@@ -15,6 +14,8 @@ set belloff=all
 set clipboard=unnamed,unnamedplus
 set complete-=i
 set completeopt=menuone,popup
+" BUG: see https://github.com/vim/vim/issues/10250
+" if has('patch-8.1.0360') | set diffopt+=algorithm:patience | endif
 set display=truncate
 set errorformat+=%f | " :cexpr system('cat /tmp/list-o-filenames.txt')
 set exrc secure

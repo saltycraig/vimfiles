@@ -43,3 +43,6 @@
 [submodule "pack/third-party/start/apprentice"]
 	path = pack/third-party/start/apprentice
 	url = https://github.com/romainl/apprentice
+[submodule "pack/third-party/start/vim-colors-solarized"]
+	path = pack/third-party/start/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized
