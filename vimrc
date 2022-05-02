@@ -115,7 +115,7 @@ else
 	cnoremap <expr> <C-k> wildmenumode() ? "\<Up>\<C-z>" : "\<C-k>"
 endif
 
-cnoremap <expr> <CR> utils#CCR()
+cnoremap <expr> <CR> CCR()
 nnoremap <Leader>ff :find *
 nnoremap <Leader>fs :sfind *
 nnoremap <Leader>fv :vert sfind *
@@ -196,6 +196,7 @@ endfunction
 function! MySolarized() abort
 	" highlight! SpecialKey cterm=NONE ctermfg=7 ctermbg=15
 	" highlight! NonText cterm=NONE ctermfg=7 ctermbg=15
+	highlight! link CurSearch IncSearch
 endfunction
 
 augroup MyColors
